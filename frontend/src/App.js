@@ -5,10 +5,12 @@ import './App.css';
 
 export default function App() {
   return (
-    <div className="app-layout">
-      <Sidebar />
-      <MainContent />
-    </div>
+    <>
+      <div className="app-layout">
+        <Sidebar />
+        <MainContent />
+      </div>
+    </>
   );
 }
 

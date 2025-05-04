@@ -1,0 +1,25 @@
+.combobox-container {
+    font-family: Arial, sans-serif;
+  }
+  
+  .combobox-select {
+    width: 180px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ffffff;
+    border-radius: 6px;
+    background-color: #d4d4d4;
+    transition: border 0.3s ease;
+  }
+  
+  .combobox-select:focus {
+    outline: none;
+    background-color: #d4d4d4;
+  }
+  
+  .combobox-select option {
+    background-color: #ffffff;
+    color: #333;
+    border-style:none;
+  }
+  

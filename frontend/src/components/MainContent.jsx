@@ -10,6 +10,8 @@ import Statistiques from '../pages/Statistiques';
 import Deconnection from '../pages/Déconnection';
 import Parametres from '../pages/Paramètres';
 
+import './css/MainContent.css'
+
 export default function MainContent() {
   return (
     <div className='main-content'>

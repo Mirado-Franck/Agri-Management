@@ -1,68 +1,41 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './css/Sidebar.css';
 import logo from '../assets/logo.png';
-import { Link } from 'react-router-dom';
+import Searchbar from './Searchbar';
+
+const navItems = [
+  { to: '/dashboard', icon: '🏠', label: 'Tableau de Bord' },
+  { to: '/Produits', icon: '📦', label: 'Produits' },
+  { to: '/stocks', icon: '📊', label: 'Stocks' },
+  { to: '/ventes', icon: '🛒', label: 'Ventes' },
+  { to: '/achats', icon: '📝', label: 'Achats' },
+  { to: '/statistiques', icon: '📈', label: 'Statistiques' },
+  { to: '/utilisateurs', icon: '👥', label: 'Utilisateurs' },
+  { to: '/langue', icon: '🌐', label: 'Langue' },
+  { to: '/parametres', icon: '⚙️', label: 'Paramètres' },
+  { to: '/logout', icon: '🔒', label: 'Déconnexion' }
+];
 
 export default function Sidebar() {
   return (
-    <div className="sidebar">
-      <img src={logo} alt="Logo" className="logo" />
+    <aside className="sidebar" aria-label="Navigation latérale">
+      <img src={logo} alt="Logo de l'application" className="logo" />
 
       <div className="search-box">
-        <input type="text" placeholder="🔍 Rechercher..." />
+        <Searchbar />
       </div>
 
-      <ul>
-        <li className="active">
-          <Link to="/dashboard"><span className="icon">🏠</span>Tableau de Bord</Link>
-        </li>
-        <li>
-          <Link to="/Produits">
-            <span className="icon">📦</span>Produits
-          </Link>
-        </li>
-        <li>
-          <Link to="/stocks">
-            <span className="icon">📊</span>Stocks
-          </Link>
-        </li>
-        <li>
-          <Link to="/ventes">
-            <span className="icon">🛒</span>Ventes
-          </Link>
-        </li>
-        <li>
-          <Link to="/achats">
-            <span className="icon">📝</span>Achats
-          </Link>
-        </li>
-        <li>
-          <Link to="/statistiques">
-            <span className="icon">📈</span>Statistiques
-          </Link>
-        </li>
-        <li>
-          <Link to="/utilisateurs"><
-              span className="icon">👥</span>Utilisateurs
-          </Link>
-        </li>
-        <li>
-          <Link to="/logout">
-            <span className="icon">🔒</span>Déconnexion
-          </Link>
-        </li>
-        <li>
-          <Link to="/langue">
-            <span className="icon">🌐</span>Langue
-          </Link>
-        </li>
-        <li className='settings'>
-          <Link to="/parametres">
-            <span className="icon">⚙️</span>Paramètres
-          </Link>
-        </li>
+      <ul className="nav-list">
+        {navItems.map(({ to, icon, label }) => (
+          <li key={to}>
+            <Link to={to} aria-label={label}>
+              <span className="icon">{icon}</span>
+              <span className="label">{label}</span>
+            </Link>
+          </li>
+        ))}
       </ul>
-
-    </div>
+    </aside>
   );
 }

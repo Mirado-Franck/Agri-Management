@@ -1,70 +1,85 @@
-    .sidebar {
-    width: 250px;
-    height: 100%;
-    background-color: #ffffff;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    font-family: 'Segoe UI', sans-serif;
-    padding-left: 20px;
-    }
+.sidebar {
+  height: 100vh;
+  width: 250px;
+  background-color: #fdfdfd;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  min-width: 220px;
+  max-width: 250px;
+  flex-shrink: 0; /* empêche le rétrécissement même si la fenêtre est zoomée */
+}
 
-    .sidebar img.logo {
-    width: 200px;
-    margin-top: 10px;
-    margin-bottom: 50px;
-    margin-left: 10px;
-    }
+.sidebar img.logo {
+  width: 180px;
+  margin: 20px auto 40px;
+  display: block;
+}
 
-    .sidebar .search-box input {
-    width: 100%;
-    padding: 8px 12px;
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    outline: none;
-    font-size: 0.9rem;
-    margin-bottom: 20px;
-    }
+.search-box {
+  width: 100%;
+  margin-bottom: 25px;
+}
 
-    .sidebar ul {
-    list-style: none;
-    padding: 0;
-    width: 100%;
-    }
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
 
-    .sidebar ul li {
-    text-decoration: none;
-    margin: 25px 0;
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    color: #333;
-    cursor: pointer;
-    transition: 0.2s ease;
-    }
-    
-    .sidebar ul li a {
-        text-decoration: none;
-        color: inherit;
-        display: flex;
-        align-items: center;
-        width: 100%;
-      }
-      
-    .sidebar ul li:hover {
-    color: #6cae3c;
-    transform: translateX(5px);
-    }
+.nav-list li {
+  margin: 15px 0;
+  transition: all 0.3s ease;
+}
 
-    .sidebar ul li span.icon {
-    font-size: 1.2rem;
-    margin-right: 10px;
-    }
+.nav-list li a {
+  display: flex;
+  align-items: center;
+  color: #333;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
-    /* Responsive Design Mbola ovaina*/
-    @media (max-width: 768px) {
-    .app-layout {
-        flex-direction: column;
-    }
-    }
+.nav-list li a:hover {
+  background-color: #eaf6e6;
+  color: #5caa3a;
+  transform: translateX(5px);
+}
+
+.nav-list .icon {
+  font-size: 1.2rem;
+  margin-right: 12px;
+}
+
+.nav-list .label {
+  font-size: 1rem;
+}
+
+.nav-list li a.active {
+  background-color: #d8f0cc;
+  color: #4b9932;
+}
+
+/* ----------- Responsive Sidebar (mobile/tablette) ----------- */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    height: 100vh;
+    width: 220px;
+    background-color: #fff;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}

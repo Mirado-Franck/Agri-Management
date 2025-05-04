@@ -1,0 +1,130 @@
+.stocks-container {
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  margin-top: 50px;
+  height: 750px;
+  border-radius: 20px;
+  background-color: rgba(247, 247, 247, 0.5);
+}
+
+.stocks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: auto;
+}
+
+  .left-buttons {
+  margin-top: auto;
+  display: flex;
+  flex-direction: row; /* par défaut, mais on le précise pour la clarté */
+  align-items: center; /* pour les aligner verticalement sur la même ligne */
+  gap: 12px; /* espace entre les éléments (modifie selon besoin) */
+
+  }
+
+.none{
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+/*************************************************/
+
+.table-wrapper {
+  max-height: 650px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.styled-table thead {
+  background-color: #f0f0f0;
+  position: sticky;
+  top: 0;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-size: 14px;
+}
+
+.styled-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Boutons actions rapides */
+.button-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.btn-stocks {
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Ajouter - vert */
+.btn-add-stocks {
+  background-color: #198754;
+  color: #fff;
+  border-color: #198754;
+}
+
+.btn-add-stocks:hover {
+  background-color: #157347;
+  border-color: #146c43;
+}
+
+/* Retirer - rouge */
+.btn-minus-stocks {
+  background-color: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+}
+
+.btn-minus-stocks:hover {
+  background-color: #bb2d3b;
+  border-color: #b02a37;
+}
+
+/* Accessibilité focus */
+.btn-stocks:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}

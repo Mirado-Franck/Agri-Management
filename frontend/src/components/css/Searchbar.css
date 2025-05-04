@@ -1,0 +1,44 @@
+/* Conteneur principal */
+.searchbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Groupe input + bouton de recherche */
+.searchbar-input-group {
+  display: flex;
+  flex: 1 1 auto;
+  border: 1px solid #ccc;
+  border-radius: 24px;
+  overflow: hidden;
+  background-color: #fff;
+  min-width: 0; /* Permet au champ de ne pas dépasser */
+}
+
+/* Champ de recherche */
+.searchbar-input {
+  flex: 1 1 auto;
+  padding: 10px 16px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  min-width: 0; /* Nécessaire pour éviter qu’il déborde */
+}
+
+/* Bouton de recherche */
+.searchbar-search-btn {
+  background-color: #f8f8f8;
+  border: none;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-left: 1px solid #ccc;
+}
+
+/* Hover states */
+.searchbar-search-btn:hover {
+  background-color: #e6e6e6;
+}
