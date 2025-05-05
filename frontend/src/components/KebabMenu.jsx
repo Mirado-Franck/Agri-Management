@@ -1,95 +1,53 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { FaFilter } from 'react-icons/fa';
 import './css/KebabMenu.css';
 
-// Composants à afficher
-function NomProduit() {
-  return <div className="content-box">🛒 Modifier le <strong>nom du produit</strong></div>;
-}
-
-function CategorieProduit() {
-  return <div className="content-box">📂 Modifier la <strong>catégorie</strong></div>;
-}
-
-function StockProduit() {
-  return <div className="content-box">📦 Modifier le <strong>stock</strong></div>;
-}
-
-function SeuilAlerte() {
-  return <div className="content-box">🚨 Modifier le <strong>seuil d’alerte</strong></div>;
-}
-
-function DateEntree() {
-  return <div className="content-box">📅 Modifier la <strong>date d'entrée</strong></div>;
-}
-
-function DateSortie() {
-  return <div className="content-box">📤 Modifier la <strong>date de sortie</strong></div>;
-}
-
-function KebabMenu() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedComponent, setSelectedComponent] = useState(null);
-  const menuRef = useRef();
+export default function KebabMenu() {
+  const [open, setOpen] = useState(false);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  const btnRef = useRef(null);
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleClickOutside = (event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setIsOpen(false);
+    if (!open && btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      setPosition({
+        top: rect.bottom + 5, // petit décalage
+        left: rect.left,
+      });
     }
-  };
-
-  const handleSelect = (component) => {
-    setSelectedComponent(component);
-    setIsOpen(false); // Ferme le menu après clic
+    setOpen(!open);
   };
 
   useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (open && !btnRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const renderSelectedComponent = () => {
-    switch (selectedComponent) {
-      case 'Nom':
-        return <NomProduit />;
-      case 'Categorie':
-        return <CategorieProduit />;
-      case 'Stock':
-        return <StockProduit />;
-      case 'Seuil':
-        return <SeuilAlerte />;
-      case 'Dentre':
-        return <DateEntree />;
-      case 'Dsortie':
-        return <DateSortie />;
-      default:
-        return null;
-    }
-  };
+  }, [open]);
 
   return (
-    <div className="kebab-container" ref={menuRef}>
-      <button className="kebab-button" onClick={toggleMenu} aria-label="Open menu">
-        ⋮
+    <div className="kebab-menu">
+      <button className="kebab-btn" ref={btnRef} onClick={toggleMenu}>
+        <FaFilter size={16} />
       </button>
-      {isOpen && (
-        <div className="kebab-menu">
-          <ul className="kebab-list">
-            <li onClick={() => handleSelect('Nom')}>Nom Produit</li>
-            <li onClick={() => handleSelect('Categorie')}>Catégorie</li>
-            <li onClick={() => handleSelect('Stock')}>Stock</li>
-            <li onClick={() => handleSelect('Seuil')}>Seuil d'alerte</li>
-            <li onClick={() => handleSelect('Dentre')}>Date d'entrée</li>
-            <li onClick={() => handleSelect('Dsortie')}>Date de sortie</li>
+      {open && (
+        <div
+          className="kebab-dropdown"
+          style={{
+            top: `${position.top}px`,
+            left: `${position.left}px`,
+          }}
+        >
+          <ul>
+            <li>Filtrer</li>
+            <li>Trier par date</li>
+            <li>Exporter</li>
           </ul>
         </div>
       )}
-      <div className="kebab-result">{renderSelectedComponent()}</div>
     </div>
   );
 }
-
-export default KebabMenu;

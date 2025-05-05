@@ -1,76 +1,43 @@
-.kebab-container {
+.kebab-menu {
   position: relative;
   display: inline-block;
 }
 
-.kebab-button {
-  margin-top: 16px;
-  margin-bottom: 0px;
+.kebab-btn {
   background: none;
   border: none;
-  font-size: 28px;
   cursor: pointer;
-  color: #333;
-  padding: 6px;
+  padding: 8px;
   border-radius: 6px;
-  transition: background 0.2s;
+  transition: background-color 0.2s ease;
 }
 
-.kebab-button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+.kebab-btn:hover {
+  background-color: #e5e7eb;
 }
 
-.kebab-menu {
-  position: absolute;
-  left: 100%;
-  top: 0;
-  margin-left: 8px;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  min-width: 160px;
-  animation: fadeIn 0.2s ease-out;
+.kebab-dropdown {
+  position: fixed; /* ← garantit qu’il se place au-dessus de tout */
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 9999; /* ← au-dessus de tous les éléments */
+  width: 160px;
 }
 
-.kebab-list {
+.kebab-dropdown ul {
   list-style: none;
-  margin: 0;
   padding: 8px 0;
+  margin: 0;
 }
 
-.kebab-list li {
-  padding: 12px 18px;
+.kebab-dropdown li {
+  padding: 10px 16px;
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
-  font-size: 15px;
+  transition: background-color 0.2s;
 }
 
-.kebab-list li:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  transform: translateX(2px);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateX(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.kebab-result {
-  margin-top: 16px;
-}
-
-.content-box {
-  padding: 16px;
-  background: #fafafa;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 15px;
+.kebab-dropdown li:hover {
+  background-color: #f5f5f5;
 }

@@ -1,4 +1,4 @@
-.stocks-container {
+.ventes-container {
   display: flex;
   flex-direction: column;
   height: 750px;
@@ -10,11 +10,11 @@
   overflow: hidden; /* évite débordements */
 }
 
-.stocks-header {
+.ventes-header {
   flex: 0 0 80px; /* hauteur fixe de 80px */
   display: flex;
   border-radius: 20px 20px 0px 0px;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   padding: 8px 16px;
   background-color: #f2f2f2;
@@ -29,6 +29,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
 }
+
 
 .styled-table {
   width: 100%;
@@ -52,12 +53,11 @@
 .styled-table tr:hover {
   background-color: #f9f9f9;
 }
-
-/**
-  Style pour les boutons d'actions
+  
+/*
+Les styles des boutons actions 
 */
 
-/* Cellule qui contient les boutons */
 .table-actions {
   display: flex;
   gap: 8px;
@@ -66,7 +66,6 @@
   padding: 8px;
 }
 
-/* Bouton moderne générique */
 .modern-button {
   border: none;
   padding: 8px;
@@ -80,22 +79,22 @@
   color: white;
 }
 
-/* Ajouter stock (vert) */
-.add-btn {
-  background-color: #10b981; /* Emerald-500 */
+/* Vue (Eye) : bleu moderne */
+.view-btn {
+  background-color: #2563eb; /* Blue-600 */
 }
 
-.add-btn:hover {
-  background-color: #059669; /* Emerald-600 */
+.view-btn:hover {
+  background-color: #1d4ed8; /* Blue-700 */
   transform: translateY(-1px);
 }
 
-/* Retirer stock (rouge) */
-.remove-btn {
-  background-color: #ef4444; /* Red-500 */
+/* Impression (Printer) : gris foncé neutre */
+.print-btn {
+  background-color: #506079; /* Gray-700 */
 }
 
-.remove-btn:hover {
-  background-color: #dc2626; /* Red-600 */
+.print-btn:hover {
+  background-color: #354965; /* Gray-800 */
   transform: translateY(-1px);
 }

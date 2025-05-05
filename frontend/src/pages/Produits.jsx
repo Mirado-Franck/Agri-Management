@@ -8,23 +8,22 @@ export default function Produits() {
   return (
     <div className="produits-container">
       <div className="produits-header">
-        <div className="left-buttons">
-          <button className="btn btn-add"><FaPlus /> Ajouter</button>
-          <button className="btn btn-edit"><FaEdit /> Modifier</button>
-          <button className="btn btn-delete"><FaTrash /> Supprimer</button>
+      <div className="button-group">
+          <button className="btn"><FaTrash/></button>
+          <button className="btn"><FaEdit/></button>
+          <button className="btn"><FaPlus/></button>
         </div>
-        <div className="searchbar-right">
-          <Searchbar />
-        </div>
+        <div>
+          <Searchbar/>
       </div>
-
+      </div>
       <div className="table-wrapper">
         <table className="styled-table">
           <thead>
             <tr>
               <th><input type="checkbox" /></th>
               <th>#</th>
-              <th>Nom</th>
+              <th>Nom produit</th>
               <th>Catégorie</th>
               <th>Date d'ajout</th>
               <th>Prix unitaire</th>
