@@ -7,14 +7,14 @@
   margin-top: 50px;
   border-radius: 20px;
   background-color: rgba(247, 247, 247, 0.5);
-  overflow: hidden; /* évite débordements */
+  overflow: hidden; 
 }
 
 .ventes-header {
   flex: 0 0 80px; /* hauteur fixe de 80px */
   display: flex;
   border-radius: 20px 20px 0px 0px;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   padding: 8px 16px;
   background-color: #f2f2f2;
@@ -98,3 +98,15 @@ Les styles des boutons actions
   background-color: #354965; /* Gray-800 */
   transform: translateY(-1px);
 }
+
+/*
+  Style Pour les boutons Crud
+*/
+.button-group {
+  display: flex;
+  gap: 10px; /* espace entre les boutons */
+}
+
+/* 
+  Style d'animation
+*/

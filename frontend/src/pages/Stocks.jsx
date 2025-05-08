@@ -1,7 +1,7 @@
 import React from 'react';
-import ComboBox from '../components/ComboBox.jsx';
 import Searchbar from '../components/Searchbar.jsx';
-import KebabMenu from '../components/KebabMenu.jsx';
+import SortBySelector from '../components/SortBySelector.jsx';
+import DateSelector from '../components/DateSelector.jsx';
 
 import { FaPlus, FaMinus} from 'react-icons/fa';
 import './css/Stocks.css';
@@ -10,11 +10,13 @@ export default function Stocks() {
   return (
     <div className="stocks-container">
       <div className="stocks-header">
-        <div>
-            <KebabMenu/>
-            </div>
-              
-            <div>
+      <div className="button-group">
+            <p>Date</p>
+            <DateSelector/>
+            <p>Trier par</p>
+            <SortBySelector/>
+          </div>
+          <div>
             <Searchbar/>
         </div>
       </div>

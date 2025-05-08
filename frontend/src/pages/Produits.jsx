@@ -2,17 +2,14 @@ import React from 'react';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import './css/Produits.css';
 import Searchbar from '../components/Searchbar.jsx';
+import CrudButtons from '../components/CrudButtons.jsx'
 
 export default function Produits() {
   
   return (
     <div className="produits-container">
       <div className="produits-header">
-      <div className="button-group">
-          <button className="btn"><FaTrash/></button>
-          <button className="btn"><FaEdit/></button>
-          <button className="btn"><FaPlus/></button>
-        </div>
+          <CrudButtons/>
         <div>
           <Searchbar/>
       </div>

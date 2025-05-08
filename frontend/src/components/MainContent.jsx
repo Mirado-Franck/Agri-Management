@@ -15,17 +15,25 @@ import './css/MainContent.css'
 export default function MainContent() {
   return (
     <div className='main-content'>
-      <h1>Bienvenue dans mon projet</h1>
-      <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/Produits" element={<Produits />} />
-        <Route path="/Stocks" element={<Stocks />} />
-        <Route path="/Ventes" element={<Ventes />} />
-        <Route path="/Achats" element={<Achats />} />
-        <Route path="/Statistiques" element={<Statistiques />} />
-        <Route path="/Deconnection" element={<Deconnection />} />
-        <Route path="/Parametres" element={<Parametres />} />
-      </Routes>
+      <div className="headbar">
+       <div>
+        <div>
+            <h1>Bienvenue dans mon projet</h1>
+        </div>
+       </div>
+      </div>
+      <div>
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/Produits" element={<Produits />} />
+          <Route path="/Stocks" element={<Stocks />} />
+          <Route path="/Ventes" element={<Ventes />} />
+          <Route path="/Achats" element={<Achats />} />
+          <Route path="/Statistiques" element={<Statistiques />} />
+          <Route path="/Deconnection" element={<Deconnection />} />
+          <Route path="/Parametres" element={<Parametres />} />
+        </Routes>
+      </div>
     </div>
   );
 }

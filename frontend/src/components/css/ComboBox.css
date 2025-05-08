@@ -1,25 +1,63 @@
-.combobox-container {
-    font-family: Arial, sans-serif;
-  }
-  
-  .combobox-select {
-    width: 180px;
-    padding: 8px 12px;
-    font-size: 16px;
-    border: 1px solid #ffffff;
-    border-radius: 6px;
-    background-color: #d4d4d4;
-    transition: border 0.3s ease;
-  }
-  
-  .combobox-select:focus {
-    outline: none;
-    background-color: #d4d4d4;
-  }
-  
-  .combobox-select option {
-    background-color: #ffffff;
-    color: #333;
-    border-style:none;
-  }
-  
+/* Global reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Conteneur du ComboBox */
+.combo-box-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+/* Style de la combo box */
+.combo-box {
+  width: 250px;
+  padding: 10px 15px;
+  font-size: 16px;
+  color: #333;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* État de focus */
+.combo-box:focus {
+  outline: none;
+}
+
+/* Style des options */
+.combo-box option {
+  background-color: #ffffff;
+  color: #333;
+  padding: 8px;
+}
+
+/* Hover effect for better UX */
+.combo-box:hover {
+  border-color: #2a2b2d;
+}
+
+/* Style du texte placeholder */
+.combo-box::placeholder {
+  color: #aaa;
+}
+
+/* Animation de transition pour les changements */
+.combo-box, .combo-box-container {
+  transition: all 0.3s ease;
+}
