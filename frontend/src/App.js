@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+
+
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import Login from './pages/Login';
+
 import './App.css';
 
 export default function App() {
@@ -37,4 +41,5 @@ export default function App() {
       )}
     </>
   );
+  
 }

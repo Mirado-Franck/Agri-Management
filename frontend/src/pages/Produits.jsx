@@ -5,11 +5,23 @@ import Searchbar from '../components/Searchbar.jsx';
 import CrudButtons from '../components/CrudButtons.jsx';
 import ProduitForm from '../components/ProduitForm.jsx';
 
+
 export default function Produits() {
   const [showModal, setShowModal] = useState(false);
   const [produits, setProduits] = useState([]);
   const [erreur, setErreur] = useState(null);
-
+  const refreshProduits = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/produits/produits/");
+      const data = await response.json();
+      setProduits(data);
+    } catch (error) {
+      console.error("❌ Erreur fetch produits :", error);
+      setErreur(error.message);
+    }
+    
+  };
+  
   useEffect(() => {
     const fetchProduits = async () => {
       try {
@@ -21,6 +33,7 @@ export default function Produits() {
         console.error("❌ Erreur fetch produits :", error);
         setErreur(error.message);
       }
+      
     };
   
     fetchProduits();
@@ -77,10 +90,16 @@ export default function Produits() {
                 <IoMdClose size={20} />
               </div>
             </button>
-            <ProduitForm />
+            
+              <ProduitForm
+                onClose={() => setShowModal(false)}
+                onRefreshProduits={refreshProduits}
+              />
           </div>
         </div>
       )}
+
     </div>
+
   );
 }
