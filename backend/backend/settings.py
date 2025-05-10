@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # Ajoute ceci
     'rest_framework',
     'authentification',  # 👈 ajoute cette ligne
+    'gestion_produit',
 ]
 
 MIDDLEWARE = [
@@ -120,6 +121,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+#Cette ligne a été ajouté pour le modèle personnalisé des utilisateurs
+# ====================
+# User Configuration
+# ====================
+
+AUTH_USER_MODEL = 'authentification.User'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import './css/Ventes.css';
+import React, { useState } from 'react'
+import './css/Ventes.css'
 
 import Searchbar from '../components/Searchbar'
-import VenteForm from '../components/VenteForm'; // Assure-toi que le chemin est correct
+import VenteForm from '../components/VenteForm'
 
 import { FaEye, FaPlus } from "react-icons/fa"
 import { PiPrinter } from "react-icons/pi"
@@ -65,7 +65,11 @@ export default function Ventes() {
 
           <div className="modal-overlay">
             <div className="modal-content">
-              <button className="close-btn" onClick={() => setShowModal(false)}><IoMdClose size={20}/></button>
+              <button className="close-btn" onClick={() => setShowModal(false)}>
+                <div className='rond'>
+                    <IoMdClose size={20} />
+                </div>
+              </button>
               <VenteForm />
             </div>
           </div>

@@ -1,7 +1,7 @@
 import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
 import './css/Buttons.css';
 
-function CrudButtons({ loading, disabled }) {
+function CrudButtons({ loading, disabled, onOpenModal }) {
   return (
     <div className="button-group">
       <button
@@ -19,10 +19,12 @@ function CrudButtons({ loading, disabled }) {
       <button
         className={`btn btn-appear delay-3 ${loading ? 'btn-loading' : ''}`}
         disabled={disabled}
+        onClick={onOpenModal} // ✅ Ce bouton déclenche la modale
       >
         <FaPlus />
       </button>
     </div>
   );
 }
- export default CrudButtons;
+
+export default CrudButtons;

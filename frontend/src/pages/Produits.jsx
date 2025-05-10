@@ -1,19 +1,42 @@
-import React from 'react';
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
 import './css/Produits.css';
+import { IoMdClose } from "react-icons/io";
 import Searchbar from '../components/Searchbar.jsx';
-import CrudButtons from '../components/CrudButtons.jsx'
+import CrudButtons from '../components/CrudButtons.jsx';
+import ProduitForm from '../components/ProduitForm.jsx';
 
 export default function Produits() {
+  const [showModal, setShowModal] = useState(false);
+  const [produits, setProduits] = useState([]);
+  const [erreur, setErreur] = useState(null);
+
+  useEffect(() => {
+    const fetchProduits = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/produits/produits/");
+        const data = await response.json();
+        console.log("📦 Réponse API produits :", data); // 👈 Ajoute cette ligne
+        setProduits(data);
+      } catch (error) {
+        console.error("❌ Erreur fetch produits :", error);
+        setErreur(error.message);
+      }
+    };
   
+    fetchProduits();
+  }, []);
+
   return (
     <div className="produits-container">
       <div className="produits-header">
-          <CrudButtons/>
+        <CrudButtons onOpenModal={() => setShowModal(true)} />
         <div>
-          <Searchbar/>
+          <Searchbar />
+        </div>
       </div>
-      </div>
+
+      {erreur && <div className="alert">{erreur}</div>}
+
       <div className="table-wrapper">
         <table className="styled-table">
           <thead>
@@ -25,25 +48,39 @@ export default function Produits() {
               <th>Date d'ajout</th>
               <th>Prix unitaire</th>
               <th>Stock actuel</th>
-              <th>Seuil minimun</th>
+              <th>Seuil minimum</th>
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: 30 }, (_, i) => (
-              <tr key={i}>
+            {produits.map((produit, index) => (
+              <tr key={produit.id}>
                 <td><input type="checkbox" /></td>
-                <td>{i + 1}</td>
-                <td>Produit {i + 1}</td>
-                <td>Catégorie {i % 5}</td>
-                <td>0{i + 1}-05-2024</td>
-                <td>${100 + i * 5}</td>
-                <td>{50 - i}kg</td>
-                <td> {50 + i + 1} kg</td>
+                <td>{index + 1}</td>
+                <td>{produit.nom_produit}</td>
+                <td>{produit.categorie_produit_nom || '-'}</td>
+                <td>{new Date(produit.date_ajout).toLocaleDateString()}</td>
+                <td>{produit.prix_unitaire} Ar</td>
+                <td>{produit.stock_actuel ?? '–'} kg</td>
+                <td>{produit.seuil_alerte} kg</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* MODAL FLOTTANTE */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button className="close-btn" onClick={() => setShowModal(false)}>
+              <div className='rond'>
+                <IoMdClose size={20} />
+              </div>
+            </button>
+            <ProduitForm />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
