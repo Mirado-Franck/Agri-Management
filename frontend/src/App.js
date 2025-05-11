@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ToastContainer } from 'react-toastify';
-
+import { Toaster } from 'sonner'; // ✅ Import sonner
 
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
@@ -31,6 +30,7 @@ export default function App() {
 
   return (
     <>
+      <Toaster position="top-center" size={44} />
       {!isLoggedIn ? (
         <Login onLogin={handleLogin} />
       ) : (

@@ -13,10 +13,10 @@ class ProduitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Produit
         fields = [
-            'id_produit',
+            'id',   
             'nom_produit',
-            'categorie_produit',         # Contient l’ID de la catégorie
-            'categorie_produit_nom',     # Contient le nom lisible de la catégorie
+            'categorie_produit', 
+            'categorie_produit_nom',
             'unite',
             'date_ajout',
             'prix_unitaire',

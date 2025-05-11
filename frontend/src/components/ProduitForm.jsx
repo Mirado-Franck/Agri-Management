@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'sonner'; // ✅ Remplace react-toastify
 import './css/ProduitForm.css';
 
 const ProduitForm = ({ onClose, onRefreshProduits }) => {
@@ -31,7 +30,6 @@ const ProduitForm = ({ onClose, onRefreshProduits }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 🧪 Validation simple
     if (
       !formData.nom_produit ||
       !formData.categorie_produit ||
@@ -39,7 +37,7 @@ const ProduitForm = ({ onClose, onRefreshProduits }) => {
       parseFloat(formData.prix_unitaire) <= 0 ||
       parseFloat(formData.seuil_alerte) < 0
     ) {
-      toast.warn("Veuillez remplir tous les champs correctement.");
+      toast.warning("Veuillez remplir tous les champs correctement.");
       return;
     }
 
@@ -68,14 +66,16 @@ const ProduitForm = ({ onClose, onRefreshProduits }) => {
           seuil_alerte: ''
         });
 
-        if (onRefreshProduits) onRefreshProduits(); // actualiser la liste
-        if (onClose) onClose(); // fermer le modal
+        if (onRefreshProduits) onRefreshProduits();
+        if (onClose) onClose();
       } else {
         const err = await response.json();
         console.error("❌ Erreur API :", err);
+        toast.error("Une erreur est survenue lors de l'ajout.");
       }
     } catch (error) {
       console.error("⚠️ Erreur réseau :", error);
+      toast.error("Erreur de connexion au serveur.");
     }
   };
 

@@ -9,7 +9,6 @@ class Categorie(models.Model):
         return self.nom
 
 class Produit(models.Model):
-    id_produit = models.AutoField(primary_key=True)
     nom_produit = models.CharField(max_length=100)
     categorie_produit = models.ForeignKey('Categorie', on_delete=models.CASCADE, default=1)
     unite = models.CharField(max_length=20)

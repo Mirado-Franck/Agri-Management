@@ -1,8 +1,17 @@
-import React from 'react'
-import { MdSearch } from 'react-icons/md'
-import './css/Searchbar.css'
+import React, { useState } from 'react';
+import { MdSearch } from 'react-icons/md';
+import './css/Searchbar.css';
 
-export default function Searchbar() {
+export default function Searchbar({ onSearch }) {
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearch = () => {
+    // Envoie le texte de recherche au composant parent
+    if (typeof onSearch === 'function') {
+      onSearch(searchText);
+    }
+  };
+
   return (
     <div className="searchbar">
       <div className="searchbar-input-group">
@@ -10,15 +19,17 @@ export default function Searchbar() {
           type="text"
           className="searchbar-input"
           placeholder="Rechercher"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
         />
-        <button className="searchbar-search-btn">
+        <button 
+          className="searchbar-search-btn"
+          onClick={handleSearch}
+        >
           <MdSearch size={24} />
         </button>
       </div>
     </div>
   );
 }
-
-
-
-
