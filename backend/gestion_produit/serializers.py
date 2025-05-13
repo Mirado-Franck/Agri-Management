@@ -25,6 +25,11 @@ class ProduitSerializer(serializers.ModelSerializer):
 
 
 class StockSerializer(serializers.ModelSerializer):
+    produit_nom = serializers.CharField(source='produit.nom_produit')
+    produit_categorie = serializers.CharField(source='produit.categorie_produit.nom')
+    produit_unite = serializers.CharField(source='produit.unite')
+    seuil_alerte = serializers.IntegerField(source='produit.seuil_alerte')
+    
     class Meta:
         model = Stock
         fields = '__all__'

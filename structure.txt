@@ -1,0 +1,100 @@
+﻿├── .vscode
+│   ├── settings.json
+├── backend
+│   ├── authentification
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── migrations
+│   │   │   ├── __init__.py
+│   │   │   ├── 0001_initial.py
+│   │   ├── models.py
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── backend
+│   │   ├── __init__.py
+│   │   ├── asgi.py
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   ├── wsgi.py
+│   ├── data.py
+│   ├── db.sqlite3
+│   ├── gestion_produit
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── migrations
+│   │   │   ├── __init__.py
+│   │   │   ├── 0001_initial.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── manage.py
+│   ├── reset_db.py
+├── frontend
+│   ├── .gitignore
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── public
+│   │   ├── favicon.ico
+│   │   ├── index.html
+│   │   ├── logo192.png
+│   │   ├── logo512.png
+│   │   ├── manifest.json
+│   │   ├── robots.txt
+│   ├── README.md
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.js
+│   │   ├── assets
+│   │   │   ├── logo.png
+│   │   │   ├── profile.png
+│   │   ├── components
+│   │   │   ├── ConfirmationDialog.jsx
+│   │   │   ├── CrudButtons.jsx
+│   │   │   ├── css
+│   │   │   │   ├── Buttons.css
+│   │   │   │   ├── ComboBox.css
+│   │   │   │   ├── ConfirmationDialog.css
+│   │   │   │   ├── KebabMenu.css
+│   │   │   │   ├── MainContent.css
+│   │   │   │   ├── ProduitForm.css
+│   │   │   │   ├── ProduitFormEdit.css
+│   │   │   │   ├── Searchbar.css
+│   │   │   │   ├── Sidebar.css
+│   │   │   │   ├── VenteForm.css
+│   │   │   ├── DateSelector.jsx
+│   │   │   ├── Form.jsx
+│   │   │   ├── KebabMenu.jsx
+│   │   │   ├── MainContent.jsx
+│   │   │   ├── ProduitForm.jsx
+│   │   │   ├── ProduitFormEdit.jsx
+│   │   │   ├── SaleInput.jsx
+│   │   │   ├── Searchbar.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   ├── SortBySelector.jsx
+│   │   │   ├── VenteForm.jsx
+│   │   ├── index.css
+│   │   ├── index.js
+│   │   ├── pages
+│   │   │   ├── Achats.jsx
+│   │   │   ├── css
+│   │   │   │   ├── Achats.css
+│   │   │   │   ├── Login.css
+│   │   │   │   ├── Produits.css
+│   │   │   │   ├── Stocks.css
+│   │   │   │   ├── Ventes.css
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── Déconnection.jsx
+│   │   │   ├── Login.jsx
+│   │   │   ├── Paramètres.jsx
+│   │   │   ├── Produits.jsx
+│   │   │   ├── Statistiques.jsx
+│   │   │   ├── Stocks.jsx
+│   │   │   ├── Ventes.jsx
+├── package.json
+├── package-lock.json
+├── structure.txt

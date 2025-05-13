@@ -22,10 +22,11 @@ class Produit(models.Model):
 class Stock(models.Model):
     produit = models.OneToOneField(Produit, on_delete=models.CASCADE, related_name='stock')
     quantite = models.FloatField(default=0)
-    last_update = models.DateTimeField(auto_now=True)
+    date_entree = models.DateTimeField(auto_now_add=True)
+    date_sortie = models.DateTimeField(null=True, blank=True)  # facultatif
 
     def __str__(self):
-        return f"{self.produit.nom} - {self.quantite} {self.produit.unite}"
+        return f"{self.produit.nom_produit} - {self.quantite} {self.produit.unite}"
 
 class Achat(models.Model):
     date = models.DateField()
