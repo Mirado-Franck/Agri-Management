@@ -6,9 +6,8 @@ export default function Searchbar({ onSearch }) {
   const [searchText, setSearchText] = useState('');
 
   const handleSearch = () => {
-    // Envoie le texte de recherche au composant parent
     if (typeof onSearch === 'function') {
-      onSearch(searchText);
+      onSearch(searchText.trim());
     }
   };
 

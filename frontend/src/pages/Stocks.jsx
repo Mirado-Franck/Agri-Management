@@ -15,6 +15,7 @@ export default function Stocks() {
   const [quantity, setQuantity] = useState(1);
   const [dateFilter, setDateFilter] = useState('anytime');
   const [sortOption, setSortOption] = useState('newest-first');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:8000/api/produits/stocks/')
@@ -28,11 +29,21 @@ export default function Stocks() {
 
   useEffect(() => {
     const filterAndSortStocks = () => {
-      // Étape 1 : Filtrer les stocks par date
+      // Étape 1 : Filtrer par recherche
+      let filtered = stocks.filter(stock => {
+        const search = searchTerm.toLowerCase();
+        if (!search) return true; // Si searchTerm est vide, afficher tous les stocks
+        return (
+          (stock.produit_nom && stock.produit_nom.toLowerCase().includes(search)) ||
+          (stock.produit_categorie && stock.produit_categorie.toLowerCase().includes(search))
+        );
+      });
+
+      // Étape 2 : Filtrer par date
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      let filtered = stocks.filter(stock => {
+      filtered = filtered.filter(stock => {
         const entryDate = new Date(stock.date_entree);
         if (dateFilter === 'anytime') {
           return true;
@@ -50,7 +61,7 @@ export default function Stocks() {
         return true;
       });
 
-      // Étape 2 : Trier les stocks filtrés
+      // Étape 3 : Trier les stocks filtrés
       filtered = [...filtered].sort((a, b) => {
         if (sortOption === 'newest-first') {
           return new Date(b.date_entree) - new Date(a.date_entree);
@@ -68,7 +79,7 @@ export default function Stocks() {
     };
 
     filterAndSortStocks();
-  }, [dateFilter, sortOption, stocks]);
+  }, [dateFilter, sortOption, searchTerm, stocks]);
 
   const handleActionClick = (stock, type) => {
     setSelectedStock(stock);
@@ -134,7 +145,7 @@ export default function Stocks() {
           <SortBySelector selectedSort={sortOption} setSortOption={setSortOption} />
         </div>
         <div>
-          <Searchbar />
+          <Searchbar onSearch={(term) => setSearchTerm(term)} />
         </div>
       </div>
 
