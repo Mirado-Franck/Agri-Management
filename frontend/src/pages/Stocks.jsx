@@ -51,8 +51,10 @@ export default function Stocks() {
               <td>{stock.produit_nom}</td>
               <td>{stock.produit_categorie}</td>
               <td>{stock.quantite} {stock.produit_unite}</td>
-              <td>{stock.seuil_alerte} kg</td> {/* Affiche le seuil d'alerte */}
-              <td>🟢</td>
+              <td>{stock.seuil_alerte} {stock.produit_unite}</td> {/* Affiche le seuil d'alerte */}
+              <td style={{ color: stock.etat ? 'red' : 'green' }}>
+                {stock.etat ? "🔴 Stock bas" : "🟢 OK"}
+              </td>
               <td>{new Date(stock.date_entree).toLocaleDateString()}</td>
               <td>{stock.date_sortie ? new Date(stock.date_sortie).toLocaleDateString() : '--'}</td>
               <td className="table-actions">

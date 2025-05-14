@@ -29,10 +29,14 @@ class StockSerializer(serializers.ModelSerializer):
     produit_categorie = serializers.CharField(source='produit.categorie_produit.nom')
     produit_unite = serializers.CharField(source='produit.unite')
     seuil_alerte = serializers.IntegerField(source='produit.seuil_alerte')
-    
+    etat = serializers.ReadOnlyField()
+
     class Meta:
         model = Stock
-        fields = '__all__'
+        fields = [
+            'id', 'produit_nom', 'produit_categorie', 'produit_unite',
+            'quantite', 'date_entree', 'date_sortie', 'seuil_alerte', 'etat'
+        ]
 
 
 class AchatDetailSerializer(serializers.ModelSerializer):

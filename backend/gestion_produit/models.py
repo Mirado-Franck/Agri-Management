@@ -19,6 +19,10 @@ class Produit(models.Model):
     def __str__(self):
         return self.nom_produit
 
+    @property
+    def etat(self):
+        return self.quantite <= self.produit.seuil_alerte
+
 class Stock(models.Model):
     produit = models.OneToOneField(Produit, on_delete=models.CASCADE, related_name='stock')
     quantite = models.FloatField(default=0)

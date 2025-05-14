@@ -40,10 +40,10 @@ export default function Produits() {
                 <td>Admin</td>
                 <td className="table-actions">
                   <button className="modern-button view-btn">
-                    <FaEye />. details
+                    <FaEye />
                   </button>
                   <button className="modern-button print-btn">
-                    <PiPrinter />. imprimer
+                    <PiPrinter />
                   </button>
                 </td>
               </tr>
