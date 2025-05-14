@@ -1,5 +1,10 @@
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from django.utils import timezone
+
 from .models import Categorie, Produit, Stock, Achat, AchatDetail, Vente, VenteDetail
 from .serializers import (
     CategorieSerializer,
@@ -11,6 +16,22 @@ from .serializers import (
     VenteDetailSerializer
 )
 
+# ✅ Vue personnalisée pour ajouter du stock
+@api_view(['POST'])
+def ajouter_stock(request, pk):
+    try:
+        stock = Stock.objects.get(pk=pk)
+    except Stock.DoesNotExist:
+        return Response({'error': 'Stock introuvable'}, status=404)
+
+    quantite = float(request.data.get('quantite', 0))
+    stock.quantite += quantite
+    stock.date_entree = timezone.now()
+    stock.save()
+
+    return Response({'message': 'Stock mis à jour avec succès'})
+
+# ✅ ViewSets
 class CategorieViewSet(viewsets.ModelViewSet):
     queryset = Categorie.objects.all()
     serializer_class = CategorieSerializer
@@ -38,4 +59,3 @@ class VenteViewSet(viewsets.ModelViewSet):
 class VenteDetailViewSet(viewsets.ModelViewSet):
     queryset = VenteDetail.objects.all()
     serializer_class = VenteDetailSerializer
-

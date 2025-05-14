@@ -25,7 +25,7 @@ export default function Stocks() {
     setActionType(type);
     setIsModalOpen(true);
   };
-  
+
   const handleStockChange = () => {
     if (!selectedStock || !quantity) return;
   

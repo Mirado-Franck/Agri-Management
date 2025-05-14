@@ -7,7 +7,8 @@ from .views import (
     AchatViewSet,
     AchatDetailViewSet,
     VenteViewSet,
-    VenteDetailViewSet
+    VenteDetailViewSet,
+    ajouter_stock  # ✅ N'oublie pas d'importer ta vue personnalisée
 )
 
 router = DefaultRouter()
@@ -21,4 +22,5 @@ router.register(r'vente-details', VenteDetailViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('stocks/<int:pk>/ajouter-stock/', ajouter_stock, name='ajouter-stock'),  # ✅ Ajoute cette ligne
 ]
