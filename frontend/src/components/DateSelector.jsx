@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import './css/ComboBox.css'; // Assurez-vous d'inclure le fichier CSS
+import React from 'react';
+import './css/ComboBox.css';
 
-const DateSelector = () => {
-  const [selectedDate, setSelectedDate] = useState('');
-
+const DateSelector = ({ selectedDate, setDateFilter }) => {
   const handleChange = (e) => {
-    setSelectedDate(e.target.value);
+    setDateFilter(e.target.value);
   };
 
   return (

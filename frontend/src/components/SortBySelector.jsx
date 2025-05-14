@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import './css/ComboBox.css'; // Assurez-vous d'inclure le fichier CSS
+import React from 'react';
+import './css/ComboBox.css';
 
-const SortBySelector = () => {
-  const [selectedSort, setSelectedSort] = useState('');
-
+const SortBySelector = ({ selectedSort, setSortOption }) => {
   const handleChange = (e) => {
-    setSelectedSort(e.target.value);
+    setSortOption(e.target.value);
   };
 
   return (

@@ -8,17 +8,67 @@ import './css/Stocks.css';
 
 export default function Stocks() {
   const [stocks, setStocks] = useState([]);
+  const [filteredStocks, setFilteredStocks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStock, setSelectedStock] = useState(null);
-  const [actionType, setActionType] = useState(null); // "add" ou "remove"
-  const [quantity, setQuantity] = useState(1); // quantité saisie
+  const [actionType, setActionType] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [dateFilter, setDateFilter] = useState('anytime');
+  const [sortOption, setSortOption] = useState('newest-first');
 
   useEffect(() => {
     fetch('http://localhost:8000/api/produits/stocks/')
       .then(response => response.json())
-      .then(data => setStocks(data))
+      .then(data => {
+        setStocks(data);
+        setFilteredStocks(data);
+      })
       .catch(error => console.error("Erreur lors du chargement des stocks :", error));
   }, []);
+
+  useEffect(() => {
+    const filterAndSortStocks = () => {
+      // Étape 1 : Filtrer les stocks par date
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      let filtered = stocks.filter(stock => {
+        const entryDate = new Date(stock.date_entree);
+        if (dateFilter === 'anytime') {
+          return true;
+        } else if (dateFilter === 'today') {
+          return entryDate.toDateString() === today.toDateString();
+        } else if (dateFilter === 'last-7-days') {
+          const sevenDaysAgo = new Date(today);
+          sevenDaysAgo.setDate(today.getDate() - 7);
+          return entryDate >= sevenDaysAgo;
+        } else if (dateFilter === 'last-30-days') {
+          const thirtyDaysAgo = new Date(today);
+          thirtyDaysAgo.setDate(today.getDate() - 30);
+          return entryDate >= thirtyDaysAgo;
+        }
+        return true;
+      });
+
+      // Étape 2 : Trier les stocks filtrés
+      filtered = [...filtered].sort((a, b) => {
+        if (sortOption === 'newest-first') {
+          return new Date(b.date_entree) - new Date(a.date_entree);
+        } else if (sortOption === 'oldest-first') {
+          return new Date(a.date_entree) - new Date(b.date_entree);
+        } else if (sortOption === 'a-z') {
+          return a.produit_nom.localeCompare(b.produit_nom);
+        } else if (sortOption === 'z-a') {
+          return b.produit_nom.localeCompare(a.produit_nom);
+        }
+        return 0;
+      });
+
+      setFilteredStocks(filtered);
+    };
+
+    filterAndSortStocks();
+  }, [dateFilter, sortOption, stocks]);
 
   const handleActionClick = (stock, type) => {
     setSelectedStock(stock);
@@ -39,7 +89,7 @@ export default function Stocks() {
       return;
     }
   
-    const today = new Date().toISOString(); // Format ISO 8601, ex: 2025-05-14T11:34:00.000Z
+    const today = new Date().toISOString();
   
     const payload = {
       quantite: updatedQuantity,
@@ -62,6 +112,9 @@ export default function Stocks() {
         setStocks(prev =>
           prev.map(item => (item.id === selectedStock.id ? data : item))
         );
+        setFilteredStocks(prev =>
+          prev.map(item => (item.id === selectedStock.id ? data : item))
+        );
         setIsModalOpen(false);
         setQuantity(1);
       })
@@ -76,9 +129,9 @@ export default function Stocks() {
       <div className="stocks-header">
         <div className="button-group">
           <p>Date</p>
-          <DateSelector />
+          <DateSelector selectedDate={dateFilter} setDateFilter={setDateFilter} />
           <p>Trier par</p>
-          <SortBySelector />
+          <SortBySelector selectedSort={sortOption} setSortOption={setSortOption} />
         </div>
         <div>
           <Searchbar />
@@ -101,7 +154,7 @@ export default function Stocks() {
             </tr>
           </thead>
           <tbody>
-            {stocks.map((stock, i) => (
+            {filteredStocks.map((stock, i) => (
               <tr key={stock.id}>
                 <td>{i + 1}</td>
                 <td>{stock.produit_nom}</td>
