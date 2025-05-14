@@ -34,12 +34,25 @@ export default function Stocks() {
         ? selectedStock.quantite + quantity
         : selectedStock.quantite - quantity;
   
+    if (updatedQuantity < 0) {
+      alert("Erreur : La quantité ne peut pas être négative !");
+      return;
+    }
+  
+    const today = new Date().toISOString(); // Format ISO 8601, ex: 2025-05-14T11:34:00.000Z
+  
+    const payload = {
+      quantite: updatedQuantity,
+      ...(actionType === 'add' && { date_entree: today }),
+      ...(actionType === 'remove' && { date_sortie: today }),
+    };
+  
     fetch(`http://localhost:8000/api/produits/stocks/${selectedStock.id}/`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ quantite: updatedQuantity }),
+      body: JSON.stringify(payload),
     })
       .then(response => {
         if (!response.ok) throw new Error("Erreur lors de la mise à jour du stock");
@@ -54,9 +67,10 @@ export default function Stocks() {
       })
       .catch(error => {
         console.error("Erreur lors de l'ajustement du stock :", error);
+        alert("Une erreur s'est produite. Vérifiez la console pour plus de détails.");
       });
   };
-  
+
   return (
     <div className="stocks-container">
       <div className="stocks-header">
@@ -119,30 +133,15 @@ export default function Stocks() {
         </table>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <h2>{actionType === 'add' ? 'Ajouter au stock' : 'Retirer du stock'}</h2>
-        <p>Produit : <strong>{selectedStock?.produit_nom}</strong></p>
-
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-            handleStockChange();
-          }}
-        >
-          <label>Quantité :</label>
-          <input
-            type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
-            min="1"
-            required
-          />
-          <button type="submit" className="submit-button">
-            Valider
-          </button>
-        </form>
-      </Modal>
-
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        selectedStock={selectedStock}
+        actionType={actionType}
+        quantity={quantity}
+        setQuantity={setQuantity}
+        onSubmit={handleStockChange}
+      />
     </div>
   );
 }

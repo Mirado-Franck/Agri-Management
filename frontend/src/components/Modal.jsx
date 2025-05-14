@@ -1,15 +1,61 @@
-// components/Modal.jsx
 import React from 'react';
 import './css/Modal.css';
 
-export default function Modal({ isOpen, onClose, children }) {
+export default function Modal({ 
+  isOpen, 
+  onClose, 
+  selectedStock, 
+  actionType, 
+  quantity, 
+  setQuantity, 
+  onSubmit 
+}) {
   if (!isOpen) return null;
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>X</button>
-        {children}
+        <h2 className="modal-title">
+          {actionType === 'add' ? '➕ Ajouter au stock' : '➖ Retirer du stock'}
+        </h2>
+
+        <div className="modal-body">
+          <p className="modal-label">
+            Produit : <strong>{selectedStock?.produit_nom}</strong>
+          </p>
+
+          <form
+            onSubmit={e => {
+              e.preventDefault();
+              onSubmit();
+            }}
+            className="modal-form"
+          >
+            <label htmlFor="quantity" className="modal-input-label">Quantité :</label>
+            <input
+              type="number"
+              id="quantity" 
+              value={quantity}
+              onChange={(e) => setQuantity(Number(e.target.value))}
+              min="1"
+              required
+              className="modal-input"
+            />
+
+            <div className="modal-actions">
+              <button type="submit" className="modal-submit-button">
+                ✅ Valider
+              </button>
+              <button 
+                type="button" 
+                className="modal-cancel-button" 
+                onClick={onClose}
+              >
+                ❌ Annuler
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
