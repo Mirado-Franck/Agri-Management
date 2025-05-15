@@ -10,7 +10,7 @@ class Categorie(models.Model):
 
 class Produit(models.Model):
     nom_produit = models.CharField(max_length=100)
-    categorie_produit = models.ForeignKey('Categorie', on_delete=models.CASCADE, default=1)
+    categorie_produit = models.ForeignKey(Categorie, on_delete=models.CASCADE, default=1)
     unite = models.CharField(max_length=20)
     date_ajout = models.DateTimeField(default=timezone.now)
     prix_unitaire = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -19,18 +19,31 @@ class Produit(models.Model):
     def __str__(self):
         return self.nom_produit
 
-    @property
-    def etat(self):
-        return self.quantite <= self.produit.seuil_alerte
-
 class Stock(models.Model):
-    produit = models.OneToOneField(Produit, on_delete=models.CASCADE, related_name='stock')
+    produit = models.ForeignKey(Produit, on_delete=models.CASCADE)
     quantite = models.FloatField(default=0)
     date_entree = models.DateTimeField(default=timezone.now)
-    date_sortie = models.DateTimeField(null=True, blank=True)  # facultatif
+    date_sortie = models.DateTimeField(null=True, blank=True)
+    etat = models.CharField(max_length=20, default='rupture')
 
     def __str__(self):
-        return f"{self.produit.nom_produit} - {self.quantite} {self.produit.unite}"
+        return f"{self.produit.nom_produit} - {self.quantite}"
+
+    def update_etat(self):
+        seuil = self.produit.seuil_alerte
+        quantite = self.quantite
+        if quantite == 0:
+            self.etat = 'rupture'
+        elif quantite == seuil:
+            self.etat = 'securite'
+        elif quantite > seuil:
+            self.etat = 'disponible'
+        elif quantite < seuil:
+            self.etat = 'alerte'
+
+    def save(self, *args, **kwargs):
+        self.update_etat()
+        super().save(*args, **kwargs)
 
 class Achat(models.Model):
     date = models.DateField()

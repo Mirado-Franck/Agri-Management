@@ -29,7 +29,6 @@ class StockSerializer(serializers.ModelSerializer):
     produit_categorie = serializers.CharField(source='produit.categorie_produit.nom')
     produit_unite = serializers.CharField(source='produit.unite')
     seuil_alerte = serializers.IntegerField(source='produit.seuil_alerte')
-    etat = serializers.ReadOnlyField()
 
     class Meta:
         model = Stock
@@ -37,6 +36,16 @@ class StockSerializer(serializers.ModelSerializer):
             'id', 'produit_nom', 'produit_categorie', 'produit_unite',
             'quantite', 'date_entree', 'date_sortie', 'seuil_alerte', 'etat'
         ]
+
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        instance.update_etat()
+        return instance
+
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        instance.update_etat()
+        return instance
 
 
 class AchatDetailSerializer(serializers.ModelSerializer):
