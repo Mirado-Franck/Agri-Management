@@ -9,6 +9,7 @@ class CategorieSerializer(serializers.ModelSerializer):
 
 class ProduitSerializer(serializers.ModelSerializer):
     categorie_produit_nom = serializers.CharField(source='categorie_produit.nom', read_only=True)
+    quantite_en_stock = serializers.SerializerMethodField()  # ✅ Nouveau champ
 
     class Meta:
         model = Produit
@@ -21,7 +22,12 @@ class ProduitSerializer(serializers.ModelSerializer):
             'date_ajout',
             'prix_unitaire',
             'seuil_alerte',
+            'quantite_en_stock',  # ✅ Inclure dans la sortie
         ]
+
+    def get_quantite_en_stock(self, obj):
+        stock = Stock.objects.filter(produit=obj).first()
+        return stock.quantite if stock else 0
 
 
 class StockSerializer(serializers.ModelSerializer):
@@ -47,6 +53,28 @@ class StockSerializer(serializers.ModelSerializer):
         instance.update_etat()
         return instance
 
+class VenteDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VenteDetail
+        fields = ['produit', 'quantite', 'prix_unitaire']
+
+class VenteSerializer(serializers.ModelSerializer):
+    details = VenteDetailSerializer(many=True)  # champ imbriqué
+
+    class Meta:
+        model = Vente
+        fields = ['id', 'date', 'client', 'total', 'details']
+    
+    def create(self, validated_data):
+        details_data = validated_data.pop('details')
+        user = self.context['request'].user  # récupère l'utilisateur connecté
+        vente = Vente.objects.create(user=user, **validated_data)
+
+        for detail in details_data:
+            VenteDetail.objects.create(vente=vente, **detail)
+        
+        return vente
+
 
 class AchatDetailSerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,18 +87,4 @@ class AchatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Achat
-        fields = '__all__'
-
-
-class VenteDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = VenteDetail
-        fields = '__all__'
-
-
-class VenteSerializer(serializers.ModelSerializer):
-    details = VenteDetailSerializer(many=True, read_only=True, source='ventedetail_set')
-
-    class Meta:
-        model = Vente
         fields = '__all__'
