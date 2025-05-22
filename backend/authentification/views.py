@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
@@ -23,6 +24,15 @@ class LoginView(APIView):
         user = authenticate(username=username, password=password)
 
         if user is not None:
-            return Response({"message": "Login réussi"}, status=status.HTTP_200_OK)
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "user": {
+                    "id": user.id,
+                    "username": user.username,
+                    "role": user.role,
+                }
+            }, status=status.HTTP_200_OK)
         else:
             return Response({"message": "Identifiants invalides"}, status=status.HTTP_401_UNAUTHORIZED)

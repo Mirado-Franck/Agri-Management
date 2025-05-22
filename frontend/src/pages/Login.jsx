@@ -23,13 +23,21 @@ export default function Login({ onLogin }) {
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.message);
+        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
+        localStorage.setItem('user_id', data.user.id);
+        localStorage.setItem('user_role', data.user.role);
+
+        alert(
+          `✅ Connexion réussie !\n\nAccess token: ${data.access}\nRefresh token: ${data.refresh}\nUser ID: ${data.user.id}\nRôle: ${data.user.role}`
+        );
+
         onLogin();
       } else {
-        setErreur(data.message);
+        setErreur(data.message || 'Erreur d’authentification');
       }
     } catch (error) {
-      setErreur("Erreur de connexion");
+      setErreur("Erreur de connexion au serveur");
     }
   };
 
@@ -65,7 +73,7 @@ export default function Login({ onLogin }) {
             type="button"
             className="toggle-password"
             onClick={() => setShowPassword(!showPassword)}
-            aria-label="Toggle password visibility"
+            aria-label="Afficher/Masquer le mot de passe"
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </button>

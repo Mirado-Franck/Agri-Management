@@ -58,6 +58,7 @@ class AchatDetailViewSet(viewsets.ModelViewSet):
 class VenteViewSet(viewsets.ModelViewSet):
     queryset = Vente.objects.all()
     serializer_class = VenteSerializer
+    permission_classes = [IsAuthenticated]
 
 class VenteDetailViewSet(viewsets.ModelViewSet):
     queryset = VenteDetail.objects.all()

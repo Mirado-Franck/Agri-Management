@@ -9,7 +9,7 @@ from .views import (
     VenteViewSet,
     VenteCreateView,
     VenteDetailViewSet,
-    ajouter_stock  # ✅ N'oublie pas d'importer ta vue personnalisée
+    ajouter_stock
 )
 
 router = DefaultRouter()

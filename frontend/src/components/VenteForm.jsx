@@ -6,11 +6,10 @@ export default function VenteForm() {
   const [produitsDisponibles, setProduitsDisponibles] = useState([]);
   const [stocks, setStocks] = useState([]);
   const [vente, setVente] = useState({
+    client: '',
     produits: [{ categorie: '', produitId: '', quantite: 1, prix: 0 }],
-    remarques: ''
   });
 
-  // Charger les produits
   useEffect(() => {
     fetch('http://localhost:8000/api/produits/produits/')
       .then(res => res.json())
@@ -18,7 +17,6 @@ export default function VenteForm() {
       .catch(err => console.error('Erreur chargement produits', err));
   }, []);
 
-  // Charger les stocks
   useEffect(() => {
     fetch('http://localhost:8000/api/produits/stocks/')
       .then(res => res.json())
@@ -71,11 +69,45 @@ export default function VenteForm() {
     return vente.produits.reduce((total, p) => total + p.quantite * p.prix, 0).toFixed(2);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('📤 Vente à envoyer :', vente);
+  
+    const token = localStorage.getItem('access_token');
+    const userId = parseInt(localStorage.getItem('user_id'));
+  
+    const venteData = {
+      client: vente.client,
+      user: userId,
+      date: new Date().toISOString().slice(0, 10),
+      total: parseFloat(calculerTotal()),
+      details: vente.produits.map(p => ({   // 👈 ici
+        produit: parseInt(p.produitId),
+        quantite: parseFloat(p.quantite),
+        prix_unitaire: parseFloat(p.prix),
+      })),
+    };    
+  
+    console.log('🧾 Vente envoyée :', venteData);
+  
+    const response = await fetch('http://localhost:8000/api/produits/ventes/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(venteData),
+    });
+  
+    const result = await response.json();
+  
+    if (response.ok) {
+      alert('✅ Vente enregistrée !');
+    } else {
+      console.error('🛑 Erreur serveur :', result);
+      alert(`Erreur: ${JSON.stringify(result)}`);
+    }
   };
-
+  
   const produitsSelectionnes = vente.produits
     .filter(p => p.produitId)
     .map(p => parseInt(p.produitId));
@@ -83,6 +115,17 @@ export default function VenteForm() {
   return (
     <div className="vente-form">
       <h2 className="vente-title">Nouvelle Vente</h2>
+
+      <div className="vente-group">
+        <label>Client</label>
+        <input
+          type="text"
+          value={vente.client}
+          onChange={(e) => setVente({ ...vente, client: e.target.value })}
+          className="vente-input"
+          required
+        />
+      </div>
 
       <div className="vente-produits-scrollable">
         {vente.produits.map((p, index) => (
@@ -145,15 +188,6 @@ export default function VenteForm() {
 
       <div className="vente-total">
         <strong>Total : {calculerTotal()} €</strong>
-      </div>
-
-      <div className="vente-group">
-        <label>Remarques</label>
-        <textarea
-          rows="3"
-          value={vente.remarques}
-          onChange={(e) => setVente({ ...vente, remarques: e.target.value })}
-        ></textarea>
       </div>
 
       <button className="vente-btn-primary full" onClick={handleSubmit}>
