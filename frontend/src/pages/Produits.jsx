@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo  } from 'react';
+import React, { useState, useEffect } from 'react';
 import './css/Produits.css';
 import { toast } from 'sonner';
 import { IoMdClose } from "react-icons/io";
