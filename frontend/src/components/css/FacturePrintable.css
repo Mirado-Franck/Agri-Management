@@ -1,0 +1,36 @@
+.facture-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    color: #000;
+    background: #fff;
+  }
+  
+  .facture-title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .facture-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .facture-table th, .facture-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .facture-table th {
+    background-color: #f4f4f4;
+  }
+  
+  .facture-total {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 18px;
+  }
+  
