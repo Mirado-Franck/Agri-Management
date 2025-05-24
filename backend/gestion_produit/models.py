@@ -61,7 +61,7 @@ class AchatDetail(models.Model):
     prix_unitaire = models.FloatField()
 
     def __str__(self):
-        return f"{self.produit.nom} x {self.quantite} @ {self.prix_unitaire}"
+        return f"{self.produit.nom_produit} x {self.quantite} @ {self.prix_unitaire}"
 
 class Vente(models.Model):
     date = models.DateField()
@@ -79,5 +79,5 @@ class VenteDetail(models.Model):
     prix_unitaire = models.FloatField()
 
     def __str__(self):
-        return f"{self.produit.nom} x {self.quantite} @ {self.prix_unitaire}"
+        return f"{self.produit.nom_produit} x {self.quantite} @ {self.prix_unitaire}"
 

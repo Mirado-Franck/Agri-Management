@@ -1,16 +1,31 @@
-import React, { useState } from 'react'
-import './css/Ventes.css'
+import React, { useState, useEffect } from 'react';
+import './css/Ventes.css';
 
-import Searchbar from '../components/Searchbar'
-import VenteForm from '../components/VenteForm'
+import Searchbar from '../components/Searchbar';
+import VenteForm from '../components/VenteForm';
 
-import { FaEye, FaPlus } from "react-icons/fa"
-import { PiPrinter } from "react-icons/pi"
+import { FaEye, FaPlus } from "react-icons/fa";
+import { PiPrinter } from "react-icons/pi";
 import { IoMdClose } from "react-icons/io";
 
 export default function Ventes() {
   const [showModal, setShowModal] = useState(false);
+  const [ventes, setVentes] = useState([]);
 
+  useEffect(() => {
+    fetch('http://127.0.0.1:8000/api/produits/ventes/', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log('📦 Données reçues:', data);
+        setVentes(data);
+      })
+      .catch(err => console.error("Erreur lors du chargement des ventes :", err));
+  }, [showModal]);
+  
   return (
     <div className='ventes-container'>
       <div className="ventes-header">
@@ -38,42 +53,37 @@ export default function Ventes() {
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: 30 }, (_, i) => (
-              <tr key={i}>
-                <td>{i + 1}</td>
-                <td>0{i + 1}{i + 5}1{ i * i}</td>
-                <td>0{i + 1}-05-2025</td>
-                <td>Liva</td>
-                <td>{i + 2} 1 {i * 10}.00Ar</td>
-                <td>Admin</td>
-                <td className="table-actions">
-                  <button className="modern-button view-btn">
-                    <FaEye />
-                  </button>
-                  <button className="modern-button print-btn">
-                    <PiPrinter />
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {ventes.length > 0 ? (
+              ventes.map((vente, i) => (
+                <tr key={vente.id}>
+                  <td>{i + 1}</td>
+                  <td>{vente.id}</td>
+                  <td>{vente.date}</td>
+                  <td>{vente.client}</td>
+                  <td>{vente.total.toFixed(2)} Ar</td>
+                  <td>{vente.user?.username || '—'}</td>
+                  <td className="table-actions">
+                    <button className="modern-button view-btn"><FaEye /></button>
+                    <button className="modern-button print-btn"><PiPrinter /></button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr><td colSpan="7" style={{ textAlign: 'center' }}>Aucune vente disponible.</td></tr>
+            )}
           </tbody>
         </table>
       </div>
 
-      {/* MODAL FLOTTANTE */}
       {showModal && (
-
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <button className="close-btn" onClick={() => setShowModal(false)}>
-                <div className='rond'>
-                    <IoMdClose size={20} />
-                </div>
-              </button>
-              <VenteForm />
-            </div>
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button className="close-btn" onClick={() => setShowModal(false)}>
+              <div className='rond'><IoMdClose size={20} /></div>
+            </button>
+            <VenteForm />
           </div>
-
+        </div>
       )}
     </div>
   );

@@ -59,22 +59,30 @@ class VenteDetailSerializer(serializers.ModelSerializer):
         fields = ['produit', 'quantite', 'prix_unitaire']
 
 class VenteSerializer(serializers.ModelSerializer):
-    details = VenteDetailSerializer(many=True)  # champ imbriqué
+    details = VenteDetailSerializer(many=True)
+    user = serializers.SerializerMethodField()
 
     class Meta:
         model = Vente
-        fields = ['id', 'date', 'client', 'total', 'details']
+        fields = ['id', 'date', 'client', 'total', 'user', 'details']
     
+    def get_user(self, obj):
+        if obj.user:
+            return {
+                "id": obj.user.id,
+                "username": obj.user.username
+            }
+        return None
+
     def create(self, validated_data):
         details_data = validated_data.pop('details')
-        user = self.context['request'].user  # récupère l'utilisateur connecté
+        user = self.context['request'].user
         vente = Vente.objects.create(user=user, **validated_data)
 
         for detail in details_data:
             VenteDetail.objects.create(vente=vente, **detail)
         
         return vente
-
 
 class AchatDetailSerializer(serializers.ModelSerializer):
     class Meta:
