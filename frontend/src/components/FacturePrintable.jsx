@@ -1,39 +1,56 @@
-// src/components/FacturePrintable.jsx
 import React from 'react';
 import './css/FacturePrintable.css';
 
-export default function FacturePrintable({ vente }) {
-  return (
-    <div className="facture-container">
-      <h2 className="facture-title">Facture</h2>
-      <p><strong>Date:</strong> {vente.date}</p>
-      <p><strong>Client:</strong> {vente.client}</p>
-      <p><strong>Employé:</strong> {vente.user?.username}</p>
+const FacturePrintable = React.forwardRef(({ vente }, ref) => {
+  if (!vente) return null;
 
-      <table className="facture-table">
-        <thead>
-          <tr>
-            <th>Produit</th>
-            <th>Quantité</th>
-            <th>Prix unitaire</th>
-            <th>Sous-total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {vente.details.map((d, i) => (
-            <tr key={i}>
-              <td>{d.produit_nom}</td>
-              <td>{d.quantite}</td>
-              <td>{d.prix_unitaire} Ar</td>
-              <td>{(d.quantite * d.prix_unitaire).toFixed(2)} Ar</td>
+  return (
+    <div className="facture-container" ref={ref}>
+      <div className="facture-header">
+        <h1>Facture</h1>
+        <div>
+          <strong>Vente N°:</strong> {vente.id}<br />
+          <strong>Date:</strong> {vente.date}<br />
+        </div>
+      </div>
+
+      <div className="facture-client">
+        <strong>Client:</strong> {vente.client}<br />
+        <strong>Employé:</strong> {vente.user?.username || '—'}
+      </div>
+
+      <div className="facture-details">
+        <table>
+          <thead>
+            <tr>
+              <th>Produit</th>
+              <th>Quantité</th>
+              <th>Prix unitaire</th>
+              <th>Total</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {vente.details?.map((item, idx) => (
+              <tr key={idx}>
+                <td>{item.produit_nom}</td>
+                <td>{item.quantite}</td>
+                <td>{item.prix_unitaire} Ar</td>
+                <td>{item.sous_total} Ar</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <div className="facture-total">
-        <strong>Total : {vente.total.toFixed(2)} Ar</strong>
+        <strong>Total à payer:</strong> {vente.total.toFixed(2)} Ar
+      </div>
+
+      <div className="facture-footer">
+        <p>Merci pour votre achat !</p>
       </div>
     </div>
   );
-}
+});
+
+export default FacturePrintable;

@@ -149,3 +149,21 @@ Les styles des boutons actions
   padding: 5px 10px;
   cursor: pointer;
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-container,
+  .print-container * {
+    visibility: visible;
+  }
+
+  .print-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
