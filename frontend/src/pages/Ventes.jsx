@@ -17,7 +17,8 @@ export default function Ventes() {
   const [ventes, setVentes] = useState([]);
   const [selectedVente, setSelectedVente] = useState(null);
   const [venteToPrint, setVenteToPrint] = useState(null);
-
+  const [searchTerm, setSearchTerm] = useState('');
+  
   useEffect(() => {
     axiosInstance.get('/produits/ventes/')
       .then(res => {
@@ -42,6 +43,14 @@ export default function Ventes() {
     }, 300);
   };
 
+  // Logique de recherche
+  const filteredVentes = ventes.filter(vente =>
+    vente.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+    vente.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    vente.date.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    vente.user?.username?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className='ventes-container'>
       <div className="ventes-header">
@@ -51,7 +60,10 @@ export default function Ventes() {
           </button>
         </div>
         <div>
-          <Searchbar />
+          <Searchbar 
+            onSearch={(text) => setSearchTerm(text)} 
+            placeholder="Rechercher un produit..."
+          />
         </div>
       </div>
 
@@ -69,8 +81,8 @@ export default function Ventes() {
             </tr>
           </thead>
           <tbody>
-            {ventes.length > 0 ? (
-              ventes.map((vente, i) => (
+            {filteredVentes.length > 0 ? (
+              filteredVentes.map((vente, i) => (
                 <tr key={vente.id}>
                   <td>{i + 1}</td>
                   <td>{vente.id}</td>
@@ -89,7 +101,7 @@ export default function Ventes() {
                 </tr>
               ))
             ) : (
-              <tr><td colSpan="7" style={{ textAlign: 'center' }}>Aucune vente disponible.</td></tr>
+              <tr><td colSpan="7" style={{ textAlign: 'center' }}>Aucune vente trouvée.</td></tr>
             )}
           </tbody>
         </table>
@@ -115,9 +127,10 @@ export default function Ventes() {
         </div>
       )}
 
-      {/* Impression invisible */}
+      {/* Impression avec animation de chargement */}
       {venteToPrint && (
-        <div className="print-container">
+        <div className="print-container loading">
+          <div className="loader"></div>
           <FacturePrintable vente={venteToPrint} />
         </div>
       )}

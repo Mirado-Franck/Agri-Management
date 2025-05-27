@@ -30,7 +30,6 @@
   border-radius: 6px;
 }
 
-
 .styled-table {
   width: 100%;
   border-collapse: collapse;
@@ -144,12 +143,49 @@ Les styles des boutons actions
   top: 10px;
   right: 15px;
   background:white;
-  color: balck;
+  color: black; /* Corrigé "balck" en "black" */
   border: none;
   padding: 5px 10px;
   cursor: pointer;
 }
 
+/* Animation de chargement pour l'impression */
+.print-container.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent; /* Fond invisible */
+  z-index: 9999; /* Au-dessus des autres éléments */
+  pointer-events: none; /* Pas d'interaction */
+}
+
+/* Masquer le contenu de FacturePrintable */
+.print-container.loading > *:not(.loader) {
+  display: none; /* Cacher tout sauf le loader */
+}
+
+/* Style de l'animation de chargement */
+.loader {
+  border: 4px solid #f3f3f3; /* Gris clair */
+  border-top: 4px solid #2563eb; /* Bleu assorti au thème */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+/* Animation de rotation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Styles pour l'impression */
 @media print {
   body * {
     visibility: hidden;
@@ -165,5 +201,18 @@ Les styles des boutons actions
     top: 0;
     left: 0;
     width: 100%;
+  }
+
+  .print-container.loading {
+    display: block;
+    background: white;
+  }
+
+  .print-container.loading > *:not(.loader) {
+    display: block; /* Afficher FacturePrintable lors de l'impression */
+  }
+
+  .loader {
+    display: none; /* Cacher le loader lors de l'impression */
   }
 }
