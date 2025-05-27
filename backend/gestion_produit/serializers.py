@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import Categorie, Produit, Stock, Achat, AchatDetail, Vente, VenteDetail
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class CategorieSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,7 +11,7 @@ class CategorieSerializer(serializers.ModelSerializer):
 
 class ProduitSerializer(serializers.ModelSerializer):
     categorie_produit_nom = serializers.CharField(source='categorie_produit.nom', read_only=True)
-    quantite_en_stock = serializers.SerializerMethodField()  # ✅ Nouveau champ
+    quantite_en_stock = serializers.SerializerMethodField()
 
     class Meta:
         model = Produit
@@ -22,13 +24,12 @@ class ProduitSerializer(serializers.ModelSerializer):
             'date_ajout',
             'prix_unitaire',
             'seuil_alerte',
-            'quantite_en_stock',  # ✅ Inclure dans la sortie
+            'quantite_en_stock',
         ]
 
     def get_quantite_en_stock(self, obj):
         stock = Stock.objects.filter(produit=obj).first()
         return stock.quantite if stock else 0
-
 
 class StockSerializer(serializers.ModelSerializer):
     produit_nom = serializers.CharField(source='produit.nom_produit')
@@ -89,10 +90,15 @@ class AchatDetailSerializer(serializers.ModelSerializer):
         model = AchatDetail
         fields = '__all__'
 
+class UserMinimalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username']
 
 class AchatSerializer(serializers.ModelSerializer):
-    details = AchatDetailSerializer(many=True, read_only=True, source='achatdetail_set')
+    details = AchatDetailSerializer(many=True, read_only=True)
+    user = UserMinimalSerializer(read_only=True)  # ✅ Affichage du username
 
     class Meta:
         model = Achat
-        fields = '__all__'
+        fields = ['id', 'date', 'fournisseur', 'user', 'total', 'details']

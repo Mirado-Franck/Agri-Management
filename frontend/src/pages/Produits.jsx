@@ -18,7 +18,7 @@ export default function Produits() {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [deleteCount, setDeleteCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   const refreshProduits = async () => {
     setIsLoading(true);
     try {
@@ -44,18 +44,8 @@ export default function Produits() {
         setErreur(error.message);
       }
     };
-
     fetchProduits();
   }, []);
-
-
-  useEffect(() => {
-    console.log("SearchTerm mis à jour:", searchTerm);
-  }, [searchTerm]);
-  
-  const filteredProduits = produits.filter(produit => {
-    return produit.nom_produit.toLowerCase().includes(searchTerm.toLowerCase());
-  });
 
   const isAllSelected = produits.length > 0 && selectedProduits.length === produits.length;
 
@@ -76,19 +66,19 @@ export default function Produits() {
   const handleDelete = async () => {
     try {
       setIsLoading(true);
-      
+
       const deleteRequests = selectedProduits.map(id =>
         fetch(`http://127.0.0.1:8000/api/produits/produits/${id}/`, {
           method: 'DELETE'
         })
       );
-  
+
       const responses = await Promise.all(deleteRequests);
       const allSuccessful = responses.every(response => response.ok);
-  
+
       if (allSuccessful) {
-        toast.success(deleteCount > 1 
-          ? "Produits supprimés avec succès" 
+        toast.success(deleteCount > 1
+          ? "Produits supprimés avec succès"
           : "Produit supprimé avec succès");
         refreshProduits();
         setSelectedProduits([]);
@@ -103,7 +93,7 @@ export default function Produits() {
 
   const getFilteredProduits = () => {
     if (!searchTerm) return produits;
-    
+
     return produits.filter(produit => {
       const matchesName = produit.nom_produit.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = produit.categorie_produit_nom?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -112,31 +102,32 @@ export default function Produits() {
   };
 
   const displayedProduits = getFilteredProduits();
+
   return (
     <div className="produits-container">
       <div className="produits-header">
         <CrudButtons
-            loading={isLoading} // Ajoutez un état isLoading si nécessaire
-            selectedProduits={selectedProduits}
-            onOpenModal={() => {
+          loading={isLoading}
+          selectedProduits={selectedProduits}
+          onOpenModal={() => {
+            setShowModal(true);
+            setEditingProduit(null);
+          }}
+          onEdit={() => {
+            if (selectedProduits.length === 1) {
+              const produitToEdit = produits.find(p => p.id === selectedProduits[0]);
+              setEditingProduit(produitToEdit);
               setShowModal(true);
-              setEditingProduit(null); // Mode création
-            }}
-            onEdit={() => {
-              if (selectedProduits.length === 1) {
-                const produitToEdit = produits.find(p => p.id === selectedProduits[0]);
-                setEditingProduit(produitToEdit);
-                setShowModal(true);
-              }
-            }}
-            onDelete={() => {
-              setDeleteCount(selectedProduits.length);
-              setShowConfirmDialog(true);
-            }}
+            }
+          }}
+          onDelete={() => {
+            setDeleteCount(selectedProduits.length);
+            setShowConfirmDialog(true);
+          }}
         />
         <div>
-          <Searchbar 
-            onSearch={(text) => setSearchTerm(text)} 
+          <Searchbar
+            onSearch={(text) => setSearchTerm(text)}
             placeholder="Rechercher un produit..."
           />
         </div>
@@ -148,7 +139,6 @@ export default function Produits() {
         <table className="styled-table">
           <thead>
             <tr>
-              {/* Case "Sélectionner tout" */}
               <th>
                 <input
                   type="checkbox"
@@ -169,8 +159,8 @@ export default function Produits() {
             </tr>
           </thead>
           <tbody>
-            {filteredProduits.length > 0 ? (
-              filteredProduits.map((produit, index) => (
+            {displayedProduits.length > 0 ? (
+              displayedProduits.map((produit, index) => (
                 <tr key={produit.id || index}>
                   <td>
                     <input
@@ -199,7 +189,6 @@ export default function Produits() {
         </table>
       </div>
 
-      {/* Modal */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -209,7 +198,7 @@ export default function Produits() {
             }}>
               <div className='rond'><IoMdClose size={20} /></div>
             </button>
-            
+
             {editingProduit ? (
               <ProduitFormEdit
                 produit={editingProduit}
@@ -230,17 +219,16 @@ export default function Produits() {
       )}
 
       <ConfirmationDialog
-      isOpen={showConfirmDialog}
-      onConfirm={handleDelete}
-      onCancel={() => setShowConfirmDialog(false)}
-      title={deleteCount > 1 ? "Supprimer plusieurs produits" : "Supprimer le produit"}
-      message={
-        deleteCount > 1
-          ? `Voulez-vous vraiment supprimer ces ${deleteCount} produits ?`
-          : "Voulez-vous vraiment supprimer ce produit ? Cette action est irréversible."
-      }
-    />
-
+        isOpen={showConfirmDialog}
+        onConfirm={handleDelete}
+        onCancel={() => setShowConfirmDialog(false)}
+        title={deleteCount > 1 ? "Supprimer plusieurs produits" : "Supprimer le produit"}
+        message={
+          deleteCount > 1
+            ? `Voulez-vous vraiment supprimer ces ${deleteCount} produits ?`
+            : "Voulez-vous vraiment supprimer ce produit ? Cette action est irréversible."
+        }
+      />
     </div>
   );
 }
