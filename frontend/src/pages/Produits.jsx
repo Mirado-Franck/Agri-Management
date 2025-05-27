@@ -174,8 +174,8 @@ export default function Produits() {
                   <td>{produit.categorie_produit_nom || '-'}</td>
                   <td>{produit.date_ajout ? new Date(produit.date_ajout).toLocaleDateString() : '-'}</td>
                   <td>{produit.prix_unitaire || '0'} Ar</td>
-                  <td>{produit.stock_actuel ?? '–'} kg</td>
-                  <td>{produit.seuil_alerte || '0'} kg</td>
+                  <td>{produit.quantite_en_stock ?? '–'} {produit.unite}</td>
+                  <td>{produit.seuil_alerte || '0'} {produit.unite}</td>
                 </tr>
               ))
             ) : (
