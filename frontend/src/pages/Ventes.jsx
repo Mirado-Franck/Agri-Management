@@ -10,6 +10,8 @@ import { FaEye, FaPlus } from "react-icons/fa";
 import { PiPrinter } from "react-icons/pi";
 import { IoMdClose } from "react-icons/io";
 
+import axiosInstance from '../axiosInstance'; // Importer axiosInstance
+
 export default function Ventes() {
   const [showModal, setShowModal] = useState(false);
   const [ventes, setVentes] = useState([]);
@@ -17,15 +19,10 @@ export default function Ventes() {
   const [venteToPrint, setVenteToPrint] = useState(null);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/produits/ventes/', {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log('📦 Données reçues:', data);
-        setVentes(data);
+    axiosInstance.get('/produits/ventes/')
+      .then(res => {
+        console.log('📦 Données reçues:', res.data);
+        setVentes(res.data);
       })
       .catch(err => {
         console.error("Erreur lors du chargement des ventes :", err);

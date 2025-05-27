@@ -1,0 +1,29 @@
+header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 16px;
+    background-color: transparent !important; /* Fond transparent */
+    margin-top: 0px !important; /* Margin-top prioritaire */
+  }
+  
+  .user-circle {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-circle div {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Cercle */
+    background-color: #f1f5f9; /* Gris clair moderne */
+    color: #1e40af; /* Bleu foncé pour la lettre */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600; /* Police semi-grasse */
+    font-size: 1.125rem; /* Taille de texte moderne */
+    border: 2px solid #e2e8f0; /* Bordure subtile */
+    transition: transform 0.2s ease-in-out; /* Animation fluide */
+  }
+  

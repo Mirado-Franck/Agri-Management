@@ -1,6 +1,6 @@
 .main-content {
     flex: 1;
-    padding: 20px;
+    margin-top: 0px;
     background-color: rgb(red, green, blue);
   }
   
@@ -16,3 +16,6 @@
     color: #7f8c8d;
   }
   
+  .headbar{
+    margin-top: 0px;
+  }

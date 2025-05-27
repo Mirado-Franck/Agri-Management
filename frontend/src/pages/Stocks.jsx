@@ -3,7 +3,7 @@ import Searchbar from '../components/Searchbar.jsx';
 import SortBySelector from '../components/SortBySelector.jsx';
 import DateSelector from '../components/DateSelector.jsx';
 import Modal from '../components/Modal.jsx';
-import { FaPlus, FaMinus } from 'react-icons/fa';
+import { FaPlus, FaMinus, FaCheckCircle, FaExclamationTriangle, FaExclamationCircle, FaTimesCircle } from 'react-icons/fa';
 import { toast } from 'sonner';
 import './css/Stocks.css';
 
@@ -68,7 +68,7 @@ export default function Stocks() {
         } else if (sortOption === 'a-z') {
           return a.produit_nom.localeCompare(b.produit_nom);
         } else if (sortOption === 'z-a') {
-          return b.produit_nom.localeCompare(a.produit_nom);
+          return b.produit_nom.localeCompare(b.produit_nom);
         }
         return 0;
       });
@@ -127,9 +127,9 @@ export default function Stocks() {
 
         // Notifications pour les états "alerte" et "rupture"
         if (data.etat === 'alerte') {
-          toast.warning(`⚠️ Stock en alerte pour ${data.produit_nom} : ${data.quantite} ${data.produit_unite} restant`);
+          toast.warning(`<FaExclamationCircle /> Stock en alerte pour ${data.produit_nom} : ${data.quantite} ${data.produit_unite} restant`);
         } else if (data.etat === 'rupture') {
-          toast.error(`🚨 Rupture de stock pour ${data.produit_nom}`);
+          toast.error(`<FaTimesCircle /> Rupture de stock pour ${data.produit_nom}`);
         }
 
         setIsModalOpen(false);
@@ -144,15 +144,15 @@ export default function Stocks() {
   const getEtatDisplay = (etat) => {
     switch (etat) {
       case 'disponible':
-        return { text: '🟢 Disponible', color: 'green' };
+        return { text: <><FaCheckCircle className="inline mr-1" /> Disponible</>, color: 'green' };
       case 'securite':
-        return { text: '🟡 Stock de sécurité', color: 'orange' };
+        return { text: <><FaExclamationTriangle className="inline mr-1" /> Stock de sécurité</>, color: 'orange' };
       case 'alerte':
-        return { text: '🔴 Stock en alerte', color: 'red' };
+        return { text: <><FaExclamationCircle className="inline mr-1" /> Stock en alerte</>, color: 'red' };
       case 'rupture':
-        return { text: '⚫ Rupture', color: 'black' };
+        return { text: <><FaTimesCircle className="inline mr-1" /> Rupture</>, color: 'black' };
       default:
-        return { text: '🟢 OK', color: 'green' };
+        return { text: <><FaCheckCircle className="inline mr-1" /> OK</>, color: 'green' };
     }
   };
 

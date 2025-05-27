@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-
+import Header from './Header';
 import Dashboard from '../pages/Dashboard';
 import Produits from '../pages/Produits';
 import Stocks from '../pages/Stocks';
@@ -9,18 +9,13 @@ import Achats from '../pages/Achats';
 import Statistiques from '../pages/Statistiques';
 import Deconnection from '../pages/Déconnection';
 import Parametres from '../pages/Paramètres';
+import './css/MainContent.css';
 
-import './css/MainContent.css'
-
-export default function MainContent() {
+function MainContent() {
   return (
-    <div className='main-content'>
+    <div className="main-content">
       <div className="headbar">
-       <div>
-        <div>
-            <h1>Bienvenue dans mon projet</h1>
-        </div>
-       </div>
+        <Header userInitial="M" />
       </div>
       <div>
         <Routes>
@@ -37,3 +32,5 @@ export default function MainContent() {
     </div>
   );
 }
+
+export default MainContent;

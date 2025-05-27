@@ -1,7 +1,14 @@
-import React from 'react'
+import React from 'react';
+import './css/Header.css';
 
-export default function () {
+function Header({ userInitial = 'M' }) {
   return (
-    <div></div>
-  )
+    <header>
+      <div className="user-circle">
+        <div>{userInitial}</div>
+      </div>
+    </header>
+  );
 }
+
+export default Header;
