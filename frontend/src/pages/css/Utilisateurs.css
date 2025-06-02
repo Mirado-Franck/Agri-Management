@@ -1,0 +1,27 @@
+.utilisateurs-container {
+    padding: 20px;
+  }
+  
+  .utilisateurs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .btn {
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  
+  .styled-table th,
+  .styled-table td {
+    border: 1px solid #ddd;
+  }
+  

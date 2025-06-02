@@ -7,6 +7,7 @@ import Stocks from '../pages/Stocks';
 import Ventes from '../pages/Ventes';
 import Achats from '../pages/Achats';
 import Statistiques from '../pages/Statistiques';
+import Utilisateurs from '../pages/Utilisateurs';
 import Deconnection from '../pages/Déconnection';
 import Parametres from '../pages/Paramètres';
 import './css/MainContent.css';
@@ -25,8 +26,9 @@ function MainContent() {
           <Route path="/Ventes" element={<Ventes />} />
           <Route path="/Achats" element={<Achats />} />
           <Route path="/Statistiques" element={<Statistiques />} />
-          <Route path="/Deconnection" element={<Deconnection />} />
+          <Route path="/Utilisateurs" element={<Utilisateurs />} />
           <Route path="/Parametres" element={<Parametres />} />
+          <Route path="/Deconnection" element={<Deconnection />} />
         </Routes>
       </div>
     </div>
