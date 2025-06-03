@@ -210,7 +210,7 @@ export default function VenteForm() {
       </button>
 
       <div className="vente-total">
-        <strong>Total : {calculerTotal()} €</strong>
+        <strong>Total : {calculerTotal()} Ar</strong>
       </div>
 
       <button className="vente-btn-primary full" onClick={handleSubmit}>

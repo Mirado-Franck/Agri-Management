@@ -14,24 +14,21 @@ export default function Login({ onLogin }) {
     try {
       const response = await fetch('http://127.0.0.1:8000/api/auth/login/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
+        // ✅ Stockage complet des données utilisateur
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
         localStorage.setItem('user_id', data.user.id);
         localStorage.setItem('user_role', data.user.role);
+        localStorage.setItem('user_username', data.user.username); // 👈 Ajout essentiel
 
-        alert(
-          `✅ Connexion réussie !\n\nAccess token: ${data.access}\nRefresh token: ${data.refresh}\nUser ID: ${data.user.id}\nRôle: ${data.user.role}`
-        );
-
+        alert(`✅ Connexion réussie !`);
         onLogin();
       } else {
         setErreur(data.message || 'Erreur d’authentification');
@@ -73,7 +70,6 @@ export default function Login({ onLogin }) {
             type="button"
             className="toggle-password"
             onClick={() => setShowPassword(!showPassword)}
-            aria-label="Afficher/Masquer le mot de passe"
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </button>

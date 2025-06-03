@@ -1,29 +1,71 @@
 header {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 16px;
-    background-color: transparent !important; /* Fond transparent */
-    margin-top: 0px !important; /* Margin-top prioritaire */
-  }
-  
-  .user-circle {
-    display: flex;
-    align-items: center;
-  }
-  
-  .user-circle div {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%; /* Cercle */
-    background-color: #f1f5f9; /* Gris clair moderne */
-    color: #1e40af; /* Bleu foncé pour la lettre */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600; /* Police semi-grasse */
-    font-size: 1.125rem; /* Taille de texte moderne */
-    border: 2px solid #e2e8f0; /* Bordure subtile */
-    transition: transform 0.2s ease-in-out; /* Animation fluide */
-  }
-  
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 16px;
+  background-color: transparent;
+  position: relative;
+}
+
+.notification-icon {
+  margin-right: 16px;
+  color: #0369a1;
+  cursor: pointer;
+}
+
+.user-circle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.user-initial {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e0f2fe;
+  color: #0369a1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.125rem;
+  border: 2px solid #bae6fd;
+  transition: transform 0.2s ease-in-out;
+}
+
+.user-circle:hover .user-initial {
+  transform: scale(1.05);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  width: 190px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  color: #111827;
+  border-bottom: 1px solid #f3f4f6;
+  background-color: #ffffff;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f9ff;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
