@@ -1,20 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import './css/VenteForm.css'; // tu peux créer AchatForm.css si tu veux les styles séparés
+import './css/AchatForm.css';
 import { FaTrash, FaPlus } from 'react-icons/fa';
 
 export default function AchatForm() {
   const [produitsDisponibles, setProduitsDisponibles] = useState([]);
+  const [stocks, setStocks] = useState([]);
   const [achat, setAchat] = useState({
     fournisseur: '',
     produits: [{ categorie: '', produitId: '', quantite: 1, prix: 0 }],
   });
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/produits/produits/')
-      .then(res => res.json())
-      .then(data => setProduitsDisponibles(data))
-      .catch(err => console.error('Erreur chargement produits', err));
+    fetchProduits();
+    fetchStocks();
   }, []);
+
+  const fetchProduits = async () => {
+    try {
+      const res = await fetch('http://localhost:8000/api/produits/produits/');
+      const data = await res.json();
+      setProduitsDisponibles(data);
+    } catch (err) {
+      console.error('Erreur chargement produits', err);
+    }
+  };
+
+  const fetchStocks = async () => {
+    try {
+      const res = await fetch('http://localhost:8000/api/produits/stocks/');
+      const data = await res.json();
+      setStocks(data);
+    } catch (err) {
+      console.error('Erreur chargement stocks', err);
+    }
+  };
 
   const handleProduitChange = (index, field, value) => {
     const produits = [...achat.produits];
@@ -28,7 +47,7 @@ export default function AchatForm() {
       const produit = produitsDisponibles.find(p => p.id === parseInt(value));
       produits[index].prix = produit ? parseFloat(produit.prix_unitaire) : 0;
     } else if (field === 'quantite') {
-      produits[index].quantite = parseFloat(value);
+      produits[index].quantite = Number(value);
     }
 
     setAchat({ ...achat, produits });
@@ -37,7 +56,7 @@ export default function AchatForm() {
   const ajouterProduit = () => {
     setAchat({
       ...achat,
-      produits: [...achat.produits, { categorie: '', produitId: '', quantite: 1, prix: 0 }]
+      produits: [...achat.produits, { categorie: '', produitId: '', quantite: 1, prix: 0 }],
     });
   };
 
@@ -53,10 +72,10 @@ export default function AchatForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const token = localStorage.getItem('access_token');
     const userId = parseInt(localStorage.getItem('user_id'));
-
+  
     const achatData = {
       fournisseur: achat.fournisseur,
       user: userId,
@@ -67,55 +86,65 @@ export default function AchatForm() {
         quantite: parseFloat(p.quantite),
         prix_unitaire: parseFloat(p.prix),
       })),
-    };
-
+    };    
+  
     console.log('🧾 Achat envoyé :', achatData);
-
-    const response = await fetch('http://localhost:8000/api/produits/achats/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(achatData),
-    });
-
-    const result = await response.json();
-
-    if (response.ok) {
-      alert('✅ Achat enregistré !');
-    } else {
-      console.error('🛑 Erreur serveur :', result);
-      alert(`Erreur: ${JSON.stringify(result)}`);
+  
+    try {
+      const response = await fetch('http://localhost:8000/api/produits/achats/create/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(achatData),
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        alert('✅ Achat enregistré !');
+        setAchat({
+          fournisseur: '',
+          produits: [{ categorie: '', produitId: '', quantite: 1, prix: 0 }],
+        });
+        await fetchStocks();
+      } else {
+        console.error('🛑 Erreur serveur :', result);
+        alert(`Erreur: ${JSON.stringify(result)}`);
+      }
+    } catch (err) {
+      console.error('🛑 Erreur réseau :', err);
+      alert('Erreur réseau lors de l\'enregistrement de l\'achat.');
     }
   };
-
+  
   const produitsSelectionnes = achat.produits
     .filter(p => p.produitId)
     .map(p => parseInt(p.produitId));
 
   return (
-    <div className="vente-form">
-      <h2 className="vente-title">Nouvel Achat</h2>
+    <div className="achat-form">
+      <h2 className="achat-title">Nouvel Achat</h2>
 
-      <div className="vente-group">
+      <div className="achat-group">
         <label>Fournisseur</label>
         <input
           type="text"
           value={achat.fournisseur}
           onChange={(e) => setAchat({ ...achat, fournisseur: e.target.value })}
-          className="vente-input"
+          className="achat-input"
           required
         />
       </div>
 
-      <div className="vente-produits-scrollable">
+      <div className="achat-produits-scrollable">
         {achat.produits.map((p, index) => (
-          <div className="vente-produit-row-custom produit-fade-in" key={index}>
+          <div className="achat-produit-row-custom produit-fade-in" key={index}>
             <select
               value={p.categorie}
               onChange={(e) => handleProduitChange(index, 'categorie', e.target.value)}
-              className="vente-select"
+              className="achat-select"
             >
               <option value="">Catégorie</option>
               {[...new Set(produitsDisponibles.map(prod => prod.categorie_produit_nom))].map((cat) => (
@@ -126,7 +155,7 @@ export default function AchatForm() {
             <select
               value={p.produitId}
               onChange={(e) => handleProduitChange(index, 'produitId', e.target.value)}
-              className="vente-select"
+              className="achat-select"
               disabled={!p.categorie}
             >
               <option value="">Produit</option>
@@ -145,7 +174,7 @@ export default function AchatForm() {
               placeholder="Prix"
               value={p.prix}
               readOnly
-              className="vente-input"
+              className="achat-input"
             />
 
             <input
@@ -154,25 +183,25 @@ export default function AchatForm() {
               min={1}
               value={p.quantite}
               onChange={(e) => handleProduitChange(index, 'quantite', e.target.value)}
-              className="vente-input"
+              className="achat-input"
             />
 
-            <button className="vente-suppr-btn" onClick={() => supprimerProduit(index)}>
+            <button className="achat-suppr-btn" onClick={() => supprimerProduit(index)}>
               <FaTrash />
             </button>
           </div>
         ))}
       </div>
 
-      <button className="vente-btn-outline success" onClick={ajouterProduit}>
+      <button className="achat-btn-outline success" onClick={ajouterProduit}>
         <FaPlus /> Ajouter une ligne
       </button>
 
-      <div className="vente-total">
+      <div className="achat-total">
         <strong>Total : {calculerTotal()} €</strong>
       </div>
 
-      <button className="vente-btn-primary full" onClick={handleSubmit}>
+      <button className="achat-btn-primary full" onClick={handleSubmit}>
         Enregistrer l'achat
       </button>
     </div>

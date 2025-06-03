@@ -19,7 +19,6 @@ from .serializers import (
     VenteDetailSerializer
 )
 
-# ✅ Vue personnalisée pour ajouter du stock
 @api_view(['POST'])
 def ajouter_stock(request, pk):
     try:
@@ -34,7 +33,6 @@ def ajouter_stock(request, pk):
 
     return Response({'message': 'Stock mis à jour avec succès'})
 
-# ✅ Vue pour créer une vente
 class VenteCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -45,7 +43,6 @@ class VenteCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# ✅ Vue pour lister les ventes
 class VenteListView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -54,7 +51,24 @@ class VenteListView(APIView):
         serializer = VenteSerializer(ventes, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-# ✅ ViewSets
+class AchatCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = AchatSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AchatListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        achats = Achat.objects.all()
+        serializer = AchatSerializer(achats, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class CategorieViewSet(viewsets.ModelViewSet):
     queryset = Categorie.objects.all()
     serializer_class = CategorieSerializer
@@ -66,10 +80,6 @@ class ProduitViewSet(viewsets.ModelViewSet):
 class StockViewSet(viewsets.ModelViewSet):
     queryset = Stock.objects.all()
     serializer_class = StockSerializer
-
-class AchatViewSet(viewsets.ModelViewSet):
-    queryset = Achat.objects.all()
-    serializer_class = AchatSerializer
 
 class AchatDetailViewSet(viewsets.ModelViewSet):
     queryset = AchatDetail.objects.all()

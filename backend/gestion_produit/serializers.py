@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Categorie, Produit, Stock, Achat, AchatDetail, Vente, VenteDetail
 from django.contrib.auth import get_user_model
-from django.utils import timezone  # Ajout de l'importation manquante
+from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
 User = get_user_model()
@@ -81,7 +81,6 @@ class VenteSerializer(serializers.ModelSerializer):
         details_data = validated_data.pop('details')
         user = self.context['request'].user
 
-        # Vérifier le stock pour chaque produit
         for detail in details_data:
             produit_id = detail.get('produit')
             quantite = detail.get('quantite')
@@ -95,15 +94,12 @@ class VenteSerializer(serializers.ModelSerializer):
             except Stock.DoesNotExist:
                 raise ValidationError(f"Aucun stock trouvé pour le produit ID {produit_id}")
 
-        # Créer la vente
         vente = Vente.objects.create(user=user, **validated_data)
 
-        # Créer les détails de la vente et mettre à jour le stock
         for detail in details_data:
             produit_id = detail.get('produit')
             quantite = detail.get('quantite')
             VenteDetail.objects.create(vente=vente, **detail)
-            # Mettre à jour le stock
             stock = Stock.objects.get(produit_id=produit_id)
             stock.quantite -= quantite
             stock.date_sortie = timezone.now()
@@ -115,17 +111,46 @@ class VenteSerializer(serializers.ModelSerializer):
 class AchatDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = AchatDetail
-        fields = '__all__'
+        fields = ['produit', 'quantite', 'prix_unitaire']
+
+class AchatSerializer(serializers.ModelSerializer):
+    details = AchatDetailSerializer(many=True)
+    user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Achat
+        fields = ['id', 'date', 'fournisseur', 'total', 'user', 'details']
+    
+    def get_user(self, obj):
+        if obj.user:
+            return {
+                "id": obj.user.id,
+                "username": obj.user.username
+            }
+        return None
+
+    def create(self, validated_data):
+        details_data = validated_data.pop('details')
+        user = self.context['request'].user
+
+        # Créer l'achat
+        achat = Achat.objects.create(user=user, **validated_data)
+
+        # Créer les détails de l'achat et mettre à jour le stock
+        for detail in details_data:
+            produit_id = detail.get('produit')
+            quantite = detail.get('quantite')
+            AchatDetail.objects.create(achat=achat, **detail)
+            # Mettre à jour ou créer le stock
+            stock, created = Stock.objects.get_or_create(produit_id=produit_id, defaults={'quantite': 0})
+            stock.quantite += quantite
+            stock.date_entree = timezone.now()
+            stock.update_etat()
+            stock.save()
+        
+        return achat
 
 class UserMinimalSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username']
-
-class AchatSerializer(serializers.ModelSerializer):
-    details = AchatDetailSerializer(many=True, read_only=True)
-    user = UserMinimalSerializer(read_only=True)
-
-    class Meta:
-        model = Achat
-        fields = ['id', 'date', 'fournisseur', 'user', 'total', 'details']

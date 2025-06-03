@@ -1,0 +1,170 @@
+.achat-form-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 15px;
+  }
+  
+  .achat-form {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+  } 
+  
+  .achat-title {
+    color: #2e7d32;
+    margin-bottom: 1.2rem;
+  }
+  
+  .achat-section-title {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .achat-group {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  
+  .achat-group label {
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+  }
+  
+  .achat-form input[type="text"],
+  .achat-form input[type="date"],
+  .achat-form input[type="number"],
+  .achat-form textarea {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 100%;
+  }
+  
+  .achat-form textarea {
+    resize: vertical;
+  }
+  
+  .achat-produit-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .achat-btn-outline {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    border: 2px solid #2e7d32;
+    color: #2e7d32;
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .achat-btn-outline:hover {
+    background: #e8f5e9;
+  }
+  
+  .success {
+    border-color: #2e7d32;
+    color: #2e7d32;
+  }
+  
+  .achat-total {
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+  }
+  
+  .achat-btn-primary {
+    margin-top: 1.5rem;
+    background: #2e7d32;
+    color: #fff;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .achat-btn-primary:hover {
+    background: #2e7d32;
+  }
+  
+  .full {
+    width: 100%;
+  }
+  
+  
+  
+  /*
+    Ventes
+  */
+  
+  .achat-produits-container {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    padding-right: 5px;
+  }
+  
+  .achat-produit-row-custom {
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.7fr 0.7fr auto;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .achat-select,
+  .achat-input {
+    padding: 0.5rem;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 100%;
+  }
+  
+  .achat-suppr-btn {
+    background: crimson;
+    color: white;
+    border: none;
+    padding: 0.5rem 0.7rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .achat-suppr-btn:hover {
+    background: rgb(203, 8, 8);
+  }
+  
+  /*
+  /* Apparition animée 
+  */
+  
+  .achat-produits-scrollable {
+    max-height: 150px; /* à ajuster si besoin */
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    padding-right: 5px;
+  }
+  
+  
+  @keyframes fadeInSlide {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .produit-fade-in {
+    animation: fadeInSlide 0.3s ease-out;
+  }
+  
