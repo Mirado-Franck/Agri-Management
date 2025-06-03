@@ -10,7 +10,7 @@ import { FaEye, FaPlus } from "react-icons/fa";
 import { PiPrinter } from "react-icons/pi";
 import { IoMdClose } from "react-icons/io";
 
-import axiosInstance from '../axiosInstance'; // Importer axiosInstance
+import axiosInstance from '../axiosInstance';
 
 export default function Ventes() {
   const [showModal, setShowModal] = useState(false);
@@ -20,15 +20,19 @@ export default function Ventes() {
   const [searchTerm, setSearchTerm] = useState('');
   
   useEffect(() => {
-    axiosInstance.get('/produits/ventes/')
-      .then(res => {
-        console.log('📦 Données reçues:', res.data);
-        setVentes(res.data);
-      })
-      .catch(err => {
-        console.error("Erreur lors du chargement des ventes :", err);
-        alert("Erreur lors du chargement des ventes. Vérifiez votre token.");
-      });
+    const fetchVentes = async () => {
+      try {
+        const token = localStorage.getItem('access_token');
+        console.log('🔑 Token utilisé:', token); // Log du token pour débogage
+        const response = await axiosInstance.get('/produits/ventes/');
+        console.log('📦 Données reçues:', response.data);
+        setVentes(response.data);
+      } catch (err) {
+        console.error('🛑 Erreur lors du chargement des ventes:', err.response?.status, err.response?.data);
+        alert(`Erreur lors du chargement des ventes: ${err.response?.status || 'Inconnue'} - ${err.response?.data?.detail || 'Vérifiez votre token ou l\'URL.'}`);
+      }
+    };
+    fetchVentes();
   }, [showModal]);
 
   const voirDetails = (vente) => {
@@ -39,11 +43,10 @@ export default function Ventes() {
     setVenteToPrint(vente);
     setTimeout(() => {
       window.print();
-      setVenteToPrint(null); // Nettoyage après impression
+      setVenteToPrint(null);
     }, 300);
   };
 
-  // Logique de recherche
   const filteredVentes = ventes.filter(vente =>
     vente.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
     vente.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -107,7 +110,6 @@ export default function Ventes() {
         </table>
       </div>
 
-      {/* Modal pour détails */}
       {selectedVente && (
         <DetailsModal
           vente={selectedVente}
@@ -115,7 +117,6 @@ export default function Ventes() {
         />
       )}
 
-      {/* Modal pour ajout de vente */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -127,7 +128,6 @@ export default function Ventes() {
         </div>
       )}
 
-      {/* Impression avec animation de chargement */}
       {venteToPrint && (
         <div className="print-container loading">
           <div className="loader"></div>

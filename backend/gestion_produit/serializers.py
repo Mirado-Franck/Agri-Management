@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import Categorie, Produit, Stock, Achat, AchatDetail, Vente, VenteDetail
 from django.contrib.auth import get_user_model
+from django.utils import timezone  # Ajout de l'importation manquante
+from rest_framework.exceptions import ValidationError
 
 User = get_user_model()
 
@@ -78,10 +80,35 @@ class VenteSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         details_data = validated_data.pop('details')
         user = self.context['request'].user
+
+        # Vérifier le stock pour chaque produit
+        for detail in details_data:
+            produit_id = detail.get('produit')
+            quantite = detail.get('quantite')
+            try:
+                stock = Stock.objects.get(produit_id=produit_id)
+                if stock.quantite < quantite:
+                    raise ValidationError(
+                        f"Stock insuffisant pour le produit {stock.produit.nom_produit}. "
+                        f"Disponible: {stock.quantite}, Demandé: {quantite}"
+                    )
+            except Stock.DoesNotExist:
+                raise ValidationError(f"Aucun stock trouvé pour le produit ID {produit_id}")
+
+        # Créer la vente
         vente = Vente.objects.create(user=user, **validated_data)
 
+        # Créer les détails de la vente et mettre à jour le stock
         for detail in details_data:
+            produit_id = detail.get('produit')
+            quantite = detail.get('quantite')
             VenteDetail.objects.create(vente=vente, **detail)
+            # Mettre à jour le stock
+            stock = Stock.objects.get(produit_id=produit_id)
+            stock.quantite -= quantite
+            stock.date_sortie = timezone.now()
+            stock.update_etat()
+            stock.save()
         
         return vente
 
@@ -97,7 +124,7 @@ class UserMinimalSerializer(serializers.ModelSerializer):
 
 class AchatSerializer(serializers.ModelSerializer):
     details = AchatDetailSerializer(many=True, read_only=True)
-    user = UserMinimalSerializer(read_only=True)  # ✅ Affichage du username
+    user = UserMinimalSerializer(read_only=True)
 
     class Meta:
         model = Achat

@@ -11,18 +11,29 @@ export default function VenteForm() {
   });
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/produits/produits/')
-      .then(res => res.json())
-      .then(data => setProduitsDisponibles(data))
-      .catch(err => console.error('Erreur chargement produits', err));
+    fetchProduits();
+    fetchStocks();
   }, []);
 
-  useEffect(() => {
-    fetch('http://localhost:8000/api/produits/stocks/')
-      .then(res => res.json())
-      .then(data => setStocks(data))
-      .catch(err => console.error('Erreur chargement stocks', err));
-  }, []);
+  const fetchProduits = async () => {
+    try {
+      const res = await fetch('http://localhost:8000/api/produits/produits/');
+      const data = await res.json();
+      setProduitsDisponibles(data);
+    } catch (err) {
+      console.error('Erreur chargement produits', err);
+    }
+  };
+
+  const fetchStocks = async () => {
+    try {
+      const res = await fetch('http://localhost:8000/api/produits/stocks/');
+      const data = await res.json();
+      setStocks(data);
+    } catch (err) {
+      console.error('Erreur chargement stocks', err);
+    }
+  };
 
   const handleProduitChange = (index, field, value) => {
     const produits = [...vente.produits];
@@ -80,7 +91,7 @@ export default function VenteForm() {
       user: userId,
       date: new Date().toISOString().slice(0, 10),
       total: parseFloat(calculerTotal()),
-      details: vente.produits.map(p => ({   // 👈 ici
+      details: vente.produits.map(p => ({
         produit: parseInt(p.produitId),
         quantite: parseFloat(p.quantite),
         prix_unitaire: parseFloat(p.prix),
@@ -89,22 +100,34 @@ export default function VenteForm() {
   
     console.log('🧾 Vente envoyée :', venteData);
   
-    const response = await fetch('http://localhost:8000/api/produits/ventes/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(venteData),
-    });
+    try {
+      const response = await fetch('http://localhost:8000/api/produits/ventes/create/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(venteData),
+      });
   
-    const result = await response.json();
+      const result = await response.json();
   
-    if (response.ok) {
-      alert('✅ Vente enregistrée !');
-    } else {
-      console.error('🛑 Erreur serveur :', result);
-      alert(`Erreur: ${JSON.stringify(result)}`);
+      if (response.ok) {
+        alert('✅ Vente enregistrée !');
+        // Réinitialiser le formulaire
+        setVente({
+          client: '',
+          produits: [{ categorie: '', produitId: '', quantite: 1, prix: 0 }],
+        });
+        // Recharger les stocks pour refléter les changements
+        await fetchStocks();
+      } else {
+        console.error('🛑 Erreur serveur :', result);
+        alert(`Erreur: ${JSON.stringify(result)}`);
+      }
+    } catch (err) {
+      console.error('🛑 Erreur réseau :', err);
+      alert('Erreur réseau lors de l\'enregistrement de la vente.');
     }
   };
   

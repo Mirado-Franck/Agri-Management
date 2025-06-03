@@ -34,6 +34,26 @@ def ajouter_stock(request, pk):
 
     return Response({'message': 'Stock mis à jour avec succès'})
 
+# ✅ Vue pour créer une vente
+class VenteCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = VenteSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# ✅ Vue pour lister les ventes
+class VenteListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        ventes = Vente.objects.all()
+        serializer = VenteSerializer(ventes, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 # ✅ ViewSets
 class CategorieViewSet(viewsets.ModelViewSet):
     queryset = Categorie.objects.all()
@@ -54,22 +74,3 @@ class AchatViewSet(viewsets.ModelViewSet):
 class AchatDetailViewSet(viewsets.ModelViewSet):
     queryset = AchatDetail.objects.all()
     serializer_class = AchatDetailSerializer
-
-class VenteViewSet(viewsets.ModelViewSet):
-    queryset = Vente.objects.all()
-    serializer_class = VenteSerializer
-    permission_classes = [IsAuthenticated]
-
-class VenteDetailViewSet(viewsets.ModelViewSet):
-    queryset = VenteDetail.objects.all()
-    serializer_class = VenteDetailSerializer
-    
-class VenteCreateView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        serializer = VenteSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

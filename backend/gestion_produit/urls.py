@@ -6,9 +6,8 @@ from .views import (
     StockViewSet,
     AchatViewSet,
     AchatDetailViewSet,
-    VenteViewSet,
     VenteCreateView,
-    VenteDetailViewSet,
+    VenteListView,
     ajouter_stock
 )
 
@@ -18,11 +17,10 @@ router.register(r'produits', ProduitViewSet)
 router.register(r'stocks', StockViewSet)
 router.register(r'achats', AchatViewSet)
 router.register(r'achat-details', AchatDetailViewSet)
-router.register(r'ventes', VenteViewSet)
-router.register(r'vente-details', VenteDetailViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
     path('ventes/create/', VenteCreateView.as_view(), name='vente-create'),
-    path('stocks/<int:pk>/ajouter-stock/', ajouter_stock, name='ajouter-stock'),  # ✅ Ajoute cette ligne
+    path('ventes/', VenteListView.as_view(), name='vente-list'),
+    path('stocks/<int:pk>/ajouter-stock/', ajouter_stock, name='ajouter-stock'),
 ]
