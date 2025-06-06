@@ -8,6 +8,7 @@ const DateSelector = ({ selectedDate, setDateFilter }) => {
 
   return (
     <div className="combo-box-container">
+      <label htmlFor="date-selector" className="combo-box-label">Filtrer par date :</label>
       <select 
         id="date-selector"
         className="combo-box"

@@ -1,49 +1,97 @@
 .facture-container {
   font-family: 'Arial', sans-serif;
-  padding: 20px;
   max-width: 800px;
-  margin: auto;
-  background: white;
+  margin: 0 auto;
+  padding: 40px;
+  border: 1px solid #ccc;
+  background-color: #fff;
   color: #333;
+  font-size: 14px;
 }
 
 .facture-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #555;
+  border-bottom: 2px solid #333;
+  padding-bottom: 10px;
   margin-bottom: 20px;
 }
 
 .facture-header h1 {
   margin: 0;
+  font-size: 28px;
 }
 
 .facture-client {
   margin-bottom: 20px;
-  font-size: 1rem;
+  line-height: 1.6;
 }
 
 .facture-details table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
-.facture-details th, .facture-details td {
-  padding: 8px;
+.facture-details th,
+.facture-details td {
   border: 1px solid #ccc;
+  padding: 8px;
   text-align: left;
 }
 
+.facture-details th {
+  background-color: #f2f2f2;
+}
+
 .facture-total {
-  margin-top: 20px;
-  font-size: 1.2rem;
   text-align: right;
+  font-size: 16px;
   font-weight: bold;
+  margin-top: 20px;
+  border-top: 2px solid #333;
+  padding-top: 10px;
 }
 
 .facture-footer {
-  margin-top: 30px;
   text-align: center;
+  margin-top: 30px;
   font-style: italic;
+  color: #777;
+}
+
+/* Ligne de séparation style "ciseaux" */
+.facture-separation {
+  margin: 40px 0;
+  border-top: 2px dashed #bbb;
+  position: relative;
+}
+
+.facture-separation::before {
+  content: "✂️";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 0 5px;
+  font-size: 18px;
+}
+
+/* Impression uniquement */
+@media print {
+  body {
+    margin: 0;
+  }
+
+  .facture-container {
+    box-shadow: none;
+    border: none;
+    padding: 0;
+  }
+
+  .facture-separation {
+    page-break-after: always;
+  }
 }

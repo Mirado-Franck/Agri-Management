@@ -1,3 +1,4 @@
+/* ----- Container principal ----- */
 .dashboard-container {
   padding: 24px;
   font-family: 'Arial', sans-serif;
@@ -5,6 +6,14 @@
   min-height: 100vh;
   color: #1f2937;
   margin: 0 auto;
+}
+
+/* ----- Titre ----- */
+.dashboard-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #1f2937;
 }
 
 /* ----- KPI Cards ----- */
@@ -22,11 +31,16 @@
   padding: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
-  text-align: center;
 }
 
 .kpi-card:hover {
   transform: translateY(-4px);
+}
+
+.kpi-icon {
+  font-size: 1.5rem;
+  color: #3b82f6;
+  margin-bottom: 8px;
 }
 
 .kpi-label {
@@ -37,8 +51,6 @@
 }
 
 .kpi-value {
-  font-size: 1.4rem;
-  font-weight: 700;
   color: #111827;
 }
 
@@ -47,10 +59,14 @@
   background-color: #fefce8;
 }
 
-/* ----- Chart Section ----- */
+.kpi-card.warning .kpi-icon {
+  color: #eab308;
+}
+
+/* ----- Section Graphiques ----- */
 .charts-section {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); /* Agrandissement ici */
   gap: 24px;
 }
 
@@ -72,33 +88,14 @@
 .chart-container {
   max-width: 100%;
   height: 300px;
-  position: relative;
-  overflow: hidden;
   background: #ffffff;
   border-radius: 8px;
   padding: 15px;
+  overflow: hidden;
+  position: relative;
 }
 
-/* ----- Dashboard Title ----- */
-.dashboard-title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  margin-bottom: 24px;
-  color: #1f2937;
-}
-
-/* ----- Icônes KPI ----- */
-.kpi-icon {
-  font-size: 1.5rem;
-  color: #3b82f6;
-  margin-bottom: 8px;
-}
-
-.warning .kpi-icon {
-  color: #eab308;
-}
-
-/* ----- Responsive Adjustments ----- */
+/* ----- Responsive ----- */
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 16px;

@@ -8,6 +8,7 @@ const SortBySelector = ({ selectedSort, setSortOption }) => {
 
   return (
     <div className="combo-box-container">
+      <label htmlFor="sort-by-selector" className="combo-box-label">Trier par :</label>
       <select 
         id="sort-by-selector"
         className="combo-box"

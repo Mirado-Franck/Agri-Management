@@ -39,11 +39,8 @@ export default function VentePieChart() {
               label: 'Quantité vendue',
               data: valeurs,
               backgroundColor: [
-                '#FF6B6B', // Rouge vibrant 🍒
-                '#4ECDC4', // Turquoise frais 🌊
-                '#FFD93D', // Jaune éclatant 🌞
-                '#FF8C00', // Orange dynamique 🔥
-                '#7C3AED', // Violet audacieux 💜
+                '#FF6B6B', '#4ECDC4', '#FFD93D', '#FF8C00', '#7C3AED',
+                '#34D399', '#60A5FA', '#F472B6', '#A78BFA', '#10B981'
               ],
               borderColor: '#FFFFFF',
               borderWidth: 2,
@@ -62,10 +59,10 @@ export default function VentePieChart() {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: false, // Important pour que la div fixe la hauteur
     plugins: {
       legend: {
-        position: 'right', // Légendes à droite 📍
+        position: 'right',
         labels: {
           boxWidth: 20,
           padding: 15,
@@ -85,7 +82,7 @@ export default function VentePieChart() {
   };
 
   return (
-    <>
+    <div className="chart-container">
       {loading ? (
         <p>Chargement du graphique... ⏳</p>
       ) : dataPie ? (
@@ -93,6 +90,6 @@ export default function VentePieChart() {
       ) : (
         <p>Impossible de charger les données. 😔</p>
       )}
-    </>
+    </div>
   );
 }

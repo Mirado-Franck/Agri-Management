@@ -160,9 +160,7 @@ export default function Stocks() {
     <div className="stocks-container">
       <div className="stocks-header">
         <div className="button-group">
-          <span>Date</span>
           <DateSelector selectedDate={dateFilter} setDateFilter={setDateFilter} />
-          <span>Trier par</span>
           <SortBySelector selectedSort={sortOption} setSortOption={setSortOption} />
         </div>
         <div>

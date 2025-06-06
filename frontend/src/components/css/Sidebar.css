@@ -102,6 +102,47 @@
  ----------- Responsive Sidebar (mobile/tablette) -----------
 */
 
+/* ----- Icon Colors ----- */
+.dashboard-icon {
+  color: #3b82f6; /* Bleu vif pour Tableau de Bord */
+}
+
+.produits-icon {
+  color: #FF6B6B; /* Rouge vibrant pour Produits */
+}
+
+.stocks-icon {
+  color: #4ECDC4; /* Turquoise frais pour Stocks */
+}
+
+.ventes-icon {
+  color: #FFD93D; /* Jaune éclatant pour Ventes */
+}
+
+.achats-icon {
+  color: #FF8C00; /* Orange dynamique pour Achats */
+}
+
+.stats-icon {
+  color: #7C3AED; /* Violet audacieux pour Statistiques */
+}
+
+.users-icon {
+  color: #00C4B4; /* Cyan lumineux pour Utilisateurs */
+}
+
+.langue-icon {
+  color: #F472B6; /* Rose pétillant pour Langue */
+}
+
+.params-icon {
+  color: #6B7280; /* Gris moderne pour Paramètres */
+}
+
+.logout-icon {
+  color: #EF4444; /* Rouge pour Déconnexion */
+}
+
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;

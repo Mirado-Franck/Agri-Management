@@ -1,6 +1,5 @@
-// src/components/DetailsModal.jsx
 import React from 'react';
-import './css/DetailsModal.css'; // à créer pour le style si besoin
+import './css/DetailsModal.css';
 import { IoMdClose } from "react-icons/io";
 
 export default function DetailsModal({ vente, onClose }) {
@@ -30,10 +29,10 @@ export default function DetailsModal({ vente, onClose }) {
           <tbody>
             {vente.details.map((d, i) => (
               <tr key={i}>
-                <td>{d.produit_nom || d.produit}</td>
+                <td>{d.produit?.nom_produit || '---'}</td>
                 <td>{d.quantite}</td>
                 <td>{d.prix_unitaire} Ar</td>
-                <td>{(d.quantite * d.prix_unitaire).toFixed(2)} €</td>
+                <td>{(d.quantite * d.prix_unitaire).toFixed(2)} Ar</td>
               </tr>
             ))}
           </tbody>

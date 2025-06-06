@@ -6,6 +6,7 @@ const FacturePrintable = React.forwardRef(({ vente }, ref) => {
 
   return (
     <div className="facture-container" ref={ref}>
+      {/* Copie client */}
       <div className="facture-header">
         <h1>Facture</h1>
         <div>
@@ -32,10 +33,10 @@ const FacturePrintable = React.forwardRef(({ vente }, ref) => {
           <tbody>
             {vente.details?.map((item, idx) => (
               <tr key={idx}>
-                <td>{item.produit_nom}</td>
+                <td>{item.produit_nom || item.produit.nom_produit || '—'}</td>
                 <td>{item.quantite}</td>
                 <td>{item.prix_unitaire} Ar</td>
-                <td>{item.sous_total} Ar</td>
+                <td>{(item.quantite * item.prix_unitaire).toFixed(2)} Ar</td>
               </tr>
             ))}
           </tbody>
@@ -48,6 +49,14 @@ const FacturePrintable = React.forwardRef(({ vente }, ref) => {
 
       <div className="facture-footer">
         <p>Merci pour votre achat !</p>
+      </div>
+
+      {/* Ligne de séparation ✂️ */}
+      <div className="facture-separation"></div>
+
+      {/* Partie duplicata / copie magasin */}
+      <div className="facture-footer">
+        <p><em>Copie magasin - à archiver</em></p>
       </div>
     </div>
   );

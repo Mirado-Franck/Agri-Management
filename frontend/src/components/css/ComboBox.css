@@ -1,63 +1,40 @@
-/* Global reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f7fa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-/* Conteneur du ComboBox */
 .combo-box-container {
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin: auto;
+  gap: 8px;
+  max-width: 300px;
 }
 
-/* Style de la combo box */
+.combo-box-label {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1f2937;
+}
+
 .combo-box {
-  width: 250px;
-  padding: 10px 15px;
-  font-size: 16px;
-  color: #333;
+  width: 100%;
+  padding: 8px 12px;
+  font-family: 'Arial', sans-serif;
+  font-size: 0.9rem;
+  color: #1f2937;
   background-color: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-/* État de focus */
-.combo-box:focus {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
   outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Style des options */
+.combo-box:hover {
+  border-color: #3b82f6;
+}
+
+.combo-box:focus {  
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
 .combo-box option {
   background-color: #ffffff;
-  color: #333;
-  padding: 8px;
-}
-
-/* Hover effect for better UX */
-.combo-box:hover {
-  border-color: #2a2b2d;
-}
-
-/* Style du texte placeholder */
-.combo-box::placeholder {
-  color: #aaa;
-}
-
-/* Animation de transition pour les changements */
-.combo-box, .combo-box-container {
-  transition: all 0.3s ease;
+  color: #1f2937;
 }

@@ -53,14 +53,11 @@ export default function VenteChart() {
   const data = {
     labels: ventesParSemaine.map(v => v[0]),
     datasets: [{
-      label: 'Total des ventes (€)',
+      label: 'Total des ventes (Ar)',
       data: ventesParSemaine.map(v => v[1]),
       backgroundColor: [
-        '#FF6B6B', // Rouge vibrant 🍒
-        '#4ECDC4', // Turquoise frais 🌊
-        '#FFD93D', // Jaune éclatant 🌞
-        '#FF8C00', // Orange dynamique 🔥
-        '#7C3AED', // Violet audacieux 💜
+        '#FF6B6B', '#4ECDC4', '#FFD93D', '#FF8C00', '#7C3AED',
+        '#34D399', '#60A5FA', '#F472B6', '#A78BFA', '#10B981'
       ],
       borderColor: '#FFFFFF',
       borderWidth: 2,
@@ -70,10 +67,10 @@ export default function VenteChart() {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: false, // Important pour gérer la hauteur 📏
     plugins: {
       legend: {
-        position: 'right', // Légendes à droite 📍
+        position: 'right',
         labels: {
           boxWidth: 20,
           padding: 15,
@@ -89,7 +86,7 @@ export default function VenteChart() {
         padding: 10,
         cornerRadius: 6,
         callbacks: {
-          label: ctx => `${ctx.raw.toFixed(2)} €`,
+          label: ctx => `${ctx.raw.toFixed(2)} Ar`,
         },
       },
     },
@@ -97,11 +94,15 @@ export default function VenteChart() {
       y: {
         beginAtZero: true,
         ticks: {
-          callback: value => `${value} €`,
+          callback: value => `${value} Ar`,
         },
       },
     },
   };
 
-  return <Bar data={data} options={options} />;
+  return (
+    <div className="chart-container"> {/* ✅ Style appliqué ici */}
+      <Bar data={data} options={options} />
+    </div>
+  );
 }
