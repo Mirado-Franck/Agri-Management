@@ -1,0 +1,11 @@
+.chart-container {
+  background: #f9fafb; /* Fond clair */
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre douce */
+  transition: transform 0.3s ease; /* Animation légère */
+}
+
+.chart-container:hover {
+  transform: translateY(-5px); /* Effet de survol */
+}
