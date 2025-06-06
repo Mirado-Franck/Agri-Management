@@ -84,3 +84,7 @@ class StockViewSet(viewsets.ModelViewSet):
 class AchatDetailViewSet(viewsets.ModelViewSet):
     queryset = AchatDetail.objects.all()
     serializer_class = AchatDetailSerializer
+
+class VenteDetailViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = VenteDetail.objects.select_related('produit').all()
+    serializer_class = VenteDetailSerializer

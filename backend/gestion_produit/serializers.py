@@ -57,6 +57,8 @@ class StockSerializer(serializers.ModelSerializer):
         return instance
 
 class VenteDetailSerializer(serializers.ModelSerializer):
+    produit = ProduitSerializer(read_only=True)  # ✅ Ceci donne accès à nom_produit côté frontend
+
     class Meta:
         model = VenteDetail
         fields = ['produit', 'quantite', 'prix_unitaire']
@@ -133,15 +135,12 @@ class AchatSerializer(serializers.ModelSerializer):
         details_data = validated_data.pop('details')
         user = self.context['request'].user
 
-        # Créer l'achat
         achat = Achat.objects.create(user=user, **validated_data)
 
-        # Créer les détails de l'achat et mettre à jour le stock
         for detail in details_data:
             produit_id = detail.get('produit')
             quantite = detail.get('quantite')
             AchatDetail.objects.create(achat=achat, **detail)
-            # Mettre à jour ou créer le stock
             stock, created = Stock.objects.get_or_create(produit_id=produit_id, defaults={'quantite': 0})
             stock.quantite += quantite
             stock.date_entree = timezone.now()

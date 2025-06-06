@@ -5,11 +5,12 @@ from .views import (
     ProduitViewSet,
     StockViewSet,
     AchatDetailViewSet,
+    VenteDetailViewSet,  # 👈 NE PAS OUBLIER
     VenteCreateView,
     VenteListView,
     AchatCreateView,
     AchatListView,
-    ajouter_stock
+    ajouter_stock,
 )
 
 router = DefaultRouter()
@@ -17,6 +18,7 @@ router.register(r'categories', CategorieViewSet)
 router.register(r'produits', ProduitViewSet)
 router.register(r'stocks', StockViewSet)
 router.register(r'achat-details', AchatDetailViewSet)
+router.register(r'vente-details', VenteDetailViewSet)  # ✅ ICI !
 
 urlpatterns = [
     path('', include(router.urls)),
