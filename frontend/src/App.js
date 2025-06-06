@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Toaster } from 'sonner'; // ✅ Import sonner
+import { Toaster } from 'sonner';
+import { ThemeProvider } from './pages/config/ThemeContext.js'; // Importez le ThemeProvider
 
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
@@ -29,7 +30,7 @@ export default function App() {
   };
 
   return (
-    <>
+    <ThemeProvider> {/* Enveloppez toute l'application avec ThemeProvider */}
       <Toaster position="top-center" size={44} />
       {!isLoggedIn ? (
         <Login onLogin={handleLogin} />
@@ -39,7 +40,6 @@ export default function App() {
           <MainContent />
         </div>
       )}
-    </>
+    </ThemeProvider>
   );
-  
 }

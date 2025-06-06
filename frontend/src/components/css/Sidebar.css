@@ -143,6 +143,31 @@
   color: #EF4444; /* Rouge pour Déconnexion */
 }
 
+/* ----- Theme Button Styles ----- */
+.theme-toggle {
+  margin: 16px 0;
+}
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  background-color: transparent;
+  border: none;
+  color: #1f2937;
+  font-family: 'Arial', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.theme-btn:hover {
+  background-color: #f3f4f6;
+}
+
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;

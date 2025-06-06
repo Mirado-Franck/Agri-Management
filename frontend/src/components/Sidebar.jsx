@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { FaHome, FaBox, FaChartBar, FaShoppingCart, FaFileAlt, FaChartLine, FaUsers, FaGlobe, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import './css/Sidebar.css';
 import logo from '../assets/logo.png';
-import Searchbar from './Searchbar';
 
 const navItems = [
   { to: '/dashboard', icon: <FaHome className="icon dashboard-icon" />, label: 'Tableau de Bord' },
@@ -23,10 +22,6 @@ export default function Sidebar({ onLogout }) {
   return (
     <aside className="sidebar" aria-label="Navigation latérale">
       <img src={logo} alt="Logo de l'application" className="logo" />
-
-      <div className="search-box">
-        <Searchbar />
-      </div>
 
       <ul className="nav-list">
         {navItems.map(({ to, icon, label }) => (
