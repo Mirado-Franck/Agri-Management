@@ -46,7 +46,7 @@ export default function Utilisateurs() {
   return (
     <div className="utilisateurs-container">
       <div className="utilisateurs-header">
-        <h2>Liste des Utilisateurs</h2>
+        <div></div>
         <button className="btn" onClick={() => setShowModal(true)}>
           <FaPlus /> Créer un utilisateur
         </button>

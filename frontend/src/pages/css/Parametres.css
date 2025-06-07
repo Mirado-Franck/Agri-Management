@@ -26,6 +26,7 @@
 .settings-panel {
   overflow-y: scroll ;
   margin: 2rem auto;
+  height: 750px;
   padding: 0 1rem;
   color: var(--dark);
   transition: background 0.3s ease, color 0.3s ease;
@@ -41,16 +42,12 @@
 }
 
 .settings-card {
+  margin-top: 3px;
   background: var(--light);
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   transition: all 0.3s ease;
   border: 1px solid var(--light-gray);
-}
-
-.settings-card.active {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .card-header {

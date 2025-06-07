@@ -93,11 +93,6 @@ const Parametres = () => {
             <p>Mettez à jour votre mot de passe régulièrement</p>
             <button className="action-btn security-btn">Modifier</button>
           </div>
-          <div className="security-item">
-            <h4>Authentification à deux facteurs</h4>
-            <p>Ajoutez une couche de sécurité supplémentaire</p>
-            <button className="action-btn security-btn">Activer 2FA</button>
-          </div>
         </div>
       ),
     },
@@ -118,13 +113,6 @@ const Parametres = () => {
             <span>Alertes de stock faible</span>
             <label className="switch">
               <input type="checkbox" defaultChecked />
-              <span className="slider round"></span>
-            </label>
-          </div>
-          <div className="notif-toggle">
-            <span>Notifications push</span>
-            <label className="switch">
-              <input type="checkbox" />
               <span className="slider round"></span>
             </label>
           </div>
@@ -156,10 +144,8 @@ const Parametres = () => {
 
   return (
     <div className="settings-panel">
-      <div className="settings-header">
-        <h1>Paramètres</h1>
-        <p className="settings-subtitle">Gérez vos préférences et vos informations de compte</p>
-      </div>
+        
+      <p className="settings-subtitle">Gérez vos préférences et vos informations de compte</p>
       
       <div className="settings-sections">
         {sections.map(section => (

@@ -14,73 +14,116 @@ import VentePieChart from '../components/VentePieChart';
 const Statistiques = () => {
   const [produitsAlerte, setProduitsAlerte] = useState([]);
   const [topProduits, setTopProduits] = useState([]);
+  const [performancesCategories, setPerformancesCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Couleurs pour les rangs des produits
+  // Couleurs prédéfinies pour les top produits
   const couleurs = ['#3b82f6', '#10b981', '#6366f1', '#f59e0b', '#ef4444'];
 
-  // Données statiques pour les performances par catégorie
-  const performancesCategories = [
-    { categorie: 'Électronique', ventes: 320, evolution: '+12%' },
-    { categorie: 'Alimentation', ventes: 280, evolution: '+5%' },
-    { categorie: 'Textile', ventes: 195, evolution: '-3%' },
-    { categorie: 'Mobilier', ventes: 150, evolution: '+8%' }
-  ];
-
-  // Récupération dynamique des produits en alerte et top 5 produits
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('access_token');
 
-        // Récupération des produits en alerte
-        const stockRes = await fetch('http://localhost:8000/api/produits/stocks/', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        const stockData = await stockRes.json();
-        const alertes = stockData.filter(stock => stock.etat === 'alerte' || stock.etat === 'rupture');
-        setProduitsAlerte(alertes);
-
-        // Récupération des ventes pour le top 5 produits
+        // Récupération des ventes pour top produits et performances par catégorie
         const venteRes = await fetch('http://localhost:8000/api/produits/ventes/', {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        const ventesData = await venteRes.json();
 
-        // Calcul du top 5 produits
+        // Récupération des stocks pour produits en alerte
+        const stockRes = await fetch('http://localhost:8000/api/produits/stocks/', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        // Récupération des produits pour les catégories
+        const produitRes = await fetch('http://127.0.0.1:8000/api/produits/produits/', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const ventesData = await venteRes.json();
+        const stocksData = await stockRes.json();
+        const produitsData = await produitRes.json();
+
+        // Calcul des top 5 produits
         const compteurProduits = {};
-        ventesData.forEach(vente => {
+        (Array.isArray(ventesData) ? ventesData : []).forEach(vente => {
           vente.details.forEach(detail => {
             const nom = typeof detail.produit === 'object' ? detail.produit.nom_produit : detail.produit;
             compteurProduits[nom] = (compteurProduits[nom] || 0) + detail.quantite;
           });
         });
 
-        const topProduitsArray = Object.entries(compteurProduits)
+        const top5 = Object.entries(compteurProduits)
           .sort((a, b) => b[1] - a[1])
           .slice(0, 5)
           .map(([nom, ventes], index) => ({
             nom,
             ventes,
-            couleur: couleurs[index]
+            couleur: couleurs[index % couleurs.length]
           }));
 
-        setTopProduits(topProduitsArray);
+        setTopProduits(top5);
+
+        // Calcul des performances par catégorie
+        const categoriesVentes = {};
+        (Array.isArray(ventesData) ? ventesData : []).forEach(vente => {
+          vente.details.forEach(detail => {
+            const produit = (Array.isArray(produitsData) ? produitsData : []).find(p => 
+              p.nom_produit === (typeof detail.produit === 'object' ? detail.produit.nom_produit : detail.produit)
+            );
+            if (produit && produit.categorie_produit_nom) {
+              const categorie = produit.categorie_produit_nom;
+              categoriesVentes[categorie] = (categoriesVentes[categorie] || 0) + detail.quantite;
+            }
+          });
+        });
+
+        // Simulation d'évolution (exemple, à adapter selon tes données réelles)
+        const performances = Object.entries(categoriesVentes)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 4) // Limite à 4 catégories comme dans l'original
+          .map(([categorie, ventes], index) => ({
+            categorie,
+            ventes,
+            evolution: index % 2 === 0 ? `+${Math.floor(Math.random() * 10 + 1)}%` : `-${Math.floor(Math.random() * 5 + 1)}%`
+          }));
+
+        setPerformancesCategories(performances);
+
+        // Produits en alerte
+        const alertes = (Array.isArray(stocksData) ? stocksData : []).filter(stock => stock.etat === 'alerte' || stock.etat === 'rupture');
+        setProduitsAlerte(alertes);
       } catch (error) {
         console.error("Erreur lors du chargement des données :", error);
-        setProduitsAlerte([]);
         setTopProduits([]);
+        setProduitsAlerte([]);
+        setPerformancesCategories([]);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="statistiques-container">
+        <h1>📊 Tableau de Statistiques</h1>
+        <p>Chargement des données...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="statistiques-container">
+
 
       <div className="statistiques-grid">
         {/* Section Évolution des ventes (2 colonnes) */}
@@ -117,7 +160,7 @@ const Statistiques = () => {
                     <div 
                       className="progress-fill" 
                       style={{
-                        width: `${(item.ventes / 500) * 100}%`,
+                        width: `${(item.ventes / Math.max(...performancesCategories.map(c => c.ventes), 500)) * 100}%`,
                         backgroundColor: index % 2 === 0 ? '#3b82f6' : '#10b981'
                       }}
                     ></div>
