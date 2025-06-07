@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaHome, FaBox, FaChartBar, FaShoppingCart, FaFileAlt, FaChartLine, FaUsers, FaGlobe, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaBox, FaChartBar, FaShoppingCart, FaFileAlt, FaChartLine, FaUsers, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import './css/Sidebar.css';
 import logo from '../assets/logo.png';
 
@@ -12,7 +12,6 @@ const navItems = [
   { to: '/achats', icon: <FaFileAlt className="icon achats-icon" />, label: 'Achats' },
   { to: '/statistiques', icon: <FaChartLine className="icon stats-icon" />, label: 'Statistiques' },
   { to: '/utilisateurs', icon: <FaUsers className="icon users-icon" />, label: 'Utilisateurs' },
-  { to: '/langue', icon: <FaGlobe className="icon langue-icon" />, label: 'Langue' },
   { to: '/parametres', icon: <FaCog className="icon params-icon" />, label: 'Paramètres' },
 ];
 

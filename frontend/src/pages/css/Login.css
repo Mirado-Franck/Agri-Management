@@ -106,3 +106,14 @@ h2 {
 .submit-button:hover {
   background-color: #5caa3a;
 }
+
+.center-wrapper {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  height: 100vh !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative;
+}

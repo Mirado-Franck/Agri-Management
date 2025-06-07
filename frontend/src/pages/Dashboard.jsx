@@ -5,6 +5,7 @@ import { MdShowChart } from "react-icons/md";
 import { BiBarChartAlt2 } from "react-icons/bi";
 import VenteChart from '../components/VenteChart';
 import VentePieChart from '../components/VentePieChart';
+import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
   const [ventes, setVentes] = useState([]);
@@ -73,7 +74,6 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      <h1 className="dashboard-title">📊 Tableau de bord</h1>
 
       {/* KPI Cards */}
       <div className="kpi-cards">
@@ -105,10 +105,10 @@ export default function Dashboard() {
       {/* Graphiques */}
       <div className="charts-section">
         <div className="chart-block">
-        <h3>
-          <BiBarChartAlt2 size={20} color="#10b981" style={{ marginRight: 4 }}/>
-          Évolution des ventes (semaine)
-        </h3>
+          <h3>
+            <BiBarChartAlt2 size={20} color="#10b981" style={{ marginRight: 4 }}/>
+            <Link to="/Statistiques">Évolution des ventes (semaine)</Link>
+          </h3>
           <div className="chart-placeholder">
             <VenteChart />
           </div>
@@ -116,8 +116,8 @@ export default function Dashboard() {
 
         <div className="chart-block">
           <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-           <MdShowChart size={20} color="#3b82f6" style={{ marginRight: 4 }} />
-            Évolution des ventes (semaine)
+            <MdShowChart size={20} color="#3b82f6" style={{ marginRight: 4 }} />
+            <Link to="/Statistiques">Répartition des ventes par produits (semaine)</Link>
           </h3>
           <div className="chart-placeholder">
             <VentePieChart />

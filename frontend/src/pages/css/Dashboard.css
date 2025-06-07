@@ -29,7 +29,6 @@
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   padding: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
 }
 
@@ -75,7 +74,6 @@
   padding: 16px;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .chart-block h3 {
@@ -113,4 +111,49 @@
   .chart-container {
     height: 250px;
   }
+}
+
+/* Ajoutez ces styles dans votre fichier Dashboard.css */
+
+/* Style de base pour les liens des graphiques */
+.chart-block a {
+  color: #3b82f6; /* Couleur bleue similaire à l'icône */
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-left: 4px;
+}
+
+/* Style au survol */
+.chart-block a:hover {
+  color: #2563eb; /* Bleu plus foncé */
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Style pour le focus (accessibilité) */
+.chart-block a:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Style pour le premier lien (Évolution des ventes) */
+.chart-block:first-child a {
+  color: #10b981; /* Couleur verte pour correspondre à l'icône */
+}
+
+.chart-block:first-child a:hover {
+  color: #059669; /* Vert plus foncé */
+}
+
+/* Conserver l'alignement avec les icônes */
+.chart-block h3 {
+  display: flex;
+  align-items: center;
+}
+
+/* Animation subtile au clic */
+.chart-block a:active {
+  transform: scale(0.98);
 }

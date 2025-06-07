@@ -39,46 +39,48 @@ export default function Login({ onLogin }) {
   };
 
   return (
-    <div className="login-container">
-      <h2>Connexion</h2>
-      {erreur && <div className="alert">{erreur}</div>}
+    <div class="center-wrapper">
+      <div className="login-container">
+        <h2>Connexion</h2>
+        {erreur && <div className="alert">{erreur}</div>}
 
-      <form onSubmit={handleLogin}>
-        <div className="input-group">
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            placeholder=" "
-          />
-          <label htmlFor="username">Nom d'utilisateur</label>
-        </div>
+        <form onSubmit={handleLogin}>
+          <div className="input-group">
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              placeholder=" "
+            />
+            <label htmlFor="username">Nom d'utilisateur</label>
+          </div>
 
-        <div className="input-group password-group">
-          <input
-            type={showPassword ? 'text' : 'password'}
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            placeholder=" "
-          />
-          <label htmlFor="password">Mot de passe</label>
-          <button
-            type="button"
-            className="toggle-password"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          <div className="input-group password-group">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder=" "
+            />
+            <label htmlFor="password">Mot de passe</label>
+            <button
+              type="button"
+              className="toggle-password"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+
+          <button type="submit" className="submit-button">
+            Se connecter
           </button>
-        </div>
-
-        <button type="submit" className="submit-button">
-          Se connecter
-        </button>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }
