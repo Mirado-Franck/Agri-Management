@@ -124,7 +124,6 @@ const Statistiques = () => {
   return (
     <div className="statistiques-container">
 
-
       <div className="statistiques-grid">
         {/* Section Évolution des ventes (2 colonnes) */}
         <section className="stat-card wide-card">
