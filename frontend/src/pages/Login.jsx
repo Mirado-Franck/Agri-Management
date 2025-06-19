@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import './css/Login.css';
+import { toast } from 'sonner';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import toastStyles from './toast/toast.js'; // 👈 Importation
 
 export default function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [erreur, setErreur] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e) => {
@@ -21,28 +22,30 @@ export default function Login({ onLogin }) {
       const data = await response.json();
 
       if (response.ok) {
-        // ✅ Stockage complet des données utilisateur
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
         localStorage.setItem('user_id', data.user.id);
         localStorage.setItem('user_role', data.user.role);
-        localStorage.setItem('user_username', data.user.username); // 👈 Ajout essentiel
+        localStorage.setItem('user_username', data.user.username);
 
-        alert(`✅ Connexion réussie !`);
+        toast.success('Connexion réussie !', { style: toastStyles.success });
         onLogin();
       } else {
-        setErreur(data.message || 'Erreur d’authentification');
+        toast.error(data.message || '❌ Erreur d’authentification', {
+          style: toastStyles.error,
+        });
       }
     } catch (error) {
-      setErreur("Erreur de connexion au serveur");
+      toast.error('⚠️ Erreur de connexion au serveur', {
+        style: toastStyles.error,
+      });
     }
   };
 
   return (
-    <div class="center-wrapper">
+    <div className="center-wrapper">
       <div className="login-container">
         <h2>Connexion</h2>
-        {erreur && <div className="alert">{erreur}</div>}
 
         <form onSubmit={handleLogin}>
           <div className="input-group">

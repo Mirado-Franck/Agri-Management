@@ -1,4 +1,5 @@
 import React from 'react';
+import { AiOutlinePlus, AiOutlineMinus, AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
 import './css/Modal.css';
 
 export default function Modal({ 
@@ -16,7 +17,15 @@ export default function Modal({
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <h2 className="modal-title">
-          {actionType === 'add' ? '➕ Ajouter au stock' : '➖ Retirer du stock'}
+          {actionType === 'add' ? (
+            <>
+              <AiOutlinePlus /> Ajouter au stock
+            </>
+          ) : (
+            <>
+              <AiOutlineMinus /> Retirer du stock
+            </>
+          )}
         </h2>
 
         <div className="modal-body">
@@ -44,14 +53,14 @@ export default function Modal({
 
             <div className="modal-actions">
               <button type="submit" className="modal-submit-button">
-                ✅ Valider
+                <AiOutlineCheck /> Valider
               </button>
               <button 
                 type="button" 
                 className="modal-cancel-button" 
                 onClick={onClose}
               >
-                ❌ Annuler
+                <AiOutlineClose /> Annuler
               </button>
             </div>
           </form>

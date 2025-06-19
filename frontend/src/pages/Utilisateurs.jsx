@@ -9,32 +9,44 @@ export default function Utilisateurs() {
   const [loading, setLoading] = useState(true);
   const [erreur, setErreur] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   useEffect(() => {
+    // Récupérer les infos de l'utilisateur connecté
+    axiosInstance.get('/auth/me/')
+      .then(res => {
+        setUserRole(res.data.role);
+        setCurrentUserId(res.data.id);
+      })
+      .catch(() => {
+        setUserRole(null);
+        setCurrentUserId(null);
+      });
+
+    // Charger la liste des utilisateurs
     axiosInstance.get('/auth/users/')
       .then(res => {
         setUtilisateurs(res.data);
         setLoading(false);
       })
-      .catch(err => {
+      .catch(() => {
         setErreur("Erreur lors du chargement des utilisateurs");
         setLoading(false);
       });
   }, []);
 
   const handleUserCreated = () => {
-    // Recharge les utilisateurs après création
     axiosInstance.get('/auth/users/')
       .then(res => {
         setUtilisateurs(res.data);
-        setShowModal(false); // Fermer la modale après création
+        setShowModal(false);
       });
   };
 
   const toggleStatut = async (userId) => {
     try {
       const res = await axiosInstance.patch(`/auth/users/${userId}/toggle_active/`);
-      // Met à jour localement la liste
       setUtilisateurs(prev =>
         prev.map(u => (u.id === userId ? { ...u, is_active: res.data.is_active } : u))
       );
@@ -42,17 +54,23 @@ export default function Utilisateurs() {
       alert("Erreur lors du changement de statut.");
     }
   };
-  
+
   return (
     <div className="utilisateurs-container">
       <div className="utilisateurs-header">
         <div></div>
-        <button className="btn" onClick={() => setShowModal(true)}>
+        <button
+          className="btn"
+          onClick={() => setShowModal(true)}
+          disabled={userRole !== 'admin'}
+          title={userRole !== 'admin' ? "Seul un admin peut créer un utilisateur" : ""}
+        >
           <FaPlus /> Créer un utilisateur
         </button>
       </div>
 
       {erreur && <div className="alert">{erreur}</div>}
+
       {loading ? (
         <div>Chargement...</div>
       ) : (
@@ -67,22 +85,35 @@ export default function Utilisateurs() {
             </tr>
           </thead>
           <tbody>
-            {utilisateurs.map((user, index) => (
-              <tr key={user.id}>
-                <td>{index + 1}</td>
-                <td>{user.username}</td>
-                <td>{user.role}</td>
-                <td>{user.is_active ? "Actif" : "Inactif"}</td>
-                <td>
-                  <button
-                    className={`btn ${user.is_active ? 'btn-danger' : 'btn-success'}`}
-                    onClick={() => toggleStatut(user.id)}
-                  >
-                    {user.is_active ? "Désactiver" : "Activer"}
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {utilisateurs.map((user, index) => {
+              const isCurrentUser = user.id === currentUserId;
+              const isActionDisabled = userRole !== 'admin' || isCurrentUser;
+
+              return (
+                <tr key={user.id}>
+                  <td>{index + 1}</td>
+                  <td>{user.username}</td>
+                  <td>{user.role}</td>
+                  <td>{user.is_active ? "Actif" : "Inactif"}</td>
+                  <td>
+                    <button
+                      className={`btn ${user.is_active ? 'btn-danger' : 'btn-success'}`}
+                      onClick={() => toggleStatut(user.id)}
+                      disabled={isActionDisabled}
+                      title={
+                        userRole !== 'admin'
+                          ? "Action réservée à l'admin"
+                          : isCurrentUser
+                          ? "Vous ne pouvez pas désactiver votre propre compte"
+                          : ""
+                      }
+                    >
+                      {user.is_active ? "Désactiver" : "Activer"}
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       )}
