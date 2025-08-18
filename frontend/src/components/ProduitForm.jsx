@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner'; // ✅ Remplace react-toastify
-import './css/ProduitForm.css';
+import styles from './css/ProduitForm.module.css';
+import Select from 'react-select';
 
 const ProduitForm = ({ onClose, onRefreshProduits }) => {
   const [formData, setFormData] = useState({
@@ -80,40 +81,83 @@ const ProduitForm = ({ onClose, onRefreshProduits }) => {
   };
 
   return (
-    <form className="form-container" onSubmit={handleSubmit}>
+    <form className={styles['form-container']} onSubmit={handleSubmit}>
       <h2>Ajouter un produit</h2>
 
-      <div className="form-group">
-        <input type="text" name="nom_produit" className="form-input" placeholder=" " value={formData.nom_produit} onChange={handleChange} required />
-        <label className="form-label">Nom</label>
+      <div className={styles['form-group']}>
+        <input
+          type="text"
+          name="nom_produit"
+          className={styles['form-input']}
+          placeholder=" "
+          value={formData.nom_produit}
+          onChange={handleChange}
+          required
+        />
+        <label className={styles['form-label']}>Nom</label>
       </div>
 
-      <div className="form-group">
-        <select name="categorie_produit" className="form-input" value={formData.categorie_produit} onChange={handleChange} required>
-          <option value="" disabled hidden>Choisir une catégorie</option>
-          {categories.map(cat => (
-            <option key={cat.id} value={cat.id}>{cat.nom}</option>
-          ))}
-        </select>
-        <label className="form-label">Catégorie</label>
+      <div className={styles['form-group']}>
+        <label className={styles['form-label']}>Catégorie</label>
+        <Select
+          options={categories.map(cat => ({ value: cat.id, label: cat.nom }))}
+          classNamePrefix="react-select"
+          placeholder="Choisir une catégorie"
+          onChange={(selectedOption) =>
+            setFormData(prev => ({
+              ...prev,
+              categorie_produit: selectedOption ? selectedOption.value : ''
+            }))
+          }
+          value={categories
+            .map(cat => ({ value: cat.id, label: cat.nom }))
+            .find(opt => opt.value === parseInt(formData.categorie_produit))}
+          isClearable
+        />
       </div>
 
-      <div className="form-group">
-        <input type="text" name="unite" className="form-input" placeholder=" " value={formData.unite} onChange={handleChange} required />
-        <label className="form-label">Unité</label>
+      <div className={styles['form-group']}>
+        <input
+          type="text"
+          name="unite"
+          className={styles['form-input']}
+          placeholder=" "
+          value={formData.unite}
+          onChange={handleChange}
+          required
+        />
+        <label className={styles['form-label']}>Unité</label>
       </div>
 
-      <div className="form-group">
-        <input type="number" name="prix_unitaire" className="form-input" placeholder=" " value={formData.prix_unitaire} onChange={handleChange} required min="0" />
-        <label className="form-label">Prix unitaire</label>
+      <div className={styles['form-group']}>
+        <input
+          type="number"
+          name="prix_unitaire"
+          className={styles['form-input']}
+          placeholder=" "
+          value={formData.prix_unitaire}
+          onChange={handleChange}
+          required
+          min="0"
+        />
+        <label className={styles['form-label']}>Prix unitaire</label>
       </div>
 
-      <div className="form-group">
-        <input type="number" name="seuil_alerte" className="form-input" placeholder=" " value={formData.seuil_alerte} onChange={handleChange} required min="0" />
-        <label className="form-label">Seuil minimum</label>
+      <div className={styles['form-group']}>
+        <input
+          type="number"
+          name="seuil_alerte"
+          className={styles['form-input']}
+          placeholder=" "
+          value={formData.seuil_alerte}
+          onChange={handleChange}
+          required
+          min="0"
+        />
+        <label className={styles['form-label']}>Seuil minimum</label>
       </div>
 
-      <button className="submit-btn">Envoyer</button>
+      <button className={styles['submit-btn']}>Envoyer</button>
     </form>
   );
 };

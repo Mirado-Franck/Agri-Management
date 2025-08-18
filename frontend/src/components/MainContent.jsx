@@ -16,19 +16,20 @@ function MainContent() {
   return (
     <div className="main-content">
       <div className="headbar">
-        <Header userInitial="M" />
+        <Header userInitial="M" /> {/* 🧑 Initiale utilisateur */}
       </div>
       <div>
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/Produits" element={<Produits />} />
-          <Route path="/Stocks" element={<Stocks />} />
-          <Route path="/Ventes" element={<Ventes />} />
-          <Route path="/Achats" element={<Achats />} />
-          <Route path="/Statistiques" element={<Statistiques />} />
-          <Route path="/Utilisateurs" element={<Utilisateurs />} />
-          <Route path="/Parametres" element={<Parametres />} />
-          <Route path="/Deconnection" element={<Deconnection />} />
+          <Route path="/" element={<Dashboard />} /> {/* 🏠 Redirection racine vers Dashboard */}
+          <Route path="/dashboard" element={<Dashboard />} /> {/* 📊 Page Dashboard */}
+          <Route path="/Produits" element={<Produits />} /> {/* 🛒 Produits */}
+          <Route path="/Stocks" element={<Stocks />} /> {/* 📦 Stocks */}
+          <Route path="/Ventes" element={<Ventes />} /> {/* 💸 Ventes */}
+          <Route path="/Achats" element={<Achats />} /> {/* 🛍️ Achats */}
+          <Route path="/Statistiques" element={<Statistiques />} /> {/* 📈 Statistiques */}
+          <Route path="/Utilisateurs" element={<Utilisateurs />} /> {/* 👥 Utilisateurs */}
+          <Route path="/Parametres" element={<Parametres />} /> {/* ⚙️ Paramètres */}
+          <Route path="/Deconnection" element={<Deconnection />} /> {/* 🚪 Déconnexion */}
         </Routes>
       </div>
     </div>

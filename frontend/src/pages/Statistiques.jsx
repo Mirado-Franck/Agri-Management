@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { 
   FiTrendingUp, 
   FiPieChart, 
@@ -7,11 +8,12 @@ import {
   FiClipboard,
   FiGrid
 } from 'react-icons/fi';
-import './css/Statistiques.css';
+import styles from './css/Statistiques.module.css';
 import VenteChart from '../components/VenteChart1';
 import VentePieChart from '../components/VentePieChart';
 
 const Statistiques = () => {
+  const location = useLocation();
   const [produitsAlerte, setProduitsAlerte] = useState([]);
   const [topProduits, setTopProduits] = useState([]);
   const [performancesCategories, setPerformancesCategories] = useState([]);
@@ -19,6 +21,18 @@ const Statistiques = () => {
 
   // Couleurs prédéfinies pour les top produits
   const couleurs = ['#3b82f6', '#10b981', '#6366f1', '#f59e0b', '#ef4444'];
+
+  // Scroll automatique vers la section Produits en alerte, légèrement ajusté
+  useEffect(() => {
+    if (location.hash === '#footer') {
+      const footer = document.getElementById('footer');
+      if (footer) {
+        footer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Ajustement léger vers le haut après le scroll
+        setTimeout(() => window.scrollBy({ top: -100, behavior: 'smooth' }), 500);
+      }
+    }
+  }, [location]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,7 +98,7 @@ const Statistiques = () => {
           });
         });
 
-        // Simulation d'évolution (exemple, à adapter selon tes données réelles)
+        // Simulation d'évolution (corrigée)
         const performances = Object.entries(categoriesVentes)
           .sort((a, b) => b[1] - a[1])
           .slice(0, 4) // Limite à 4 catégories comme dans l'original
@@ -114,7 +128,7 @@ const Statistiques = () => {
 
   if (loading) {
     return (
-      <div className="statistiques-container">
+      <div className={styles['statistiques-container']}>
         <h1>📊 Tableau de Statistiques</h1>
         <p>Chargement des données...</p>
       </div>
@@ -122,42 +136,41 @@ const Statistiques = () => {
   }
 
   return (
-    <div className="statistiques-container">
-
-      <div className="statistiques-grid">
+    <div className={styles['statistiques-container']}>
+      <div className={styles['statistiques-grid']}>
         {/* Section Évolution des ventes (2 colonnes) */}
-        <section className="stat-card wide-card">
-          <div className="card-header">
-            <FiTrendingUp className="card-icon" />
+        <section className={`${styles['stat-card']} ${styles['wide-card']}`}>
+          <div className={styles['card-header']}>
+            <FiTrendingUp className={styles['card-icon']} />
             <h2>Évolution des ventes</h2>
           </div>
-          <div className="graph-container">
+          <div className={styles['graph-container']}>
             <VenteChart />
           </div>
         </section>
 
         {/* Section Performances par catégorie */}
-        <section className="stat-card">
-          <div className="card-header">
-            <FiGrid className="card-icon" />
+        <section className={styles['stat-card']}>
+          <div className={styles['card-header']}>
+            <FiGrid className={styles['card-icon']} />
             <h2>Performances par catégorie</h2>
           </div>
-          <div className="categories-list">
+          <div className={styles['categories-list']}>
             {performancesCategories.map((item, index) => (
-              <div key={index} className="categorie-item">
-                <div className="categorie-info">
+              <div key={index} className={styles['categorie-item']}>
+                <div className={styles['categorie-info']}>
                   <h4>{item.categorie}</h4>
-                  <span className="categorie-evolution" style={{
+                  <span className={styles['categorie-evolution']} style={{
                     color: item.evolution.startsWith('+') ? '#10b981' : '#ef4444'
                   }}>
                     {item.evolution}
                   </span>
                 </div>
-                <div className="categorie-ventes">
+                <div className={styles['categorie-ventes']}>
                   <span>{item.ventes} ventes</span>
-                  <div className="progress-bar">
+                  <div className={styles['progress-bar']}>
                     <div 
-                      className="progress-fill" 
+                      className={styles['progress-fill']} 
                       style={{
                         width: `${(item.ventes / Math.max(...performancesCategories.map(c => c.ventes), 500)) * 100}%`,
                         backgroundColor: index % 2 === 0 ? '#3b82f6' : '#10b981'
@@ -171,75 +184,75 @@ const Statistiques = () => {
         </section>
 
         {/* Section Répartition par produit */}
-        <section className="stat-card">
-          <div className="card-header">
-            <FiPieChart className="card-icon" />
+        <section className={styles['stat-card']}>
+          <div className={styles['card-header']}>
+            <FiPieChart className={styles['card-icon']} />
             <h2>Répartition par produit</h2>
           </div>
-          <div className="graph-container">
+          <div className={styles['graph-container']}>
             <VentePieChart />
           </div>
         </section>
 
         {/* Section Top 5 produits */}
-        <section className="stat-card">
-          <div className="card-header">
-            <FiAward className="card-icon" />
+        <section className={styles['stat-card']}>
+          <div className={styles['card-header']}>
+            <FiAward className={styles['card-icon']} />
             <h2>Top 5 produits</h2>
           </div>
-          <div className="top-produits-list">
+          <div className={styles['top-produits-list']}>
             {topProduits.map((produit, index) => (
-              <div key={index} className="produit-item">
-                <span className="produit-rank" style={{ backgroundColor: produit.couleur }}>
+              <div key={index} className={styles['produit-item']}>
+                <span className={styles['produit-rank']} style={{ backgroundColor: produit.couleur }}>
                   {index + 1}
                 </span>
-                <span className="produit-nom">{produit.nom}</span>
-                <span className="produit-ventes">{produit.ventes} ventes</span>
+                <span className={styles['produit-nom']}>{produit.nom}</span>
+                <span className={styles['produit-ventes']}>{produit.ventes} ventes</span>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Section Produits en alerte */}
-        <section className="stat-card alert-card">
-          <div className="card-header">
-            <FiAlertTriangle className="card-icon" />
+        {/* Section Produits en alerte avec ancre */}
+        <section id="footer" className={`${styles['stat-card']} ${styles['alert-card']}`}>
+          <div className={styles['card-header']}>
+            <FiAlertTriangle className={styles['card-icon']} />
             <h2>Produits en alerte</h2>
-            <span className="badge">{produitsAlerte.length}</span>
+            <span className={styles['badge']}>{produitsAlerte.length}</span>
           </div>
-          <div className="alerte-list">
+          <div className={styles['alerte-list']}>
             {produitsAlerte.map((produit, index) => (
-              <div key={index} className="alerte-item">
+              <div key={index} className={styles['alerte-item']}>
                 <div>
                   <h4>{produit.produit_nom}</h4>
                   <p>Stock: {produit.quantite} (seuil: {produit.seuil_alerte})</p>
                 </div>
-                <button className="btn-reappro">Réappro</button>
+                <button className={styles['btn-reappro']}>Réappro</button>
               </div>
             ))}
           </div>
         </section>
 
         {/* Section Historique des ajustements */}
-        <section className="stat-card wide-card">
-          <div className="card-header">
-            <FiClipboard className="card-icon" />
+        <section className={`${styles['stat-card']} ${styles['wide-card']}`}>
+          <div className={styles['card-header']}>
+            <FiClipboard className={styles['card-icon']} />
             <h2>Historique des ajustements</h2>
           </div>
-          <div className="historique-table">
-            <div className="table-header">
+          <div className={styles['historique-table']}>
+            <div className={styles['table-header']}>
               <span>Date</span>
               <span>Produit</span>
               <span>Type</span>
               <span>Quantité</span>
             </div>
-            <div className="table-row">
+            <div className={styles['table-row']}>
               <span>12/06/2023</span>
               <span>Produit A</span>
               <span>Entrée</span>
               <span>+50</span>
             </div>
-            <div className="table-row">
+            <div className={styles['table-row']}>
               <span>10/06/2023</span>
               <span>Produit B</span>
               <span>Sortie</span>

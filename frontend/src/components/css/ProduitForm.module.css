@@ -1,0 +1,99 @@
+/* Styles de base du conteneur du formulaire */
+.form-container {
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  max-width: 500px;
+  margin-left: 2px;
+}
+
+/* Titre du formulaire */
+.form-container h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+/* Groupe de formulaire */
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+/* Styles communs pour tous les champs de saisie */
+.form-input,
+textarea.form-input,
+select.form-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+  box-sizing: border-box; /* Important pour garder les dimensions cohérentes */
+  height: 48px; /* Hauteur fixe pour tous les champs */
+  appearance: none;
+  background-color: white;
+}
+
+/* Champ multiligne (textarea) : override height si nécessaire */
+textarea.form-input {
+  resize: vertical; /* ou none si tu ne veux pas le redimensionnement */
+  min-height: 48px;
+}
+
+/* Champ select : ajouter un espace pour l'icône dropdown */
+select.form-input {
+  padding-right: 2.5rem;
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  background-size: 1rem;
+}
+
+/* Focus + Label flottant */
+.form-input:focus {
+  border-color: #3b82f6;
+}
+
+.form-input:not(:placeholder-shown) + .form-label,
+.form-input:focus + .form-label {
+  top: -10px;
+  left: 10px;
+  font-size: 0.75rem;
+  color: #3b82f6;
+}
+
+/* Label flottant */
+.form-label {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+/* Bouton d'envoi */
+.submit-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+  height: 48px; /* Même hauteur que les inputs */
+}
+
+.submit-btn:hover {
+  background: #2563eb;
+}
+

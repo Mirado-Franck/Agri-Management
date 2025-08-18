@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaBell } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import './css/Header.css';
 
 const pageTitles = {
@@ -74,7 +74,11 @@ export default function Header() {
       
       <div className="notification-icon">
         <FaBell size={20} />
-        {alertCount > 0 && <span className="alert-badge">{alertCount}</span>}
+        {alertCount > 0 && (
+          <Link to="/statistiques#footer">
+            <span className="alert-badge">{alertCount}</span>
+          </Link>
+        )}
       </div>
 
       <div className="user-circle" onClick={toggleMenu} ref={dropdownRef}>

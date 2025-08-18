@@ -38,7 +38,6 @@
   transition: transform 0.2s;
 }
 
-
 /* En-tête des cartes */
 .card-header {
   display: flex;
@@ -136,12 +135,12 @@
 }
 
 .alerte-list::-webkit-scrollbar-thumb {
-  background: #3b82f6;
+  background: #1e40af; /* Changé de #3b82f6 (bleu clair) à #1e40af (bleu foncé) */
   border-radius: 4px;
 }
 
 .alerte-list::-webkit-scrollbar-thumb:hover {
-  background: #2563eb;
+  background: #3b82f6; /* Changé de #2563eb (bleu moyen) à #3b82f6 (bleu clair) */
 }
 
 .alerte-item {
@@ -191,6 +190,11 @@
   padding: 0.8rem 0;
 }
 
+/* Appliquer une couleur personnalisée aux cases cochées */
+input[type="checkbox"] {
+  accent-color: #1e40af; 
+}
+
 .table-header {
   font-weight: 600;
   border-bottom: 1px solid #eee;
@@ -203,7 +207,6 @@
 .table-row:last-child {
   border-bottom: none;
 }
-
 
 /* Responsive */
 @media (max-width: 1200px) {

@@ -6,38 +6,34 @@ import { BiBarChartAlt2 } from "react-icons/bi";
 import VenteChart from '../components/VenteChart';
 import VentePieChart from '../components/VentePieChart';
 import { Link } from 'react-router-dom';
+import axiosInstance from '../axiosInstance';
 
 export default function Dashboard() {
   const [ventes, setVentes] = useState([]);
   const [produits, setProduits] = useState([]);
+  const [alertCount, setAlertCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('access_token');
+        console.log('🔑 Token utilisé:', token); // Log du token pour débogage
 
-        const venteRes = await fetch('http://localhost:8000/api/produits/ventes/', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
+        const venteRes = await axiosInstance.get('/produits/ventes/');
+        const produitRes = await axiosInstance.get('/produits/');
+        const stockRes = await axiosInstance.get('/produits/stocks/');
 
-        const produitRes = await fetch('http://localhost:8000/api/produits/', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-        const ventesData = await venteRes.json();
-        const produitsData = await produitRes.json();
-
-        setVentes(Array.isArray(ventesData) ? ventesData : []);
-        setProduits(Array.isArray(produitsData) ? produitsData : []);
+        setVentes(Array.isArray(venteRes.data) ? venteRes.data : []);
+        setProduits(Array.isArray(produitRes.data) ? produitRes.data : []);
+        const alertes = (Array.isArray(stockRes.data) ? stockRes.data : []).filter(stock => stock.etat === 'alerte' || stock.etat === 'rupture');
+        setAlertCount(alertes.length);
       } catch (error) {
-        console.error("Erreur de chargement des données :", error);
+        console.error("🛑 Erreur de chargement des données :", error.response?.status, error.response?.data);
+        alert(`Erreur lors du chargement des données: ${error.response?.status || 'Inconnue'} - ${error.response?.data?.detail || 'Vérifiez votre token ou l\'URL.'}`);
         setVentes([]);
         setProduits([]);
+        setAlertCount(0);
       } finally {
         setLoading(false);
       }
@@ -58,7 +54,6 @@ export default function Dashboard() {
   // Calculs dynamiques
   const totalVentes = ventes.reduce((acc, vente) => acc + parseFloat(vente.total), 0).toFixed(2);
   const nombreVentes = ventes.length;
-  const produitsEnAlerte = produits.filter(p => p.quantite_en_stock <= p.seuil_alerte).length;
 
   // Top produit
   const compteurProduits = {};
@@ -74,7 +69,6 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-
       {/* KPI Cards */}
       <div className="kpi-cards">
         <div className="kpi-card">
@@ -98,7 +92,7 @@ export default function Dashboard() {
         <div className="kpi-card warning">
           <div className="kpi-icon"><FaExclamationTriangle /></div>
           <div className="kpi-label">Produits en alerte</div>
-          <div className="kpi-value">{produitsEnAlerte}</div>
+          <div className="kpi-value">{alertCount}</div>
         </div>
       </div>
 
