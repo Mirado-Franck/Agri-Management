@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaTrash, FaPlus } from 'react-icons/fa';
-import styles from './css/AchatForm.module.css'; // ✅ CSS Module importé correctement
+import styles from './css/AchatForm.module.css';
 
 export default function AchatForm() {
   const [produitsDisponibles, setProduitsDisponibles] = useState([]);
@@ -21,7 +21,7 @@ export default function AchatForm() {
       const data = await res.json();
       setProduitsDisponibles(data);
     } catch (err) {
-      console.error('Erreur chargement produits', err);
+      console.error('❌ Erreur chargement produits', err);
     }
   };
 
@@ -31,7 +31,7 @@ export default function AchatForm() {
       const data = await res.json();
       setStocks(data);
     } catch (err) {
-      console.error('Erreur chargement stocks', err);
+      console.error('❌ Erreur chargement stocks', err);
     }
   };
 
@@ -166,7 +166,7 @@ export default function AchatForm() {
                   <option key={prod.id} value={prod.id}>
                     {prod.nom_produit}
                   </option>
-              ))}
+                ))}
             </select>
 
             <input

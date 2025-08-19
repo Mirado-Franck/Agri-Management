@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import './css/Achats.module.css'; // Supposons un fichier CSS similaire à Ventes.css
+import styles from './css/Achats.module.css';
 import Searchbar from '../components/Searchbar';
 import AchatForm from '../components/AchatForm';
-import DetailsModal from '../components/DetailsModal'; // Réutilisé, supposant qu'il fonctionne pour les achats
-import FacturePrintable from '../components/FacturePrintable'; // Réutilisé, supposant qu'il fonctionne pour les achats
+import DetailsModal from '../components/DetailsModal';
+import FacturePrintable from '../components/FacturePrintable';
 import { FaEye, FaPlus } from "react-icons/fa";
 import { PiPrinter } from "react-icons/pi";
 import { IoMdClose } from "react-icons/io";
 import axiosInstance from '../axiosInstance';
 
-export default function Achat() {
+export default function Achats() {
   const [showModal, setShowModal] = useState(false);
   const [achats, setAchats] = useState([]);
   const [selectedAchat, setSelectedAchat] = useState(null);
@@ -52,10 +52,10 @@ export default function Achat() {
   );
 
   return (
-    <div className='achats-container'>
-      <div className="achats-header">
-        <div className="button-group">
-          <button className="btn" onClick={() => setShowModal(true)}>
+    <div className={styles['achats-container']}>
+      <div className={styles['achats-header']}>
+        <div className={styles['button-group']}>
+          <button className={styles['btn']} onClick={() => setShowModal(true)}>
             <FaPlus />
           </button>
         </div>
@@ -67,8 +67,8 @@ export default function Achat() {
         </div>
       </div>
 
-      <div className="table-wrapper">
-        <table className="styled-table">
+      <div className={styles['table-wrapper']}>
+        <table className={styles['styled-table']}>
           <thead>
             <tr>
               <th>#</th>
@@ -90,11 +90,11 @@ export default function Achat() {
                   <td>{achat.fournisseur}</td>
                   <td>{achat.total.toFixed(2)} Ar</td>
                   <td>{achat.user?.username || '—'}</td>
-                  <td className="table-actions">
-                    <button className="modern-button view-btn" onClick={() => voirDetails(achat)}>
+                  <td className={styles['table-actions']}>
+                    <button className={`${styles['modern-button']} ${styles['view-btn']}`} onClick={() => voirDetails(achat)}>
                       <FaEye />
                     </button>
-                    <button className="modern-button print-btn" onClick={() => imprimerFacture(achat)}>
+                    <button className={`${styles['modern-button']} ${styles['print-btn']}`} onClick={() => imprimerFacture(achat)}>
                       <PiPrinter />
                     </button>
                   </td>
@@ -109,16 +109,16 @@ export default function Achat() {
 
       {selectedAchat && (
         <DetailsModal
-          vente={selectedAchat} // Supposons que DetailsModal accepte 'vente' comme prop
+          vente={selectedAchat}
           onClose={() => setSelectedAchat(null)}
         />
       )}
 
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button className="close-btn" onClick={() => setShowModal(false)}>
-              <div className='rond'><IoMdClose size={20} /></div>
+        <div className={styles['modal-overlay']}>
+          <div className={styles['modal-content']}>
+            <button className={styles['close-btn']} onClick={() => setShowModal(false)}>
+              <div className={styles['rond']}><IoMdClose size={20} /></div>
             </button>
             <AchatForm />
           </div>
@@ -126,9 +126,9 @@ export default function Achat() {
       )}
 
       {achatToPrint && (
-        <div className="print-container loading">
-          <div className="loader"></div>
-          <FacturePrintable vente={achatToPrint} /> // Supposons que FacturePrintable accepte 'vente'
+        <div className={`${styles['print-container']} ${styles['loading']}`}>
+          <div className={styles['loader']}></div>
+          <FacturePrintable vente={achatToPrint} />
         </div>
       )}
     </div>

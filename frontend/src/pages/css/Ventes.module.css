@@ -149,6 +149,49 @@ Les styles des boutons actions
   cursor: pointer;
 }
 
+
+.view-btn {
+  background-color: #2563eb;
+}
+
+.view-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.print-btn {
+  background-color: #506079;
+}
+
+.print-btn:hover {
+  background-color: #354965;
+  transform: translateY(-1px);
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  color: white;
+  background-color: #2563eb;
+}
+
+.btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
 /* Animation de chargement pour l'impression */
 .print-container.loading {
   position: fixed;
