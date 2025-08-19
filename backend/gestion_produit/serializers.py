@@ -56,60 +56,6 @@ class StockSerializer(serializers.ModelSerializer):
         instance.update_etat()
         return instance
 
-class VenteDetailSerializer(serializers.ModelSerializer):
-    produit = ProduitSerializer(read_only=True)  # ✅ Ceci donne accès à nom_produit côté frontend
-
-    class Meta:
-        model = VenteDetail
-        fields = ['produit', 'quantite', 'prix_unitaire']
-
-class VenteSerializer(serializers.ModelSerializer):
-    details = VenteDetailSerializer(many=True)
-    user = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Vente
-        fields = ['id', 'date', 'client', 'total', 'user', 'details']
-    
-    def get_user(self, obj):
-        if obj.user:
-            return {
-                "id": obj.user.id,
-                "username": obj.user.username
-            }
-        return None
-
-    def create(self, validated_data):
-        details_data = validated_data.pop('details')
-        user = self.context['request'].user
-
-        for detail in details_data:
-            produit_id = detail.get('produit')
-            quantite = detail.get('quantite')
-            try:
-                stock = Stock.objects.get(produit_id=produit_id)
-                if stock.quantite < quantite:
-                    raise ValidationError(
-                        f"Stock insuffisant pour le produit {stock.produit.nom_produit}. "
-                        f"Disponible: {stock.quantite}, Demandé: {quantite}"
-                    )
-            except Stock.DoesNotExist:
-                raise ValidationError(f"Aucun stock trouvé pour le produit ID {produit_id}")
-
-        vente = Vente.objects.create(user=user, **validated_data)
-
-        for detail in details_data:
-            produit_id = detail.get('produit')
-            quantite = detail.get('quantite')
-            VenteDetail.objects.create(vente=vente, **detail)
-            stock = Stock.objects.get(produit_id=produit_id)
-            stock.quantite -= quantite
-            stock.date_sortie = timezone.now()
-            stock.update_etat()
-            stock.save()
-        
-        return vente
-
 class AchatDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = AchatDetail
@@ -148,6 +94,47 @@ class AchatSerializer(serializers.ModelSerializer):
             stock.save()
         
         return achat
+
+class VenteDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VenteDetail
+        fields = ['produit', 'quantite', 'prix_unitaire']
+
+class VenteSerializer(serializers.ModelSerializer):
+    details = VenteDetailSerializer(many=True)
+    user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Vente
+        fields = ['id', 'date', 'client', 'total', 'user', 'details']
+    
+    def get_user(self, obj):
+        if obj.user:
+            return {
+                "id": obj.user.id,
+                "username": obj.user.username
+            }
+        return None
+
+    def create(self, validated_data):
+        details_data = validated_data.pop('details')
+        user = self.context['request'].user
+
+        vente = Vente.objects.create(user=user, **validated_data)
+
+        for detail in details_data:
+            produit_id = detail.get('produit')
+            quantite = detail.get('quantite')
+            stock = Stock.objects.filter(produit_id=produit_id).first()
+            if not stock or stock.quantite < quantite:
+                raise ValidationError(f"Stock insuffisant pour le produit {produit_id}")
+            VenteDetail.objects.create(vente=vente, **detail)
+            stock.quantite -= quantite
+            stock.date_sortie = timezone.now()
+            stock.update_etat()
+            stock.save()
+        
+        return vente
 
 class UserMinimalSerializer(serializers.ModelSerializer):
     class Meta:

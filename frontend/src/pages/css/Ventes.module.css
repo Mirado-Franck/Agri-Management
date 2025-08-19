@@ -126,7 +126,7 @@ Les styles des boutons actions
 .modal-content {
   background: white;
   padding: 2rem;
-  border-radius: 50px;
+  border-radius: 10px;
   max-width: 600px;
   width: 90%;
   position: relative;

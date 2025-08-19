@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './css/Achats.css'; // Supposons un fichier CSS similaire à Ventes.css
+import './css/Achats.module.css'; // Supposons un fichier CSS similaire à Ventes.css
 import Searchbar from '../components/Searchbar';
 import AchatForm from '../components/AchatForm';
 import DetailsModal from '../components/DetailsModal'; // Réutilisé, supposant qu'il fonctionne pour les achats

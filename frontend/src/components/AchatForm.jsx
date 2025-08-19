@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './css/AchatForm.css';
 import { FaTrash, FaPlus } from 'react-icons/fa';
+import styles from './css/AchatForm.module.css'; // ✅ CSS Module importé correctement
 
 export default function AchatForm() {
   const [produitsDisponibles, setProduitsDisponibles] = useState([]);
@@ -72,10 +72,10 @@ export default function AchatForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const token = localStorage.getItem('access_token');
     const userId = parseInt(localStorage.getItem('user_id'));
-  
+
     const achatData = {
       fournisseur: achat.fournisseur,
       user: userId,
@@ -86,10 +86,10 @@ export default function AchatForm() {
         quantite: parseFloat(p.quantite),
         prix_unitaire: parseFloat(p.prix),
       })),
-    };    
-  
+    };
+
     console.log('🧾 Achat envoyé :', achatData);
-  
+
     try {
       const response = await fetch('http://localhost:8000/api/produits/achats/create/', {
         method: 'POST',
@@ -99,9 +99,9 @@ export default function AchatForm() {
         },
         body: JSON.stringify(achatData),
       });
-  
+
       const result = await response.json();
-  
+
       if (response.ok) {
         alert('✅ Achat enregistré !');
         setAchat({
@@ -118,33 +118,33 @@ export default function AchatForm() {
       alert('Erreur réseau lors de l\'enregistrement de l\'achat.');
     }
   };
-  
+
   const produitsSelectionnes = achat.produits
     .filter(p => p.produitId)
     .map(p => parseInt(p.produitId));
 
   return (
-    <div className="achat-form">
-      <h2 className="achat-title">Nouvel Achat</h2>
+    <div className={styles['achat-form']}>
+      <h2 className={styles['achat-title']}>Nouvel Achat</h2>
 
-      <div className="achat-group">
+      <div className={styles['achat-group']}>
         <label>Fournisseur</label>
         <input
           type="text"
           value={achat.fournisseur}
           onChange={(e) => setAchat({ ...achat, fournisseur: e.target.value })}
-          className="achat-input"
+          className={styles['achat-input']}
           required
         />
       </div>
 
-      <div className="achat-produits-scrollable">
+      <div className={styles['achat-produits-scrollable']}>
         {achat.produits.map((p, index) => (
-          <div className="achat-produit-row-custom produit-fade-in" key={index}>
+          <div className={`${styles['achat-produit-row-custom']} ${styles['produit-fade-in']}`} key={index}>
             <select
               value={p.categorie}
               onChange={(e) => handleProduitChange(index, 'categorie', e.target.value)}
-              className="achat-select"
+              className={styles['achat-select']}
             >
               <option value="">Catégorie</option>
               {[...new Set(produitsDisponibles.map(prod => prod.categorie_produit_nom))].map((cat) => (
@@ -155,7 +155,7 @@ export default function AchatForm() {
             <select
               value={p.produitId}
               onChange={(e) => handleProduitChange(index, 'produitId', e.target.value)}
-              className="achat-select"
+              className={styles['achat-select']}
               disabled={!p.categorie}
             >
               <option value="">Produit</option>
@@ -174,7 +174,7 @@ export default function AchatForm() {
               placeholder="Prix"
               value={p.prix}
               readOnly
-              className="achat-input"
+              className={styles['achat-input']}
             />
 
             <input
@@ -183,25 +183,25 @@ export default function AchatForm() {
               min={1}
               value={p.quantite}
               onChange={(e) => handleProduitChange(index, 'quantite', e.target.value)}
-              className="achat-input"
+              className={styles['achat-input']}
             />
 
-            <button className="achat-suppr-btn" onClick={() => supprimerProduit(index)}>
+            <button className={styles['achat-suppr-btn']} onClick={() => supprimerProduit(index)}>
               <FaTrash />
             </button>
           </div>
         ))}
       </div>
 
-      <button className="achat-btn-outline success" onClick={ajouterProduit}>
+      <button className={`${styles['achat-btn-outline']} ${styles.success}`} onClick={ajouterProduit}>
         <FaPlus /> Ajouter une ligne
       </button>
 
-      <div className="achat-total">
+      <div className={styles['achat-total']}>
         <strong>Total : {calculerTotal()} €</strong>
       </div>
 
-      <button className="achat-btn-primary full" onClick={handleSubmit}>
+      <button className={`${styles['achat-btn-primary']} ${styles.full}`} onClick={handleSubmit}>
         Enregistrer l'achat
       </button>
     </div>

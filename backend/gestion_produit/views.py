@@ -88,3 +88,20 @@ class AchatDetailViewSet(viewsets.ModelViewSet):
 class VenteDetailViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = VenteDetail.objects.select_related('produit').all()
     serializer_class = VenteDetailSerializer
+
+@api_view(['POST'])
+def update_stock(request):
+    try:
+        details = request.data.get('details', [])
+        for detail in details:
+            produit_id = detail.get('produit')
+            quantite = float(detail.get('quantite'))
+            stock = Stock.objects.filter(produit_id=produit_id).first()
+            if not stock or stock.quantite < quantite:
+                return Response({'error': f'Stock insuffisant pour produit {produit_id}'}, status=400)
+            stock.quantite -= quantite
+            stock.date_sortie = timezone.now()
+            stock.save()
+        return Response({'message': 'Stocks mis à jour'}, status=200)
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)

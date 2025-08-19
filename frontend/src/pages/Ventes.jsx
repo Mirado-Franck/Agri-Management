@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './css/Ventes.css';
+import styles from './css/Ventes.module.css'; // Import du CSS module
 
 import Searchbar from '../components/Searchbar';
 import VenteForm from '../components/VenteForm';
@@ -23,7 +23,7 @@ export default function Ventes() {
     const fetchVentes = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        console.log('🔑 Token utilisé:', token); // Log du token pour débogage
+        console.log('🔑 Token utilisé:', token);
         const response = await axiosInstance.get('/produits/ventes/');
         console.log('📦 Données reçues:', response.data);
         setVentes(response.data);
@@ -55,10 +55,10 @@ export default function Ventes() {
   );
 
   return (
-    <div className='ventes-container'>
-      <div className="ventes-header">
-        <div className="button-group">
-          <button className="btn" onClick={() => setShowModal(true)}>
+    <div className={styles['ventes-container']}>
+      <div className={styles['ventes-header']}>
+        <div className={styles['button-group']}>
+          <button className={styles['btn']} onClick={() => setShowModal(true)}>
             <FaPlus />
           </button>
         </div>
@@ -70,8 +70,8 @@ export default function Ventes() {
         </div>
       </div>
 
-      <div className="table-wrapper">
-        <table className="styled-table">
+      <div className={styles['table-wrapper']}>
+        <table className={styles['styled-table']}>
           <thead>
             <tr>
               <th>#</th>
@@ -93,11 +93,11 @@ export default function Ventes() {
                   <td>{vente.client}</td>
                   <td>{vente.total.toFixed(2)} Ar</td>
                   <td>{vente.user?.username || '—'}</td>
-                  <td className="table-actions">
-                    <button className="modern-button view-btn" onClick={() => voirDetails(vente)}>
+                  <td className={styles['table-actions']}>
+                    <button className={`${styles['modern-button']} ${styles['view-btn']}`} onClick={() => voirDetails(vente)}>
                       <FaEye />
                     </button>
-                    <button className="modern-button print-btn" onClick={() => imprimerFacture(vente)}>
+                    <button className={`${styles['modern-button']} ${styles['print-btn']}`} onClick={() => imprimerFacture(vente)}>
                       <PiPrinter />
                     </button>
                   </td>
@@ -118,10 +118,10 @@ export default function Ventes() {
       )}
 
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button className="close-btn" onClick={() => setShowModal(false)}>
-              <div className='rond'><IoMdClose size={20} /></div>
+        <div className={styles['modal-overlay']}>
+          <div className={styles['modal-content']}>
+            <button className={styles['close-btn']} onClick={() => setShowModal(false)}>
+              <div className={styles['rond']}><IoMdClose size={20} /></div>
             </button>
             <VenteForm />
           </div>
@@ -129,8 +129,8 @@ export default function Ventes() {
       )}
 
       {venteToPrint && (
-        <div className="print-container loading">
-          <div className="loader"></div>
+        <div className={`${styles['print-container']} ${styles['loading']}`}>
+          <div className={styles['loader']}></div>
           <FacturePrintable vente={venteToPrint} />
         </div>
       )}
