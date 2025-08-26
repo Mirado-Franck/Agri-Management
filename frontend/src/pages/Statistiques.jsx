@@ -68,7 +68,7 @@ const Statistiques = () => {
         const compteurProduits = {};
         (Array.isArray(ventesData) ? ventesData : []).forEach(vente => {
           vente.details.forEach(detail => {
-            const nom = typeof detail.produit === 'object' ? detail.produit.nom_produit : detail.produit;
+            const nom = detail.nom_produit; // Utiliser nom_produit directement
             compteurProduits[nom] = (compteurProduits[nom] || 0) + detail.quantite;
           });
         });
@@ -89,7 +89,7 @@ const Statistiques = () => {
         (Array.isArray(ventesData) ? ventesData : []).forEach(vente => {
           vente.details.forEach(detail => {
             const produit = (Array.isArray(produitsData) ? produitsData : []).find(p => 
-              p.nom_produit === (typeof detail.produit === 'object' ? detail.produit.nom_produit : detail.produit)
+              p.nom_produit === detail.nom_produit
             );
             if (produit && produit.categorie_produit_nom) {
               const categorie = produit.categorie_produit_nom;
@@ -101,7 +101,7 @@ const Statistiques = () => {
         // Simulation d'évolution (corrigée)
         const performances = Object.entries(categoriesVentes)
           .sort((a, b) => b[1] - a[1])
-          .slice(0, 4) // Limite à 4 catégories comme dans l'original
+          .slice(0, 4)
           .map(([categorie, ventes], index) => ({
             categorie,
             ventes,
@@ -130,7 +130,7 @@ const Statistiques = () => {
     return (
       <div className={styles['statistiques-container']}>
         <h1>📊 Tableau de Statistiques</h1>
-        <p>Chargement des données...</p>
+        <p>Chargement des données... ⏳</p>
       </div>
     );
   }

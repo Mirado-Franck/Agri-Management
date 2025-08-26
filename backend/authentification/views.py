@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, ChangePasswordSerializer
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -83,3 +83,15 @@ class LoginView(APIView):
             }, status=status.HTTP_200_OK)
         else:
             return Response({"message": "Identifiants invalides"}, status=status.HTTP_401_UNAUTHORIZED)
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            user = request.user
+            user.set_password(serializer.validated_data['new_password'])
+            user.save()
+            return Response({"message": "Mot de passe modifié avec succès."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

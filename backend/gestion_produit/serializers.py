@@ -57,9 +57,12 @@ class StockSerializer(serializers.ModelSerializer):
         return instance
 
 class AchatDetailSerializer(serializers.ModelSerializer):
+    produit = serializers.PrimaryKeyRelatedField(queryset=Produit.objects.all(), write_only=True)
+    nom_produit = serializers.CharField(source='produit.nom_produit', read_only=True)
+
     class Meta:
         model = AchatDetail
-        fields = ['produit', 'quantite', 'prix_unitaire']
+        fields = ['produit', 'nom_produit', 'quantite', 'prix_unitaire']
 
 class AchatSerializer(serializers.ModelSerializer):
     details = AchatDetailSerializer(many=True)
@@ -96,9 +99,12 @@ class AchatSerializer(serializers.ModelSerializer):
         return achat
 
 class VenteDetailSerializer(serializers.ModelSerializer):
+    produit = serializers.PrimaryKeyRelatedField(queryset=Produit.objects.all(), write_only=True)
+    nom_produit = serializers.CharField(source='produit.nom_produit', read_only=True)
+
     class Meta:
         model = VenteDetail
-        fields = ['produit', 'quantite', 'prix_unitaire']
+        fields = ['produit', 'nom_produit', 'quantite', 'prix_unitaire']
 
 class VenteSerializer(serializers.ModelSerializer):
     details = VenteDetailSerializer(many=True)

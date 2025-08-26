@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaTrash, FaPlus } from 'react-icons/fa';
-import styles from './css/VenteForm.module.css'; // ✅ Import du CSS module
+import styles from './css/VenteForm.module.css';
 
 export default function VenteForm() {
   const [produitsDisponibles, setProduitsDisponibles] = useState([]);
@@ -13,11 +13,6 @@ export default function VenteForm() {
   useEffect(() => {
     fetchProduits();
     fetchStocks();
-    const interval = setInterval(() => {
-      fetchStocks();
-      fetchProduits();
-    }, 5000);
-    return () => clearInterval(interval);
   }, []);
 
   const fetchProduits = async () => {
@@ -25,6 +20,7 @@ export default function VenteForm() {
       const res = await fetch('http://localhost:8000/api/produits/produits/');
       const data = await res.json();
       setProduitsDisponibles(data);
+      // console.log('📦 Produits:', data);
     } catch (err) {
       console.error('❌ Erreur chargement produits', err);
     }
@@ -35,28 +31,34 @@ export default function VenteForm() {
       const res = await fetch('http://localhost:8000/api/produits/stocks/');
       const data = await res.json();
       setStocks(data);
+      // console.log('📊 Stocks:', data);
     } catch (err) {
       console.error('❌ Erreur chargement stocks', err);
     }
   };
 
-  const updateStocksAfterSale = async (details) => {
-    const token = localStorage.getItem('access_token');
-    try {
-      const response = await fetch('http://localhost:8000/api/produits/stocks/update/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ details }),
-      });
-      if (!response.ok) {
-        console.error('🛑 Erreur update stocks');
-      }
-    } catch (err) {
-      console.error('🛑 Erreur réseau update stocks', err);
-    }
+  // Helper : récupère l’objet stock pour un produit (essayes ID puis nom)
+  const getStockObjForProduct = (produitId) => {
+    const prodId = parseInt(produitId);
+    const byId = stocks.find(s => Number(s.produit) === prodId);
+    if (byId) return byId;
+
+    const produitSel = produitsDisponibles.find(p => p.id === prodId);
+    if (!produitSel) return undefined;
+
+    const byName = stocks.find(s => s.produit_nom === produitSel.nom_produit);
+    return byName;
+  };
+
+  // Helper : récupère la quantité disponible (stocks -> puis fallback quantite_en_stock)
+  const getQuantiteDispo = (produitId) => {
+    const stockObj = getStockObjForProduct(produitId);
+    if (stockObj && typeof stockObj.quantite === 'number') return stockObj.quantite;
+
+    const prod = produitsDisponibles.find(p => p.id === parseInt(produitId));
+    if (prod && typeof prod.quantite_en_stock === 'number') return prod.quantite_en_stock;
+
+    return 0;
   };
 
   const handleProduitChange = (index, field, value) => {
@@ -71,26 +73,36 @@ export default function VenteForm() {
       produits[index].produitId = value;
       const produit = produitsDisponibles.find(p => p.id === parseInt(value));
       produits[index].prix = produit ? parseFloat(produit.prix_unitaire) : 0;
-      produits[index].quantite = 1;
+      produits[index].quantite = 1; // reset
     } else if (field === 'quantite') {
-      const quantite = Number(value);
-      const produit = produitsDisponibles.find(p => p.id === parseInt(produits[index].produitId));
-      const stock = stocks.find(s => s.produit === parseInt(produits[index].produitId));
-      if (stock && quantite > stock.quantite) {
-        alert(`⚠️ Stock insuffisant pour ${produit?.nom_produit}. Quantité disponible : ${stock.quantite}`);
+      const saisie = Number(value);
+      const produitId = produits[index].produitId;
+      const produitSel = produitsDisponibles.find(p => p.id === parseInt(produitId));
+      const stockDispo = getQuantiteDispo(produitId);
+
+      if (!produitId) {
+        alert('Veuillez choisir un produit avant de saisir une quantité.');
         return;
       }
-      produits[index].quantite = quantite;
+
+      if (!Number.isFinite(saisie) || saisie < 1) {
+        produits[index].quantite = 1;
+      } else if (saisie > stockDispo) {
+        alert(`⚠️ Stock insuffisant pour ${produitSel?.nom_produit}. Dispo : ${stockDispo}`);
+        produits[index].quantite = stockDispo; // blocage au max
+      } else {
+        produits[index].quantite = saisie;
+      }
     }
 
     setVente({ ...vente, produits });
   };
 
   const ajouterProduit = () => {
-    setVente({
-      ...vente,
-      produits: [...vente.produits, { categorie: '', produitId: '', quantite: 1, prix: 0 }],
-    });
+    setVente(v => ({
+      ...v,
+      produits: [...v.produits, { categorie: '', produitId: '', quantite: 1, prix: 0 }],
+    }));
   };
 
   const supprimerProduit = (index) => {
@@ -99,12 +111,24 @@ export default function VenteForm() {
     setVente({ ...vente, produits });
   };
 
-  const calculerTotal = () => {
-    return vente.produits.reduce((total, p) => total + p.quantite * p.prix, 0).toFixed(2);
-  };
+  const calculerTotal = () =>
+    vente.produits.reduce((total, p) => total + (Number(p.quantite) * Number(p.prix || 0)), 0).toFixed(2);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validation “anti-dépassement” juste avant envoi
+    for (const p of vente.produits) {
+      const qMax = getQuantiteDispo(p.produitId);
+      if (!p.produitId) {
+        alert('Veuillez choisir un produit dans chaque ligne.');
+        return;
+      }
+      if (p.quantite > qMax) {
+        alert('Certaines quantités dépassent le stock disponible. Corrige-les avant d’enregistrer.');
+        return;
+      }
+    }
 
     const token = localStorage.getItem('access_token');
     const userId = parseInt(localStorage.getItem('user_id'));
@@ -121,6 +145,8 @@ export default function VenteForm() {
       })),
     };
 
+    // console.log('🧾 Vente envoyée :', venteData);
+
     try {
       const response = await fetch('http://localhost:8000/api/produits/ventes/create/', {
         method: 'POST',
@@ -135,20 +161,19 @@ export default function VenteForm() {
 
       if (response.ok) {
         alert('✅ Vente enregistrée !');
-        await updateStocksAfterSale(venteData.details);
         setVente({
           client: '',
           produits: [{ categorie: '', produitId: '', quantite: 1, prix: 0 }],
         });
-        await fetchStocks();
-        await fetchProduits();
+        await fetchStocks();     // pour refléter la baisse de stock
+        await fetchProduits();   // si tu affiches quantite_en_stock côté produits
       } else {
         console.error('🛑 Erreur serveur :', result);
         alert(`Erreur: ${JSON.stringify(result)}`);
       }
     } catch (err) {
       console.error('🛑 Erreur réseau :', err);
-      alert('Erreur réseau lors de l\'enregistrement de la vente.');
+      alert('Erreur réseau lors de l’enregistrement de la vente.');
     }
   };
 
@@ -173,9 +198,13 @@ export default function VenteForm() {
 
       <div className={styles['vente-produits-scrollable']}>
         {vente.produits.map((p, index) => {
-          const stock = stocks.find(s => s.produit === parseInt(p.produitId));
+          const produitSel = produitsDisponibles.find(prod => prod.id === parseInt(p.produitId));
+          const stockObj = getStockObjForProduct(p.produitId);
+          const qMax = stockObj?.quantite ?? produitSel?.quantite_en_stock ?? 1;
+
           return (
             <div className={`${styles['vente-produit-row-custom']} ${styles['produit-fade-in']}`} key={index}>
+              {/* Catégorie */}
               <select
                 value={p.categorie}
                 onChange={(e) => handleProduitChange(index, 'categorie', e.target.value)}
@@ -187,6 +216,7 @@ export default function VenteForm() {
                 ))}
               </select>
 
+              {/* Produit */}
               <select
                 value={p.produitId}
                 onChange={(e) => handleProduitChange(index, 'produitId', e.target.value)}
@@ -197,16 +227,14 @@ export default function VenteForm() {
                 {produitsDisponibles
                   .filter(prod => prod.categorie_produit_nom === p.categorie)
                   .filter(prod => !produitsSelectionnes.includes(prod.id) || prod.id === parseInt(p.produitId))
-                  .map((prod) => {
-                    const stockProd = stocks.find(s => s.produit === prod.id);
-                    return (
-                      <option key={prod.id} value={prod.id}>
-                        {prod.nom_produit} (Stock: {stockProd ? stockProd.quantite : 0})
-                      </option>
-                    );
-                  })}
+                  .map((prod) => (
+                    <option key={prod.id} value={prod.id}>
+                      {prod.nom_produit}
+                    </option>
+                  ))}
               </select>
 
+              {/* Prix unitaire */}
               <input
                 type="number"
                 placeholder="Prix"
@@ -215,16 +243,18 @@ export default function VenteForm() {
                 className={styles['vente-input']}
               />
 
+              {/* Quantité (max dynamique) */}
               <input
                 type="number"
-                placeholder="Quantité"
+                placeholder={`Quantité (Stock: ${Number(qMax) || 0})`}
                 min={1}
-                max={stock ? stock.quantite : 1}
+                max={Math.max(1, Number(qMax))}
                 value={p.quantite}
                 onChange={(e) => handleProduitChange(index, 'quantite', e.target.value)}
                 className={styles['vente-input']}
               />
 
+              {/* Supprimer ligne */}
               <button
                 className={styles['vente-suppr-btn']}
                 onClick={() => supprimerProduit(index)}
@@ -244,7 +274,7 @@ export default function VenteForm() {
       </button>
 
       <div className={styles['vente-total']}>
-        <strong>Total : {calculerTotal()} €</strong>
+        <strong>Total : {calculerTotal()} Ar</strong>
       </div>
 
       <button

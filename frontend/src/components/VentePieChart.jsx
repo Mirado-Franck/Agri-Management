@@ -12,7 +12,7 @@ export default function VentePieChart() {
     const fetchVenteDetails = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        const response = await fetch('http://localhost:8000/api/produits/vente-details/', {
+        const response = await fetch('http://localhost:8000/api/produits/ventes-details/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -25,7 +25,7 @@ export default function VentePieChart() {
         const details = await response.json();
         const aggregation = {};
         details.forEach((item) => {
-          const nom = item.produit.nom_produit;
+          const nom = item.nom_produit; // Changé de item.produit.nom_produit à item.nom_produit
           aggregation[nom] = (aggregation[nom] || 0) + item.quantite;
         });
 
@@ -59,7 +59,7 @@ export default function VentePieChart() {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // Important pour que la div fixe la hauteur
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'right',

@@ -1,9 +1,9 @@
 import React from 'react';
-import './css/DetailsModal.css';
+import './css/DetailsModal.css'; // Réutilise le même CSS que DetailsModalVente
 import { IoMdClose } from "react-icons/io";
 
-export default function DetailsModal({ vente, onClose }) {
-  if (!vente) return null;
+export default function DetailsModalAchat({ achat, onClose }) {
+  if (!achat) return null;
 
   return (
     <div className="modal-overlay">
@@ -12,10 +12,10 @@ export default function DetailsModal({ vente, onClose }) {
           <div className='rond'><IoMdClose size={20} /></div>
         </button>
 
-        <h3>Détails de la vente #{vente.id}</h3>
-        <p><strong>Date :</strong> {vente.date}</p>
-        <p><strong>Client :</strong> {vente.client}</p>
-        <p><strong>Employé :</strong> {vente.user?.username || '---'}</p>
+        <h3>Détails de l'achat #{achat.id}</h3>
+        <p><strong>Date :</strong> {achat.date}</p>
+        <p><strong>Fournisseur :</strong> {achat.fournisseur}</p>
+        <p><strong>Employé :</strong> {achat.user?.username || '---'}</p>
 
         <table className="details-table">
           <thead>
@@ -27,9 +27,9 @@ export default function DetailsModal({ vente, onClose }) {
             </tr>
           </thead>
           <tbody>
-            {vente.details.map((d, i) => (
+            {achat.details.map((d, i) => (
               <tr key={i}>
-                <td>{d.produit?.nom_produit || '---'}</td>
+                <td>{d.nom_produit || '---'}</td>
                 <td>{d.quantite}</td>
                 <td>{d.prix_unitaire} Ar</td>
                 <td>{(d.quantite * d.prix_unitaire).toFixed(2)} Ar</td>
@@ -37,8 +37,7 @@ export default function DetailsModal({ vente, onClose }) {
             ))}
           </tbody>
         </table>
-
-        <p><strong>Total :</strong> {vente.total} Ar</p>
+        <p><strong>Total :</strong> {achat.total.toFixed(2)} Ar</p>
       </div>
     </div>
   );

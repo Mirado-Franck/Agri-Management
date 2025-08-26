@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import styles from './css/Ventes.module.css'; // Import du CSS module
-
+import { useNavigate } from 'react-router-dom';
+import styles from './css/Ventes.module.css';
 import Searchbar from '../components/Searchbar';
 import VenteForm from '../components/VenteForm';
-import DetailsModal from '../components/DetailsModal';
+import DetailsModalVente from '../components/DetailsModalVente';
 import FacturePrintable from '../components/FacturePrintable';
-
 import { FaEye, FaPlus } from "react-icons/fa";
 import { PiPrinter } from "react-icons/pi";
 import { IoMdClose } from "react-icons/io";
-
 import axiosInstance from '../axiosInstance';
 
 export default function Ventes() {
@@ -18,28 +16,56 @@ export default function Ventes() {
   const [selectedVente, setSelectedVente] = useState(null);
   const [venteToPrint, setVenteToPrint] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchVentes = async () => {
       try {
         const token = localStorage.getItem('access_token');
         console.log('🔑 Token utilisé:', token);
+        if (!token) {
+          console.error('🛑 Aucun token trouvé');
+          alert('Session expirée, veuillez vous reconnecter.');
+          navigate('/login');
+          return;
+        }
         const response = await axiosInstance.get('/produits/ventes/');
         console.log('📦 Données reçues:', response.data);
         setVentes(response.data);
       } catch (err) {
         console.error('🛑 Erreur lors du chargement des ventes:', err.response?.status, err.response?.data);
-        alert(`Erreur lors du chargement des ventes: ${err.response?.status || 'Inconnue'} - ${err.response?.data?.detail || 'Vérifiez votre token ou l\'URL.'}`);
+        if (err.response?.status === 401) {
+          alert('Session expirée, veuillez vous reconnecter.');
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('user_username');
+          localStorage.removeItem('user_role');
+          navigate('/login');
+        } else {
+          alert(`Erreur lors du chargement des ventes: ${err.response?.status || 'Inconnue'} - ${err.response?.data?.detail || 'Vérifiez votre connexion.'}`);
+        }
       }
     };
     fetchVentes();
-  }, [showModal]);
+  }, [showModal, navigate]);
 
   const voirDetails = (vente) => {
     setSelectedVente(vente);
   };
 
   const imprimerFacture = (vente) => {
+    console.log('📄 Vente à imprimer:', vente);
+    if (!vente) {
+      console.error('🛑 Données de vente invalides: vente est null ou undefined');
+      alert('Impossible d\'imprimer la facture : aucune vente sélectionnée.');
+      return;
+    }
+    if (!vente.vente_details) {
+      console.warn('⚠️ vente_details est absent, mais la facture peut être imprimée');
+    } else if (!Array.isArray(vente.vente_details)) {
+      console.error('🛑 Données de vente invalides: vente_details n\'est pas un tableau', vente.vente_details);
+      alert('Impossible d\'imprimer la facture : détails de la vente mal formés.');
+      return;
+    }
     setVenteToPrint(vente);
     setTimeout(() => {
       window.print();
@@ -48,9 +74,9 @@ export default function Ventes() {
   };
 
   const filteredVentes = ventes.filter(vente =>
-    vente.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-    vente.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    vente.date.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    vente.id?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+    vente.client?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    vente.date?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     vente.user?.username?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -91,7 +117,7 @@ export default function Ventes() {
                   <td>{vente.id}</td>
                   <td>{vente.date}</td>
                   <td>{vente.client}</td>
-                  <td>{vente.total.toFixed(2)} Ar</td>
+                  <td>{vente.total?.toFixed(2)} Ar</td>
                   <td>{vente.user?.username || '—'}</td>
                   <td className={styles['table-actions']}>
                     <button className={`${styles['modern-button']} ${styles['view-btn']}`} onClick={() => voirDetails(vente)}>
@@ -111,7 +137,7 @@ export default function Ventes() {
       </div>
 
       {selectedVente && (
-        <DetailsModal
+        <DetailsModalVente
           vente={selectedVente}
           onClose={() => setSelectedVente(null)}
         />

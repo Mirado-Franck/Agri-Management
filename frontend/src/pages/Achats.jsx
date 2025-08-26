@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from './css/Achats.module.css';
 import Searchbar from '../components/Searchbar';
 import AchatForm from '../components/AchatForm';
-import DetailsModal from '../components/DetailsModal';
-import FacturePrintable from '../components/FacturePrintable';
+import DetailsModalAchat from '../components/DetailsModalAchat';
+import FacturePrintableAchat from '../components/FacturePrintableAchat';
 import { FaEye, FaPlus } from "react-icons/fa";
 import { PiPrinter } from "react-icons/pi";
 import { IoMdClose } from "react-icons/io";
@@ -15,22 +15,20 @@ export default function Achats() {
   const [selectedAchat, setSelectedAchat] = useState(null);
   const [achatToPrint, setAchatToPrint] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   useEffect(() => {
     const fetchAchats = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        console.log('🔑 Token utilisé:', token);
         const response = await axiosInstance.get('/produits/achats/');
-        console.log('📦 Données reçues:', response.data);
         setAchats(response.data);
       } catch (err) {
-        console.error('🛑 Erreur lors du chargement des achats:', err.response?.status, err.response?.data);
+        console.error('Erreur lors du chargement des achats:', err.response?.status, err.response?.data);
         alert(`Erreur lors du chargement des achats: ${err.response?.status || 'Inconnue'} - ${err.response?.data?.detail || 'Vérifiez votre token ou l\'URL.'}`);
       }
     };
     fetchAchats();
-  }, [showModal]);
+  }, []); // Supprimé showModal des dépendances
 
   const voirDetails = (achat) => {
     setSelectedAchat(achat);
@@ -108,8 +106,8 @@ export default function Achats() {
       </div>
 
       {selectedAchat && (
-        <DetailsModal
-          vente={selectedAchat}
+        <DetailsModalAchat
+          achat={selectedAchat}
           onClose={() => setSelectedAchat(null)}
         />
       )}
@@ -128,7 +126,7 @@ export default function Achats() {
       {achatToPrint && (
         <div className={`${styles['print-container']} ${styles['loading']}`}>
           <div className={styles['loader']}></div>
-          <FacturePrintable vente={achatToPrint} />
+          <FacturePrintableAchat achat={achatToPrint} />
         </div>
       )}
     </div>
