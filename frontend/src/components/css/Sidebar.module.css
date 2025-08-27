@@ -1,0 +1,252 @@
+/* Variables pour le thème clair */
+:root {
+  --sidebar-bg: #fdfdfd;
+  --sidebar-shadow: rgba(0, 0, 0, 0.05);
+  --sidebar-text: #333;
+  --sidebar-hover-bg: #eaf6e6;
+  --sidebar-hover-text: #5caa3a;
+  --sidebar-active-bg: #d8f0cc;
+  --sidebar-active-text: #4b9932;
+  --sidebar-icon-dashboard: #3b82f6;
+  --sidebar-icon-produits: #FF6B6B;
+  --sidebar-icon-stocks: #4ECDC4;
+  --sidebar-icon-ventes: #FFD93D;
+  --sidebar-icon-achats: #FF8C00;
+  --sidebar-icon-stats: #7C3AED;
+  --sidebar-icon-users: #00C4B4;
+  --sidebar-icon-params: #6B7280;
+  --sidebar-icon-logout: #EF4444;
+}
+
+/* Variables pour le thème sombre */
+[data-theme="dark"] {
+  --sidebar-bg: #2a2a2a;
+  --sidebar-shadow: rgba(0, 0, 0, 0.2);
+  --sidebar-text: #e0e0e0;
+  --sidebar-hover-bg: #3a3a3a;
+  --sidebar-hover-text: #7ac142;
+  --sidebar-active-bg: #4a7c59;
+  --sidebar-active-text: #a8e6cf;
+  --sidebar-icon-dashboard: #60a5fa;
+  --sidebar-icon-produits: #ff8a8a;
+  --sidebar-icon-stocks: #6ed9d1;
+  --sidebar-icon-ventes: #ffe066;
+  --sidebar-icon-achats: #ffa64d;
+  --sidebar-icon-stats: #9f7aea;
+  --sidebar-icon-users: #00e6d6;
+  --sidebar-icon-params: #9ca3af;
+  --sidebar-icon-logout: #f87171;
+}
+
+/* Styles de base */
+.sidebar {
+  height: 100vh;
+  width: 250px;
+  background-color: var(--sidebar-bg);
+  box-shadow: 2px 0 10px var(--sidebar-shadow);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  min-width: 220px;
+  max-width: 250px;
+  flex-shrink: 0;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.logo {
+  width: 180px;
+  margin: 20px auto 40px;
+  display: block;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.navList li {
+  margin: 8px 0;
+  transition: all 0.3s ease;
+}
+
+.navList li a {
+  display: flex;
+  align-items: center;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+}
+
+.navList li a:hover {
+  background-color: var(--sidebar-hover-bg);
+  color: var(--sidebar-hover-text);
+  transform: translateX(5px);
+}
+
+.icon {
+  font-size: 1.2rem;
+  margin-right: 12px;
+  transition: color 0.3s ease;
+}
+
+.label {
+  font-size: 1rem;
+  font-weight: 400;
+  transition: color 0.3s ease;
+}
+
+.navList li a.active {
+  background-color: var(--sidebar-active-bg);
+  color: var(--sidebar-active-text);
+}
+
+/* Bouton de déconnexion */
+.logoutBtn {
+  background: none;
+  border: none;
+  color: var(--sidebar-text);
+  font: inherit;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+}
+
+.logoutBtn:hover {
+  background-color: var(--sidebar-hover-bg);
+  color: var(--sidebar-hover-text);
+  transform: translateX(5px);
+}
+
+/* Couleurs des icônes */
+.dashboardIcon {
+  color: var(--sidebar-icon-dashboard);
+}
+
+.produitsIcon {
+  color: var(--sidebar-icon-produits);
+}
+
+.stocksIcon {
+  color: var(--sidebar-icon-stocks);
+}
+
+.ventesIcon {
+  color: var(--sidebar-icon-ventes);
+}
+
+.achatsIcon {
+  color: var(--sidebar-icon-achats);
+}
+
+.statsIcon {
+  color: var(--sidebar-icon-stats);
+}
+
+.usersIcon {
+  color: var(--sidebar-icon-users);
+}
+
+.paramsIcon {
+  color: var(--sidebar-icon-params);
+}
+
+.logoutIcon {
+  color: var(--sidebar-icon-logout);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    height: 100vh;
+    width: 220px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 200px;
+    padding: 16px;
+  }
+  
+  .logo {
+    width: 150px;
+    margin: 16px auto 32px;
+  }
+  
+  .navList li a {
+    padding: 10px;
+  }
+  
+  .logoutBtn {
+    padding: 10px;
+  }
+  
+  .icon {
+    font-size: 1.1rem;
+    margin-right: 10px;
+  }
+  
+  .label {
+    font-size: 0.9rem;
+  }
+}
+
+/* Support impression */
+@media print {
+  .sidebar {
+    display: none !important;
+  }
+}
+
+/* Accessibilité */
+.navList li a:focus,
+.logoutBtn:focus {
+  outline: 2px solid var(--sidebar-icon-dashboard);
+  outline-offset: 2px;
+}
+
+/* Animation pour les transitions */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.navList li {
+  animation: slideIn 0.3s ease-out;
+}
+
+.navList li:nth-child(1) { animation-delay: 0.05s; }
+.navList li:nth-child(2) { animation-delay: 0.1s; }
+.navList li:nth-child(3) { animation-delay: 0.15s; }
+.navList li:nth-child(4) { animation-delay: 0.2s; }
+.navList li:nth-child(5) { animation-delay: 0.25s; }
+.navList li:nth-child(6) { animation-delay: 0.3s; }
+.navList li:nth-child(7) { animation-delay: 0.35s; }
+.navList li:nth-child(8) { animation-delay: 0.4s; }
+.navList li:nth-child(9) { animation-delay: 0.45s; }

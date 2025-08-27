@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { 
   FaChevronDown, 
   FaChevronUp, 
@@ -24,6 +24,24 @@ const Parametres = () => {
   const { theme, setTheme } = useContext(ThemeContext);
   const username = localStorage.getItem('user_username') || 'Utilisateur';
   const role = localStorage.getItem('user_role') || 'Inconnu';
+
+  // Gérer le basculement du thème
+  useEffect(() => {
+    const updateTheme = () => {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (theme === 'system') {
+        document.documentElement.classList.toggle('dark', prefersDark);
+      } else {
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      }
+    };
+
+    updateTheme(); // Appliquer le thème initial
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', updateTheme); // Écouter les changements de préférence système
+
+    return () => mediaQuery.removeEventListener('change', updateTheme); // Nettoyer l'écouteur
+  }, [theme]);
 
   const toggleSection = (id) => {
     setActiveSection(prev => (prev === id ? null : id));
@@ -68,7 +86,6 @@ const Parametres = () => {
         setNewPassword('');
         setConfirmPassword('');
       } else {
-        // Gérer les erreurs du serializer (tableaux)
         const errorMessage = 
           (result.old_password && result.old_password[0]) ||
           (result.new_password && result.new_password[0]) ||
@@ -77,7 +94,7 @@ const Parametres = () => {
         setMessage(errorMessage);
       }
     } catch (err) {
-      console.error('Network Error:', err); // Log pour déboguer
+      console.error('Network Error:', err);
       setMessage('Erreur réseau.');
     }
   };
@@ -179,18 +196,21 @@ const Parametres = () => {
       icon: <FaInfoCircle className={styles['icon']} />,
       content: (
         <div className={styles['help-links']}>
-          <button className={styles['help-link']}>
-            <span>Documentation</span>
-            <FaChevronDown className={styles['link-arrow']} />
-          </button>
-          <button className={styles['help-link']}>
-            <span>FAQ</span>
-            <FaChevronDown className={styles['link-arrow']} />
-          </button>
-          <button className={styles['help-link']}>
-            <span>Contacter le support</span>
-            <FaChevronDown className={styles['link-arrow']} />
-          </button>
+          <div className={styles['help-link']}>
+            <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
+              <span>Documentation</span>
+            </a>
+          </div>
+          <div className={styles['help-link']}>
+            <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
+              <span>FAQ</span>
+            </a>
+          </div>
+          <div className={styles['help-link']}>
+            <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
+              <span>Contacter le support</span>
+            </a>
+          </div>
         </div>
       ),
     },
@@ -227,7 +247,6 @@ const Parametres = () => {
         ))}
       </div>
 
-      {/* Modal pour changer le mot de passe */}
       {showModal && (
         <div className={styles['modal-overlay']} onClick={() => setShowModal(false)}>
           <div className={styles['modal-content']} onClick={e => e.stopPropagation()}>

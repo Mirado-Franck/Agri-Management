@@ -1,0 +1,246 @@
+/* Variables pour le thème clair */
+:root {
+  --produits-background-primary: rgba(247, 247, 247, 0.5);
+  --produits-background-secondary: #f2f2f2;
+  --produits-background-hover: #f1f1f1bf;
+  --produits-text-primary: #333;
+  --produits-text-secondary: #6c757d;
+  --produits-border-primary: #ccc;
+  --produits-border-secondary: #ddd;
+  --produits-button-primary: #2563eb;
+  --produits-button-hover: #1d4ed8;
+  --produits-modal-background: #fff;
+  --produits-modal-overlay: rgba(0, 0, 0, 0.5);
+  --produits-modal-shadow: rgba(0, 0, 0, 0.3);
+  --produits-alert-color: #dc3545;
+}
+
+/* Variables pour le thème sombre */
+[data-theme="dark"] {
+  --produits-background-primary: #1e1e1e;
+  --produits-background-secondary: #2a2a2a;
+  --produits-background-hover: #333;
+  --produits-text-primary: #e0e0e0;
+  --produits-text-secondary: #a0a0a0;
+  --produits-border-primary: #444;
+  --produits-border-secondary: #444;
+  --produits-button-primary: #1e40af;
+  --produits-button-hover: #1e3a8a;
+  --produits-modal-background: #2a2a2a;
+  --produits-modal-overlay: rgba(0, 0, 0, 0.7);
+  --produits-modal-shadow: rgba(0, 0, 0, 0.5);
+  --produits-alert-color: #f87171;
+}
+
+/* Styles de base */
+.produitsContainer {
+  display: flex;
+  flex-direction: column;
+  height: 750px;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  margin-top: 50px;
+  border-radius: 20px;
+  background-color: var(--produits-background-primary);
+  color: var(--produits-text-primary);
+  overflow: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.produitsHeader {
+  flex: 0 0 80px;
+  display: flex;
+  border-radius: 20px 20px 0px 0px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: var(--produits-background-secondary);
+  border-bottom: 2px solid var(--produits-border-primary);
+  margin-bottom: 0px;
+  overflow: hidden;
+  color: var(--produits-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.leftButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Style Pour les boutons Crud */
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 16px;
+  background-color: var(--produits-button-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn:hover {
+  background-color: var(--produits-button-hover);
+  transform: translateY(-1px);
+}
+
+/* Style Pour le tableau */
+.tableWrapper {
+  flex: 1 1 auto;
+  overflow-x: auto;
+  border: 1px solid var(--produits-border-primary);
+  border-radius: 6px;
+  max-height: 500px;
+  transition: border-color 0.3s ease;
+}
+
+.styledTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  min-width: 800px;
+  color: var(--produits-text-primary);
+  transition: color 0.3s ease;
+}
+
+.styledTable thead {
+  background-color: var(--produits-background-secondary);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: var(--produits-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.styledTable th,
+.styledTable td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--produits-border-secondary);
+  text-align: left;
+  font-size: 14px;
+  white-space: nowrap;
+  color: var(--produits-text-primary);
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.styledTable th {
+  font-weight: bold;
+}
+
+.styledTable tr:hover {
+  background-color: var(--produits-background-hover);
+  transition: background-color 0.3s ease;
+}
+
+/* Style pour les messages */
+.alert {
+  color: var(--produits-alert-color);
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+  background-color: rgba(220, 53, 69, 0.1);
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.noResults {
+  text-align: center;
+  padding: 20px;
+  color: var(--produits-text-secondary);
+  transition: color 0.3s ease;
+}
+
+/* Style pour la modale */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--produits-modal-overlay);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.modalContent {
+  background: var(--produits-modal-background);
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 0 20px var(--produits-modal-shadow);
+  color: var(--produits-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.closeBtn {
+  position: absolute;
+  border-radius: 50%;
+  top: 10px;
+  right: 15px;
+  background: var(--produits-modal-background);
+  color: var(--produits-text-primary);
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.rond {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+/* Style pour les checkbox en bleu */
+input[type="checkbox"] {
+  accent-color: #3b82f6; /* Bleu vif */
+}
+
+/* Pour le mode sombre - bleu plus clair */
+[data-theme="dark"] input[type="checkbox"] {
+  accent-color: #60a5fa; /* Bleu plus clair pour dark mode */
+}
+
+.rond:hover {
+  background-color: var(--produits-border-primary);
+}
+
+/* Media queries pour la responsivité */
+@media (max-width: 768px) {
+  .produitsHeader {
+    flex-direction: column;
+    gap: 10px;
+    height: auto;
+    padding: 16px;
+  }
+  
+  .buttonGroup {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .styledTable th,
+  .styledTable td {
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+  
+  .modalContent {
+    padding: 1rem;
+    width: 95%;
+  }
+}

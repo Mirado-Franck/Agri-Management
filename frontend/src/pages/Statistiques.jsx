@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { 
   FiTrendingUp, 
   FiPieChart, 
@@ -22,13 +22,12 @@ const Statistiques = () => {
   // Couleurs prédéfinies pour les top produits
   const couleurs = ['#3b82f6', '#10b981', '#6366f1', '#f59e0b', '#ef4444'];
 
-  // Scroll automatique vers la section Produits en alerte, légèrement ajusté
+  // Scroll automatique vers la section Produits en alerte
   useEffect(() => {
     if (location.hash === '#footer') {
       const footer = document.getElementById('footer');
       if (footer) {
         footer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        // Ajustement léger vers le haut après le scroll
         setTimeout(() => window.scrollBy({ top: -100, behavior: 'smooth' }), 500);
       }
     }
@@ -68,7 +67,7 @@ const Statistiques = () => {
         const compteurProduits = {};
         (Array.isArray(ventesData) ? ventesData : []).forEach(vente => {
           vente.details.forEach(detail => {
-            const nom = detail.nom_produit; // Utiliser nom_produit directement
+            const nom = detail.nom_produit;
             compteurProduits[nom] = (compteurProduits[nom] || 0) + detail.quantite;
           });
         });
@@ -98,7 +97,6 @@ const Statistiques = () => {
           });
         });
 
-        // Simulation d'évolution (corrigée)
         const performances = Object.entries(categoriesVentes)
           .sort((a, b) => b[1] - a[1])
           .slice(0, 4)
@@ -227,7 +225,9 @@ const Statistiques = () => {
                   <h4>{produit.produit_nom}</h4>
                   <p>Stock: {produit.quantite} (seuil: {produit.seuil_alerte})</p>
                 </div>
-                <button className={styles['btn-reappro']}>Réappro</button>
+                <Link to="/Stocks">
+                  <button className={styles['btn-reappro']}>Réappro</button>
+                </Link>
               </div>
             ))}
           </div>
@@ -248,13 +248,13 @@ const Statistiques = () => {
             </div>
             <div className={styles['table-row']}>
               <span>12/06/2023</span>
-              <span>Produit A</span>
+              <span>Maïs</span>
               <span>Entrée</span>
               <span>+50</span>
             </div>
             <div className={styles['table-row']}>
               <span>10/06/2023</span>
-              <span>Produit B</span>
+              <span>Carotte</span>
               <span>Sortie</span>
               <span>-20</span>
             </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './css/Dashboard.css';
+import styles from './css/Dashboard.module.css';
 import { FaShoppingCart, FaChartLine, FaStar, FaExclamationTriangle } from 'react-icons/fa';
 import { MdShowChart } from "react-icons/md";
 import { BiBarChartAlt2 } from "react-icons/bi";
@@ -18,7 +18,7 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        console.log('🔑 Token utilisé:', token); // Log du token pour débogage
+        console.log('🔑 Token utilisé:', token);
 
         const venteRes = await axiosInstance.get('/produits/ventes/');
         const produitRes = await axiosInstance.get('/produits/');
@@ -44,9 +44,9 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="dashboard-container">
-        <h1 className="dashboard-title">📊 Tableau de bord</h1>
-        <p>Chargement des données...</p>
+      <div className={styles.dashboardContainer}>
+        <h1 className={styles.dashboardTitle}>📊 Tableau de bord</h1>
+        <p>Chargement des données... ⏳</p>
       </div>
     );
   }
@@ -59,7 +59,7 @@ export default function Dashboard() {
   const compteurProduits = {};
   ventes.forEach(vente => {
     vente.details.forEach(detail => {
-      const nom = typeof detail.produit === 'object' ? detail.produit.nom_produit : detail.produit;
+      const nom = detail.nom_produit; // Utiliser nom_produit directement comme dans Statistiques
       compteurProduits[nom] = (compteurProduits[nom] || 0) + detail.quantite;
     });
   });
@@ -68,52 +68,52 @@ export default function Dashboard() {
     .sort((a, b) => b[1] - a[1])[0] || ['---', 0];
 
   return (
-    <div className="dashboard-container">
+    <div className={styles.dashboardContainer}>
       {/* KPI Cards */}
-      <div className="kpi-cards">
-        <div className="kpi-card">
-          <div className="kpi-icon"><FaShoppingCart /></div>
-          <div className="kpi-label">Total des ventes</div>
-          <div className="kpi-value">{totalVentes} Ar</div>
+      <div className={styles.kpiCards}>
+        <div className={styles.kpiCard}>
+          <div className={styles.kpiIcon}><FaShoppingCart /></div>
+          <div className={styles.kpiLabel}>Total des ventes</div>
+          <div className={styles.kpiValue}>{totalVentes} Ar</div>
         </div>
 
-        <div className="kpi-card">
-          <div className="kpi-icon"><FaChartLine /></div>
-          <div className="kpi-label">Nombre de ventes</div>
-          <div className="kpi-value">{nombreVentes}</div>
+        <div className={styles.kpiCard}>
+          <div className={styles.kpiIcon}><FaChartLine /></div>
+          <div className={styles.kpiLabel}>Nombre de produits vendus</div>
+          <div className={styles.kpiValue}>{nombreVentes}</div>
         </div>
 
-        <div className="kpi-card">
-          <div className="kpi-icon"><FaStar /></div>
-          <div className="kpi-label">Top produit</div>
-          <div className="kpi-value">{topProduit[0]} ({topProduit[1]})</div>
+        <div className={styles.kpiCard}>
+          <div className={styles.kpiIcon}><FaStar /></div>
+          <div className={styles.kpiLabel}>Top produit</div>
+          <div className={styles.kpiValue}>{topProduit[0]} ({topProduit[1]})</div>
         </div>
 
-        <div className="kpi-card warning">
-          <div className="kpi-icon"><FaExclamationTriangle /></div>
-          <div className="kpi-label">Produits en alerte</div>
-          <div className="kpi-value">{alertCount}</div>
+        <div className={`${styles.kpiCard} ${styles.warning}`}>
+          <div className={styles.kpiIcon}><FaExclamationTriangle /></div>
+          <div className={styles.kpiLabel}>Produits en alerte</div>
+          <div className={styles.kpiValue}>{alertCount}</div>
         </div>
       </div>
 
       {/* Graphiques */}
-      <div className="charts-section">
-        <div className="chart-block">
+      <div className={styles.chartsSection}>
+        <div className={styles.chartBlock}>
           <h3>
             <BiBarChartAlt2 size={20} color="#10b981" style={{ marginRight: 4 }}/>
             <Link to="/Statistiques">Évolution des ventes (semaine)</Link>
           </h3>
-          <div className="chart-placeholder">
+          <div className={styles.chartPlaceholder}>
             <VenteChart />
           </div>
         </div>
 
-        <div className="chart-block">
+        <div className={styles.chartBlock}>
           <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <MdShowChart size={20} color="#3b82f6" style={{ marginRight: 4 }} />
             <Link to="/Statistiques">Répartition des ventes par produits (semaine)</Link>
           </h3>
-          <div className="chart-placeholder">
+          <div className={styles.chartPlaceholder}>
             <VentePieChart />
           </div>
         </div>

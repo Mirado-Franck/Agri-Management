@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaTrash, FaPlus } from 'react-icons/fa';
+import { toast } from 'sonner';
+import toastStyles from '../pages/toast/toast.js'; // 👈 Importation du style des toasts
 import styles from './css/AchatForm.module.css';
 
 export default function AchatForm() {
@@ -21,7 +23,7 @@ export default function AchatForm() {
       const data = await res.json();
       setProduitsDisponibles(data);
     } catch (err) {
-      console.error('❌ Erreur chargement produits', err);
+      console.error('Erreur chargement produits', err);
     }
   };
 
@@ -31,7 +33,7 @@ export default function AchatForm() {
       const data = await res.json();
       setStocks(data);
     } catch (err) {
-      console.error('❌ Erreur chargement stocks', err);
+      console.error('Erreur chargement stocks', err);
     }
   };
 
@@ -88,7 +90,7 @@ export default function AchatForm() {
       })),
     };
 
-    console.log('🧾 Achat envoyé :', achatData);
+    console.log('Achat envoyé :', achatData);
 
     try {
       const response = await fetch('http://localhost:8000/api/produits/achats/create/', {
@@ -103,19 +105,25 @@ export default function AchatForm() {
       const result = await response.json();
 
       if (response.ok) {
-        alert('✅ Achat enregistré !');
+        toast.success('Achat enregistré avec succès !', {
+          style: toastStyles.success,
+        });
         setAchat({
           fournisseur: '',
           produits: [{ categorie: '', produitId: '', quantite: 1, prix: 0 }],
         });
         await fetchStocks();
       } else {
-        console.error('🛑 Erreur serveur :', result);
-        alert(`Erreur: ${JSON.stringify(result)}`);
+        console.error('Erreur serveur :', result);
+        toast.error(`Erreur: ${result.detail || JSON.stringify(result)}`, {
+          style: toastStyles.error,
+        });
       }
     } catch (err) {
-      console.error('🛑 Erreur réseau :', err);
-      alert('Erreur réseau lors de l\'enregistrement de l\'achat.');
+      console.error('Erreur réseau :', err);
+      toast.error('Erreur réseau lors de l\'enregistrement de l\'achat.', {
+        style: toastStyles.error,
+      });
     }
   };
 
@@ -198,7 +206,7 @@ export default function AchatForm() {
       </button>
 
       <div className={styles['achat-total']}>
-        <strong>Total : {calculerTotal()} €</strong>
+        <strong>Total : {calculerTotal()} Ar</strong>
       </div>
 
       <button className={`${styles['achat-btn-primary']} ${styles.full}`} onClick={handleSubmit}>

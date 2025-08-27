@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaBell } from 'react-icons/fa';
 import { useLocation, Link } from 'react-router-dom';
-import './css/Header.css';
+import styles from './css/Header.module.css';
 
 const pageTitles = {
   '/dashboard': 'Tableau de bord',
@@ -43,7 +43,14 @@ export default function Header() {
       }
     };
 
+    // Appeler fetchAlertes immédiatement
     fetchAlertes();
+
+    // Configurer un intervalle pour actualiser toutes les 10 secondes
+    const intervalId = setInterval(fetchAlertes, 10000);
+
+    // Nettoyer l'intervalle lors du démontage
+    return () => clearInterval(intervalId);
   }, []);
 
   const toggleMenu = () => {
@@ -67,27 +74,27 @@ export default function Header() {
   };
 
   return (
-    <header>
-      <div className="page-title">
+    <header className={styles.header}>
+      <div className={styles.pageTitle}>
         <h1>{getPageTitle()}</h1>
       </div>
       
-      <div className="notification-icon">
+      <div className={styles.notificationIcon}>
         <FaBell size={20} />
         {alertCount > 0 && (
           <Link to="/statistiques#footer">
-            <span className="alert-badge">{alertCount}</span>
+            <span className={styles.alertBadge}>{alertCount}</span>
           </Link>
         )}
       </div>
 
-      <div className="user-circle" onClick={toggleMenu} ref={dropdownRef}>
-        <div className="user-initial">{initial}</div>
+      <div className={styles.userCircle} onClick={toggleMenu} ref={dropdownRef}>
+        <div className={styles.userInitial}>{initial}</div>
 
         {menuOpen && (
-          <div className="dropdown-menu">
-            <div className="dropdown-item"><strong>{username}</strong></div>
-            <div className="dropdown-item">{role}</div>
+          <div className={styles.dropdownMenu}>
+            <div className={styles.dropdownItem}><strong>{username}</strong></div>
+            <div className={styles.dropdownItem}>{role}</div>
           </div>
         )}
       </div>

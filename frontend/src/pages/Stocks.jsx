@@ -5,7 +5,7 @@ import DateSelector from '../components/DateSelector.jsx';
 import Modal from '../components/Modal.jsx';
 import { FaPlus, FaMinus, FaCheckCircle, FaExclamationTriangle, FaExclamationCircle, FaTimesCircle } from 'react-icons/fa';
 import { toast } from 'sonner';
-import './css/Stocks.css';
+import styles from './css/Stocks.module.css';
 
 export default function Stocks() {
   const [stocks, setStocks] = useState([]);
@@ -83,6 +83,7 @@ export default function Stocks() {
     setSelectedStock(stock);
     setActionType(type);
     setIsModalOpen(true);
+    setQuantity(1); // Réinitialiser la quantité à 1
   };
 
   const handleStockChange = () => {
@@ -127,9 +128,9 @@ export default function Stocks() {
 
         // Notifications pour les états "alerte" et "rupture"
         if (data.etat === 'alerte') {
-          toast.warning(`<FaExclamationCircle /> Stock en alerte pour ${data.produit_nom} : ${data.quantite} ${data.produit_unite} restant`);
+          toast.warning(`! Stock en alerte pour ${data.produit_nom} : ${data.quantite} ${data.produit_unite} restant`);
         } else if (data.etat === 'rupture') {
-          toast.error(`<FaTimesCircle /> Rupture de stock pour ${data.produit_nom}`);
+          toast.error(`! Rupture de stock pour ${data.produit_nom}`);
         }
 
         setIsModalOpen(false);
@@ -144,22 +145,22 @@ export default function Stocks() {
   const getEtatDisplay = (etat) => {
     switch (etat) {
       case 'disponible':
-        return { text: <><FaCheckCircle className="inline mr-1" /> Disponible</>, color: 'green' };
+        return { text: <><FaCheckCircle className="inline mr-1" /> Disponible</>, color: 'var(--stocks-etat-disponible)' };
       case 'securite':
-        return { text: <><FaExclamationTriangle className="inline mr-1" /> Stock de sécurité</>, color: 'orange' };
+        return { text: <><FaExclamationTriangle className="inline mr-1" /> Stock de sécurité</>, color: 'var(--stocks-etat-securite)' };
       case 'alerte':
-        return { text: <><FaExclamationCircle className="inline mr-1" /> Stock en alerte</>, color: 'red' };
+        return { text: <><FaExclamationCircle className="inline mr-1" /> Stock en alerte</>, color: 'var(--stocks-etat-alerte)' };
       case 'rupture':
-        return { text: <><FaTimesCircle className="inline mr-1" /> Rupture</>, color: 'black' };
+        return { text: <><FaTimesCircle className="inline mr-1" /> Rupture</>, color: 'var(--stocks-etat-rupture)' };
       default:
-        return { text: <><FaCheckCircle className="inline mr-1" /> OK</>, color: 'green' };
+        return { text: <><FaCheckCircle className="inline mr-1" /> OK</>, color: 'var(--stocks-etat-disponible)' };
     }
   };
 
   return (
-    <div className="stocks-container">
-      <div className="stocks-header">
-        <div className="button-group">
+    <div className={styles.stocksContainer}>
+      <div className={styles.stocksHeader}>
+        <div className={styles.buttonGroup}>
           <DateSelector selectedDate={dateFilter} setDateFilter={setDateFilter} />
           <SortBySelector selectedSort={sortOption} setSortOption={setSortOption} />
         </div>
@@ -168,8 +169,8 @@ export default function Stocks() {
         </div>
       </div>
 
-      <div className="table-wrapper">
-        <table className="styled-table">
+      <div className={styles.tableWrapper}>
+        <table className={styles.styledTable}>
           <thead>
             <tr>
               <th>#</th>
@@ -196,15 +197,15 @@ export default function Stocks() {
                   <td style={{ color }}>{text}</td>
                   <td>{new Date(stock.date_entree).toLocaleDateString()}</td>
                   <td>{stock.date_sortie ? new Date(stock.date_sortie).toLocaleDateString() : '--'}</td>
-                  <td className="table-actions">
+                  <td className={styles.tableActions}>
                     <button
-                      className="modern-button add-btn"
+                      className={`${styles.modernButton} ${styles.addBtn}`}
                       onClick={() => handleActionClick(stock, 'add')}
                     >
                       <FaPlus />
                     </button>
                     <button
-                      className="modern-button remove-btn"
+                      className={`${styles.modernButton} ${styles.removeBtn}`}
                       onClick={() => handleActionClick(stock, 'remove')}
                     >
                       <FaMinus />
@@ -225,6 +226,7 @@ export default function Stocks() {
         quantity={quantity}
         setQuantity={setQuantity}
         onSubmit={handleStockChange}
+        maxQuantity={selectedStock?.quantite || 0} // Toujours passer la quantité actuelle
       />
     </div>
   );

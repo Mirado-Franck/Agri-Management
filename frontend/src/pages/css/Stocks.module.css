@@ -1,0 +1,209 @@
+/* Variables pour le thème clair */
+:root {
+  --stocks-background-primary: rgba(247, 247, 247, 0.5);
+  --stocks-background-secondary: #f2f2f2;
+  --stocks-background-hover: #f1f1f1bf;
+  --stocks-text-primary: #333;
+  --stocks-text-secondary: #6c757d;
+  --stocks-border-primary: #ccc;
+  --stocks-border-secondary: #ddd;
+  --stocks-button-primary: #2563eb;
+  --stocks-button-hover: #1d4ed8;
+  --stocks-button-add: #10b981;
+  --stocks-button-add-hover: #059669;
+  --stocks-button-remove: #ef4444;
+  --stocks-button-remove-hover: #dc2626;
+  --stocks-modal-background: #fff;
+  --stocks-modal-overlay: rgba(0, 0, 0, 0.5);
+  --stocks-modal-shadow: rgba(0, 0, 0, 0.3);
+  /* Variables pour les états */
+  --stocks-etat-disponible: green;
+  --stocks-etat-securite: orange;
+  --stocks-etat-alerte: red;
+  --stocks-etat-rupture: black;
+}
+
+/* Variables pour le thème sombre */
+[data-theme="dark"] {
+  --stocks-background-primary: #1e1e1e;
+  --stocks-background-secondary: #2a2a2a;
+  --stocks-background-hover: #333;
+  --stocks-text-primary: #e0e0e0;
+  --stocks-text-secondary: #a0a0a0;
+  --stocks-border-primary: #444;
+  --stocks-border-secondary: #444;
+  --stocks-button-primary: #1e40af;
+  --stocks-button-hover: #1e3a8a;
+  --stocks-button-add: #0d9660;
+  --stocks-button-add-hover: #0b7a4f;
+  --stocks-button-remove: #dc2626;
+  --stocks-button-remove-hover: #b91c1c;
+  --stocks-modal-background: #2a2a2a;
+  --stocks-modal-overlay: rgba(0, 0, 0, 0.7);
+  --stocks-modal-shadow: rgba(0, 0, 0, 0.5);
+  /* Variables pour les états (sombre) */
+  --stocks-etat-disponible: #4ade80;
+  --stocks-etat-securite: #fbbf24;
+  --stocks-etat-alerte: #f87171;
+  --stocks-etat-rupture: #9ca3af;
+}
+
+/* Styles de base */
+.stocksContainer {
+  display: flex;
+  flex-direction: column;
+  height: 750px;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  margin-top: 50px;
+  border-radius: 20px;
+  background-color: var(--stocks-background-primary);
+  color: var(--stocks-text-primary);
+  overflow: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.stocksHeader {
+  flex: 0 0 80px;
+  display: flex;
+  border-radius: 20px 20px 0px 0px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: var(--stocks-background-secondary);
+  border-bottom: 2px solid var(--stocks-border-primary);
+  margin-bottom: 0px;
+  overflow: hidden;
+  color: var(--stocks-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.tableWrapper {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  border: 1px solid var(--stocks-border-primary);
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+}
+
+.styledTable {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--stocks-text-primary);
+  transition: color 0.3s ease;
+}
+
+.styledTable thead {
+  background-color: var(--stocks-background-secondary);
+  position: sticky;
+  top: 0;
+  color: var(--stocks-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.styledTable th,
+.styledTable td {
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--stocks-border-secondary);
+  text-align: left;
+  font-size: 14px;
+  color: var(--stocks-text-primary);
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.styledTable tr:hover {
+  background-color: var(--stocks-background-hover);
+  transition: background-color 0.3s ease;
+}
+
+/* Cellule qui contient les boutons */
+.tableActions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+
+/* Bouton moderne générique */
+.modernButton {
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+  color: white;
+}
+
+/* Ajouter stock (vert) */
+.addBtn {
+  background-color: var(--stocks-button-add);
+}
+
+.addBtn:hover {
+  background-color: var(--stocks-button-add-hover);
+  transform: translateY(-1px);
+}
+
+/* Retirer stock (rouge) */
+.removeBtn {
+  background-color: var(--stocks-button-remove);
+}
+
+.removeBtn:hover {
+  background-color: var(--stocks-button-remove-hover);
+  transform: translateY(-1px);
+}
+
+/* Styles pour les états de stock */
+.etatDisponible {
+  color: green;
+}
+
+.etatSecurite {
+  color: orange;
+}
+
+.etatAlerte {
+  color: red;
+}
+
+.etatRupture {
+  color: black;
+}
+
+/* Styles pour les sélecteurs de date et tri */
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+}
+
+/* Media queries pour la responsivité */
+@media (max-width: 768px) {
+  .stocksHeader {
+    flex-direction: column;
+    gap: 10px;
+    height: auto;
+    padding: 16px;
+  }
+  
+  .buttonGroup {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .styledTable th,
+  .styledTable td {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+  
+  .tableActions {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

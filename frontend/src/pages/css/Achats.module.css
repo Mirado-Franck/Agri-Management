@@ -1,3 +1,48 @@
+/* Variables pour le thème clair */
+:root {
+  --achats-background-primary: rgba(247, 247, 247, 0.5); /* Fond principal clair */
+  --achats-background-secondary: #f2f2f2; /* Fond secondaire clair */
+  --achats-background-hover: #f1f1f1bf; /* Fond au survol clair */
+  --achats-text-primary: #333; /* Texte principal clair */
+  --achats-text-secondary: #6c757d; /* Texte secondaire clair */
+  --achats-border-primary: #ccc; /* Bordure principale clair */
+  --achats-border-secondary: #ddd; /* Bordure secondaire clair */
+  --achats-button-primary: #2563eb; /* Bouton principal clair */
+  --achats-button-hover: #1d4ed8; /* Bouton au survol clair */
+  --achats-button-secondary: #506079; /* Bouton secondaire clair (print-btn) */
+  --achats-button-secondary-hover: #354965; /* Bouton secondaire au survol clair */
+  --achats-modal-background: #fff; /* Fond modale clair */
+  --achats-modal-overlay: rgba(0, 0, 0, 0.5); /* Fond overlay modale clair */
+  --achats-modal-shadow: rgba(0, 0, 0, 0.3); /* Ombre modale clair */
+  --achats-loader-border: #f3f3f3; /* Bordure loader clair */
+  --achats-loader-accent: #2563eb; /* Accent loader clair */
+  --achats-print-background: #fff; /* Fond impression clair */
+  --achats-print-text: #000; /* Texte impression clair */
+}
+
+/* Variables pour le thème sombre */
+[data-theme="dark"] {
+  --achats-background-primary: #1e1e1e; /* Fond principal sombre */
+  --achats-background-secondary: #2a2a2a; /* Fond secondaire sombre */
+  --achats-background-hover: #333; /* Fond au survol sombre */
+  --achats-text-primary: #e0e0e0; /* Texte principal sombre */
+  --achats-text-secondary: #a0a0a0; /* Texte secondaire sombre */
+  --achats-border-primary: #444; /* Bordure principale sombre */
+  --achats-border-secondary: #444; /* Bordure secondaire sombre */
+  --achats-button-primary: #1e40af; /* Bouton principal sombre */
+  --achats-button-hover: #1e3a8a; /* Bouton au survol sombre */
+  --achats-button-secondary: #4b5563; /* Bouton secondaire sombre (print-btn) */
+  --achats-button-secondary-hover: #374151; /* Bouton secondaire au survol sombre */
+  --achats-modal-background: #2a2a2a; /* Fond modale sombre */
+  --achats-modal-overlay: rgba(0, 0, 0, 0.7); /* Fond overlay modale sombre */
+  --achats-modal-shadow: rgba(0, 0, 0, 0.5); /* Ombre modale sombre */
+  --achats-loader-border: #444; /* Bordure loader sombre */
+  --achats-loader-accent: #1e40af; /* Accent loader sombre */
+  --achats-print-background: #fff; /* Fond impression sombre (inchangé) */
+  --achats-print-text: #000; /* Texte impression sombre (inchangé) */
+}
+
+/* Styles de base */
 .achats-container {
   display: flex;
   flex-direction: column;
@@ -6,8 +51,10 @@
   font-family: 'Segoe UI', sans-serif;
   margin-top: 50px;
   border-radius: 20px;
-  background-color: rgba(247, 247, 247, 0.5);
-  overflow: hidden; 
+  background-color: var(--achats-background-primary);
+  color: var(--achats-text-primary);
+  overflow: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .achats-header {
@@ -17,40 +64,50 @@
   justify-content: space-between;
   align-items: center;
   padding: 8px 16px;
-  background-color: #f2f2f2;
-  border-bottom: 2px #ccc;
+  background-color: var(--achats-background-secondary);
+  border-bottom: 2px solid var(--achats-border-primary);
   margin-bottom: 0px;
   overflow: hidden;
+  color: var(--achats-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .table-wrapper {
   flex: 1 1 auto;
   overflow-y: auto;
-  border: 1px solid #ccc;
+  border: 1px solid var(--achats-border-primary);
   border-radius: 6px;
+  transition: border-color 0.3s ease;
 }
 
 .styled-table {
   width: 100%;
   border-collapse: collapse;
+  color: var(--achats-text-primary);
+  transition: color 0.3s ease;
 }
 
 .styled-table thead {
-  background-color: #f0f0f0;
+  background-color: var(--achats-background-secondary);
   position: sticky;
   top: 0;
+  color: var(--achats-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .styled-table th,
 .styled-table td {
   padding: 12px 8px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--achats-border-secondary);
   text-align: left;
   font-size: 14px;
+  color: var(--achats-text-primary);
+  transition: border-color 0.3s ease, color 0.3s ease;
 }
 
 .styled-table tr:hover {
-  background-color: #f9f9f9;
+  background-color: var(--achats-background-hover);
+  transition: background-color 0.3s ease;
 }
 
 .table-actions {
@@ -70,25 +127,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-  color: white;
+  transition: background-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+  color:white;
 }
 
 .view-btn {
-  background-color: #2563eb;
+  background-color: var(--achats-button-primary);
 }
 
 .view-btn:hover {
-  background-color: #1d4ed8;
+  background-color: var(--achats-button-hover);
   transform: translateY(-1px);
 }
 
 .print-btn {
-  background-color: #506079;
+  background-color: var(--achats-button-secondary);
 }
 
 .print-btn:hover {
-  background-color: #354965;
+  background-color: var(--achats-button-secondary-hover);
   transform: translateY(-1px);
 }
 
@@ -106,13 +163,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  transition: background-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
   color: white;
-  background-color: #2563eb;
+  background-color: var(--achats-button-primary);
 }
 
 .btn:hover {
-  background-color: #1d4ed8;
+  background-color: var(--achats-button-hover);
   transform: translateY(-1px);
 }
 
@@ -122,21 +179,24 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--achats-modal-overlay);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  transition: background-color 0.3s ease;
 }
 
 .modal-content {
-  background: white;
+  background: var(--achats-modal-background);
   padding: 2rem;
   border-radius: 10px;
   max-width: 600px;
   width: 90%;
   position: relative;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 20px var(--achats-modal-shadow);
+  color: var(--achats-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .close-btn {
@@ -145,11 +205,12 @@
   border-radius: 50%;
   top: 10px;
   right: 15px;
-  background: white;
-  color: black;
+  background: var(--achats-modal-background);
+  color: var(--achats-text-primary);
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .print-container.loading {
@@ -171,8 +232,8 @@
 }
 
 .loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #2563eb;
+  border: 4px solid var(--achats-loader-border);
+  border-top: 4px solid var(--achats-loader-accent);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -192,6 +253,7 @@
   .print-container,
   .print-container * {
     visibility: visible;
+    color: var(--achats-print-text);
   }
 
   .print-container {
@@ -199,11 +261,12 @@
     top: 0;
     left: 0;
     width: 100%;
+    background: var(--achats-print-background);
   }
 
   .print-container.loading {
     display: block;
-    background: white;
+    background: var(--achats-print-background);
   }
 
   .print-container.loading > *:not(.loader) {

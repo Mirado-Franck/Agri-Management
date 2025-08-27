@@ -1,16 +1,62 @@
+/* Variables pour le thème clair */
+:root {
+  --achat-bg: #fff;
+  --achat-text: #333;
+  --achat-text-secondary: #555;
+  --achat-border: #ccc;
+  --achat-border-focus: #3b82f6;
+  --achat-scroll-track: #f1f5f9;
+  --achat-scroll-thumb: #3b82f6;
+  --achat-input-bg: white;
+  --achat-input-text: #333;
+  --achat-container-bg: #fefefe;
+  --achat-btn-primary-bg: #3b82f6;
+  --achat-btn-primary-hover: #2563eb;
+  --achat-btn-outline-border: #22c55e;
+  --achat-btn-outline-text: #22c55e;
+  --achat-btn-outline-hover-bg: #22c55e;
+  --achat-btn-outline-hover-text: white;
+  --achat-delete-bg: #f87171;
+  --achat-delete-hover: #dc2626;
+}
+
+/* Variables pour le thème sombre */
+[data-theme="dark"] {
+  --achat-bg: #2a2a2a;
+  --achat-text: #e0e0e0;
+  --achat-text-secondary: #a0a0a0;
+  --achat-border: #555;
+  --achat-border-focus: #60a5fa;
+  --achat-scroll-track: #3a3a3a;
+  --achat-scroll-thumb: #60a5fa;
+  --achat-input-bg: #3a3a3a;
+  --achat-input-text: #e0e0e0;
+  --achat-container-bg: #3a3a3a;
+  --achat-btn-primary-bg: #1e40af;
+  --achat-btn-primary-hover: #1e3a8a;
+  --achat-btn-outline-border: #4ade80;
+  --achat-btn-outline-text: #4ade80;
+  --achat-btn-outline-hover-bg: #4ade80;
+  --achat-btn-outline-hover-text: white;
+  --achat-delete-bg: #f87171;
+  --achat-delete-hover: #dc2626;
+}
+
 .achat-form {
   max-width: 600px;
   margin: 2rem auto;
   padding: 1.5rem;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: var(--achat-bg);
   font-family: Arial, sans-serif;
+  transition: background-color 0.3s ease;
 }
 
 .achat-title {
   text-align: center;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--achat-text);
+  transition: color 0.3s ease;
 }
 
 .achat-group {
@@ -21,21 +67,24 @@
   display: block;
   margin-bottom: 0.3rem;
   font-weight: 600;
-  color: #555;
+  color: var(--achat-text-secondary);
+  transition: color 0.3s ease;
 }
 
 .achat-input {
   width: 100%;
   padding: 0.6rem 0.8rem;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--achat-border);
   border-radius: 6px;
   font-size: 1rem;
   box-sizing: border-box;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--achat-input-bg);
+  color: var(--achat-input-text);
 }
 
 .achat-input:focus {
-  border-color: #3b82f6;
+  border-color: var(--achat-border-focus);
   outline: none;
 }
 
@@ -43,13 +92,14 @@
   max-height: 260px;
   overflow-y: auto;
   overflow-x: hidden;
-  border: 1px solid #ddd;
+  border: 1px solid var(--achat-border);
   border-radius: 6px;
   padding: 0.8rem;
-  background: #fefefe;
+  background: var(--achat-container-bg);
   margin-bottom: 1rem;
   width: 100%;
   box-sizing: border-box;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .achat-produits-scrollable::-webkit-scrollbar {
@@ -57,19 +107,21 @@
 }
 
 .achat-produits-scrollable::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: var(--achat-scroll-track);
   border-radius: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .achat-produits-scrollable::-webkit-scrollbar-thumb {
-  background-color: #3b82f6;
+  background-color: var(--achat-scroll-thumb);
   border-radius: 10px;
-  border: 1.5px solid #f1f5f9;
+  border: 1.5px solid var(--achat-scroll-track);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .achat-produits-scrollable {
   scrollbar-width: thin;
-  scrollbar-color: #3b82f6 #f1f5f9;
+  scrollbar-color: var(--achat-scroll-thumb) var(--achat-scroll-track);
 }
 
 .achat-produit-row-custom {
@@ -86,16 +138,17 @@
 .achat-select {
   width: 100%;
   padding: 0.5rem 0.6rem;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--achat-border);
   border-radius: 6px;
   font-size: 1rem;
-  background: white;
+  background: var(--achat-input-bg);
   box-sizing: border-box;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  color: var(--achat-input-text);
 }
 
 .achat-select:focus {
-  border-color: #3b82f6;
+  border-color: var(--achat-border-focus);
   outline: none;
 }
 
@@ -106,7 +159,7 @@
 }
 
 .achat-suppr-btn {
-  background: #f87171;
+  background: var(--achat-delete-bg);
   border: none;
   color: white;
   cursor: pointer;
@@ -117,31 +170,31 @@
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .achat-suppr-btn:hover {
-  background: #dc2626;
+  background: var(--achat-delete-hover);
 }
 
 .achat-btn-outline {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border: 2px solid #22c55e;
+  border: 2px solid var(--achat-btn-outline-border);
   background: transparent;
-  color: #22c55e;
+  color: var(--achat-btn-outline-text);
   padding: 0.6rem 1rem;
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   margin-bottom: 1rem;
 }
 
 .achat-btn-outline.success:hover {
-  background-color: #22c55e;
-  color: white;
+  background-color: var(--achat-btn-outline-hover-bg);
+  color: var(--achat-btn-outline-hover-text);
 }
 
 .achat-total {
@@ -149,24 +202,25 @@
   font-weight: 700;
   text-align: right;
   margin-bottom: 1rem;
-  color: #111;
+  color: var(--achat-text);
+  transition: color 0.3s ease;
 }
 
 .achat-btn-primary {
   width: 100%;
   padding: 0.8rem;
-  background-color: #3b82f6;
+  background-color: var(--achat-btn-primary-bg);
   border: none;
   border-radius: 6px;
   color: white;
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .achat-btn-primary:hover {
-  background-color: #2563eb;
+  background-color: var(--achat-btn-primary-hover);
 }
 
 .achat-btn-primary.full {

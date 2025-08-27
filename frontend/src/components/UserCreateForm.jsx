@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../axiosInstance';
+import { toast } from 'sonner';
+import toastStyles from '../pages/toast/toast.js'; // 👈 Importation du style des toasts
 import './css/UserCreateForm.css';
 
 export default function UserCreateForm({ onCancel, onSuccess }) {
@@ -32,9 +34,21 @@ export default function UserCreateForm({ onCancel, onSuccess }) {
         role,
         password,
       });
+      
+      // Toast de succès
+      toast.success(`Utilisateur "${username}" créé avec succès !`, {
+        style: toastStyles.success,
+      });
+      
       onSuccess(); // Fermer la modale + rafraîchir la liste
     } catch (err) {
-      setErreur("Erreur lors de la création de l'utilisateur.");
+      const errorMessage = err.response?.data?.message || "Erreur lors de la création de l'utilisateur.";
+      setErreur(errorMessage);
+      
+      // Toast d'erreur
+      toast.error(`❌ ${errorMessage}`, {
+        style: toastStyles.error,
+      });
     } finally {
       setLoading(false);
     }

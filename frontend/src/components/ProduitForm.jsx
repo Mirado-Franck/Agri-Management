@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { toast } from 'sonner'; // ✅ Remplace react-toastify
+import { toast } from 'sonner';
 import styles from './css/ProduitForm.module.css';
 import Select from 'react-select';
 
@@ -19,7 +19,7 @@ const ProduitForm = ({ onClose, onRefreshProduits }) => {
       .then(res => res.json())
       .then(data => setCategories(data))
       .catch(err => {
-        console.error("❌ Erreur catégories :", err);
+        console.error("Erreur catégories :", err);
       });
   }, []);
 
@@ -58,7 +58,7 @@ const ProduitForm = ({ onClose, onRefreshProduits }) => {
       });
 
       if (response.ok) {
-        toast.success("✅ Produit ajouté avec succès !");
+        toast.success("Produit ajouté avec succès !");
         setFormData({
           nom_produit: '',
           categorie_produit: '',
@@ -71,34 +71,34 @@ const ProduitForm = ({ onClose, onRefreshProduits }) => {
         if (onClose) onClose();
       } else {
         const err = await response.json();
-        console.error("❌ Erreur API :", err);
+        console.error("Erreur API :", err);
         toast.error("Une erreur est survenue lors de l'ajout.");
       }
     } catch (error) {
-      console.error("⚠️ Erreur réseau :", error);
+      console.error("Erreur réseau :", error);
       toast.error("Erreur de connexion au serveur.");
     }
   };
 
   return (
-    <form className={styles['form-container']} onSubmit={handleSubmit}>
+    <form className={styles.formContainer} onSubmit={handleSubmit}>
       <h2>Ajouter un produit</h2>
 
-      <div className={styles['form-group']}>
+      <div className={styles.formGroup}>
         <input
           type="text"
           name="nom_produit"
-          className={styles['form-input']}
+          className={styles.formInput}
           placeholder=" "
           value={formData.nom_produit}
           onChange={handleChange}
           required
         />
-        <label className={styles['form-label']}>Nom</label>
+        <label className={styles.formLabel}>Nom</label>
       </div>
 
-      <div className={styles['form-group']}>
-        <label className={styles['form-label']}>Catégorie</label>
+      <div className={styles.formGroup}>
+        <label className={styles.selectLabel}>Catégorie</label>
         <Select
           options={categories.map(cat => ({ value: cat.id, label: cat.nom }))}
           classNamePrefix="react-select"
@@ -113,53 +113,105 @@ const ProduitForm = ({ onClose, onRefreshProduits }) => {
             .map(cat => ({ value: cat.id, label: cat.nom }))
             .find(opt => opt.value === parseInt(formData.categorie_produit))}
           isClearable
+          styles={customSelectStyles}
         />
       </div>
 
-      <div className={styles['form-group']}>
+      <div className={styles.formGroup}>
         <input
           type="text"
           name="unite"
-          className={styles['form-input']}
+          className={styles.formInput}
           placeholder=" "
           value={formData.unite}
           onChange={handleChange}
           required
         />
-        <label className={styles['form-label']}>Unité</label>
+        <label className={styles.formLabel}>Unité</label>
       </div>
 
-      <div className={styles['form-group']}>
+      <div className={styles.formGroup}>
         <input
           type="number"
           name="prix_unitaire"
-          className={styles['form-input']}
+          className={styles.formInput}
           placeholder=" "
           value={formData.prix_unitaire}
           onChange={handleChange}
           required
           min="0"
         />
-        <label className={styles['form-label']}>Prix unitaire</label>
+        <label className={styles.formLabel}>Prix unitaire</label>
       </div>
 
-      <div className={styles['form-group']}>
+      <div className={styles.formGroup}>
         <input
           type="number"
           name="seuil_alerte"
-          className={styles['form-input']}
+          className={styles.formInput}
           placeholder=" "
           value={formData.seuil_alerte}
           onChange={handleChange}
           required
           min="0"
         />
-        <label className={styles['form-label']}>Seuil minimum</label>
+        <label className={styles.formLabel}>Seuil minimum</label>
       </div>
 
-      <button className={styles['submit-btn']}>Envoyer</button>
+      <button className={styles.submitBtn}>Envoyer</button>
     </form>
   );
+};
+
+// Styles personnalisés pour react-select avec support dark mode
+const customSelectStyles = {
+  control: (base, state) => ({
+    ...base,
+    backgroundColor: 'var(--form-bg)',
+    borderColor: state.isFocused ? 'var(--form-border-focus)' : 'var(--form-border)',
+    boxShadow: state.isFocused ? '0 0 0 1px var(--form-border-focus)' : 'none',
+    '&:hover': {
+      borderColor: 'var(--form-border-hover)'
+    },
+    minHeight: '48px'
+  }),
+  menu: (base) => ({
+    ...base,
+    backgroundColor: 'var(--form-bg)',
+    border: '1px solid var(--form-border)'
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isFocused ? 'var(--form-option-hover)' : 'var(--form-bg)',
+    color: 'var(--form-text)',
+    '&:active': {
+      backgroundColor: 'var(--form-option-active)'
+    }
+  }),
+  singleValue: (base) => ({
+    ...base,
+    color: 'var(--form-text)'
+  }),
+  placeholder: (base) => ({
+    ...base,
+    color: 'var(--form-placeholder)'
+  }),
+  input: (base) => ({
+    ...base,
+    color: 'var(--form-text)'
+  }),
+  dropdownIndicator: (base) => ({
+    ...base,
+    color: 'var(--form-text)'
+  }),
+  clearIndicator: (base) => ({
+    ...base,
+    color: 'var(--form-text)'
+  }),
+  indicatorSeparator: (base) => ({
+    ...base,
+    backgroundColor: 'var(--form-border)'
+  })
 };
 
 export default ProduitForm;

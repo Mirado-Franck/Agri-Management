@@ -1,0 +1,89 @@
+/* Variables pour le thème clair */
+:root {
+  --main-bg: rgba(247, 247, 247, 0.5);
+  --main-text-primary: #2c3e50;
+  --main-text-secondary: #7f8c8d;
+  --main-border: #ccc;
+}
+
+/* Variables pour le thème sombre */
+[data-theme="dark"] {
+  --main-bg: #1e1e1e;
+  --main-text-primary: #e0e0e0;
+  --main-text-secondary: #a0a0a0;
+  --main-border: #444;
+}
+
+/* Styles de base */
+.mainContent {
+  flex: 1;
+  margin-top: 0px;
+  background-color: var(--main-bg);
+  padding: 20px;
+  transition: background-color 0.3s ease;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.mainContent h1 {
+  font-size: 2rem;
+  color: var(--main-text-primary);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.mainContent p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--main-text-secondary);
+  transition: color 0.3s ease;
+}
+
+.headbar {
+  margin-top: 0px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mainContent {
+    padding: 16px;
+  }
+  
+  .mainContent h1 {
+    font-size: 1.5rem;
+  }
+  
+  .mainContent p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mainContent {
+    padding: 12px;
+  }
+  
+  .mainContent h1 {
+    font-size: 1.25rem;
+  }
+  
+  .mainContent p {
+    font-size: 0.85rem;
+  }
+}
+
+/* Support impression */
+@media print {
+  .mainContent {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .mainContent h1 {
+    color: black !important;
+  }
+  
+  .mainContent p {
+    color: #333 !important;
+  }
+}

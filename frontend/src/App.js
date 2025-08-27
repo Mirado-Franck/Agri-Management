@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Toaster } from 'sonner';
-import { ThemeProvider } from './pages/config/ThemeContext.js'; // Importez le ThemeProvider
-
+import { ThemeProvider } from './pages/config/ThemeContext.js';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import Login from './pages/Login';
-
 import './App.css';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Vérifie si l'utilisateur est déjà connecté (au démarrage de l'app)
   useEffect(() => {
     const logged = localStorage.getItem('isLoggedIn');
     if (logged === 'true') {
@@ -30,7 +27,7 @@ export default function App() {
   };
 
   return (
-    <ThemeProvider> {/* Enveloppez toute l'application avec ThemeProvider */}
+    <ThemeProvider>
       <Toaster position="top-center" size={44} />
       {!isLoggedIn ? (
         <Login onLogin={handleLogin} />

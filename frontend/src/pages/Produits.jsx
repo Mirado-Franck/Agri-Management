@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './css/Produits.css';
+import styles from './css/Produits.module.css';
 import { toast } from 'sonner';
 import { IoMdClose } from "react-icons/io";
 import Searchbar from '../components/Searchbar.jsx';
@@ -104,8 +104,8 @@ export default function Produits() {
   const displayedProduits = getFilteredProduits();
 
   return (
-    <div className="produits-container">
-      <div className="produits-header">
+    <div className={styles.produitsContainer}>
+      <div className={styles.produitsHeader}>
         <CrudButtons
           loading={isLoading}
           selectedProduits={selectedProduits}
@@ -133,10 +133,10 @@ export default function Produits() {
         </div>
       </div>
 
-      {erreur && <div className="alert">{erreur}</div>}
+      {erreur && <div className={styles.alert}>{erreur}</div>}
 
-      <div className="table-wrapper">
-        <table className="styled-table">
+      <div className={styles.tableWrapper}>
+        <table className={styles.styledTable}>
           <thead>
             <tr>
               <th>
@@ -180,7 +180,7 @@ export default function Produits() {
               ))
             ) : (
               <tr>
-                <td colSpan="8" className="no-results">
+                <td colSpan="8" className={styles.noResults}>
                   {searchTerm ? "Aucun résultat trouvé" : "Chargement..."}
                 </td>
               </tr>
@@ -190,13 +190,13 @@ export default function Produits() {
       </div>
 
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button className="close-btn" onClick={() => {
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <button className={styles.closeBtn} onClick={() => {
               setShowModal(false);
               setEditingProduit(null);
             }}>
-              <div className='rond'><IoMdClose size={20} /></div>
+              <div className={styles.rond}><IoMdClose size={20} /></div>
             </button>
 
             {editingProduit ? (

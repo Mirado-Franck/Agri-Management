@@ -1,16 +1,62 @@
+/* Variables pour le thème clair */
+:root {
+  --vente-bg: #fff;
+  --vente-text: #333;
+  --vente-text-secondary: #555;
+  --vente-border: #ccc;
+  --vente-border-focus: #3b82f6;
+  --vente-scroll-track: #f1f5f9;
+  --vente-scroll-thumb: #3b82f6;
+  --vente-input-bg: white;
+  --vente-input-text: #333;
+  --vente-container-bg: #fefefe;
+  --vente-btn-primary-bg: #3b82f6;
+  --vente-btn-primary-hover: #2563eb;
+  --vente-btn-outline-border: #22c55e;
+  --vente-btn-outline-text: #22c55e;
+  --vente-btn-outline-hover-bg: #22c55e;
+  --vente-btn-outline-hover-text: white;
+  --vente-delete-bg: #f87171;
+  --vente-delete-hover: #dc2626;
+}
+
+/* Variables pour le thème sombre */
+[data-theme="dark"] {
+  --vente-bg: #2a2a2a;
+  --vente-text: #e0e0e0;
+  --vente-text-secondary: #a0a0a0;
+  --vente-border: #555;
+  --vente-border-focus: #60a5fa;
+  --vente-scroll-track: #3a3a3a;
+  --vente-scroll-thumb: #60a5fa;
+  --vente-input-bg: #3a3a3a;
+  --vente-input-text: #e0e0e0;
+  --vente-container-bg: #3a3a3a;
+  --vente-btn-primary-bg: #1e40af;
+  --vente-btn-primary-hover: #1e3a8a;
+  --vente-btn-outline-border: #4ade80;
+  --vente-btn-outline-text: #4ade80;
+  --vente-btn-outline-hover-bg: #4ade80;
+  --vente-btn-outline-hover-text: white;
+  --vente-delete-bg: #f87171;
+  --vente-delete-hover: #dc2626;
+}
+
 .vente-form {
   max-width: 600px;
   margin: 2rem auto;
   padding: 1.5rem;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: var(--vente-bg);
   font-family: Arial, sans-serif;
+  transition: background-color 0.3s ease;
 }
 
 .vente-title {
   text-align: center;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--vente-text);
+  transition: color 0.3s ease;
 }
 
 .vente-group {
@@ -21,56 +67,61 @@
   display: block;
   margin-bottom: 0.3rem;
   font-weight: 600;
-  color: #555;
+  color: var(--vente-text-secondary);
+  transition: color 0.3s ease;
 }
 
 .vente-input {
   width: 100%;
   padding: 0.6rem 0.8rem;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--vente-border);
   border-radius: 6px;
   font-size: 1rem;
   box-sizing: border-box;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--vente-input-bg);
+  color: var(--vente-input-text);
 }
 
 .vente-input:focus {
-  border-color: #3b82f6;
+  border-color: var(--vente-border-focus);
   outline: none;
 }
 
 .vente-produits-scrollable {
   max-height: 260px;
-  overflow-y: auto;      /* scroll vertical uniquement */
-  overflow-x: hidden;    /* interdit le scroll horizontal */
-  border: 1px solid #ddd;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid var(--vente-border);
   border-radius: 6px;
   padding: 0.8rem;
-  background: #fefefe;
+  background: var(--vente-container-bg);
   margin-bottom: 1rem;
-  width: 100%;           /* occupe toute la largeur possible */
+  width: 100%;
   box-sizing: border-box;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .vente-produits-scrollable::-webkit-scrollbar {
-  width: 6px;            /* largeur du scroll vertical */
+  width: 6px;
 }
 
 .vente-produits-scrollable::-webkit-scrollbar-track {
-  background: #f1f5f9;   /* couleur du track (fond du scroll) */
+  background: var(--vente-scroll-track);
   border-radius: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .vente-produits-scrollable::-webkit-scrollbar-thumb {
-  background-color: #3b82f6;  /* couleur du thumb (barre scroll) */
+  background-color: var(--vente-scroll-thumb);
   border-radius: 10px;
-  border: 1.5px solid #f1f5f9; /* espacement autour pour un effet "fin" */
+  border: 1.5px solid var(--vente-scroll-track);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Pour Firefox */
 .vente-produits-scrollable {
-  scrollbar-width: thin;             /* scrollbar plus fine */
-  scrollbar-color: #3b82f6 #f1f5f9; /* couleur thumb / track */
+  scrollbar-width: thin;
+  scrollbar-color: var(--vente-scroll-thumb) var(--vente-scroll-track);
 }
 
 .vente-produit-row-custom {
@@ -81,28 +132,25 @@
   margin-bottom: 0.8rem;
   width: 100%;
   box-sizing: border-box;
-  min-width: 0;          /* évite overflow dans certains navigateurs */
+  min-width: 0;
 }
 
 .vente-select {
   width: 100%;
   padding: 0.5rem 0.6rem;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--vente-border);
   border-radius: 6px;
   font-size: 1rem;
-  background: white;
+  background: var(--vente-input-bg);
   box-sizing: border-box;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  color: var(--vente-input-text);
 }
 
 .vente-select:focus {
-  border-color: #3b82f6;
+  border-color: var(--vente-border-focus);
   outline: none;
 }
-
-/* .vente-input[type="number"] {
-  -moz-appearance: textfield; /* supprime les flèches sous Firefox 
-} */
 
 .vente-input::-webkit-inner-spin-button,
 .vente-input::-webkit-outer-spin-button {
@@ -111,7 +159,7 @@
 }
 
 .vente-suppr-btn {
-  background: #f87171;
+  background: var(--vente-delete-bg);
   border: none;
   color: white;
   cursor: pointer;
@@ -122,31 +170,31 @@
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .vente-suppr-btn:hover {
-  background: #dc2626;
+  background: var(--vente-delete-hover);
 }
 
 .vente-btn-outline {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border: 2px solid #22c55e;
+  border: 2px solid var(--vente-btn-outline-border);
   background: transparent;
-  color: #22c55e;
+  color: var(--vente-btn-outline-text);
   padding: 0.6rem 1rem;
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   margin-bottom: 1rem;
 }
 
 .vente-btn-outline.success:hover {
-  background-color: #22c55e;
-  color: white;
+  background-color: var(--vente-btn-outline-hover-bg);
+  color: var(--vente-btn-outline-hover-text);
 }
 
 .vente-total {
@@ -154,24 +202,25 @@
   font-weight: 700;
   text-align: right;
   margin-bottom: 1rem;
-  color: #111;
+  color: var(--vente-text);
+  transition: color 0.3s ease;
 }
 
 .vente-btn-primary {
   width: 100%;
   padding: 0.8rem;
-  background-color: #3b82f6;
+  background-color: var(--vente-btn-primary-bg);
   border: none;
   border-radius: 6px;
   color: white;
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .vente-btn-primary:hover {
-  background-color: #2563eb;
+  background-color: var(--vente-btn-primary-hover);
 }
 
 .vente-btn-primary.full {

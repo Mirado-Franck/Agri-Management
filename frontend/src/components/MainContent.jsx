@@ -10,26 +10,26 @@ import Statistiques from '../pages/Statistiques';
 import Utilisateurs from '../pages/Utilisateurs';
 import Deconnection from '../pages/Déconnection';
 import Parametres from '../pages/Paramètres';
-import './css/MainContent.css';
+import styles from './css/MainContent.module.css';
 
 function MainContent() {
   return (
-    <div className="main-content">
-      <div className="headbar">
-        <Header userInitial="M" /> {/* 🧑 Initiale utilisateur */}
+    <div className={styles.mainContent}>
+      <div className={styles.headbar}>
+        <Header /> {/* Le composant Header gère lui-même l'initiale utilisateur */}
       </div>
-      <div>
+      <div className={styles.contentArea}>
         <Routes>
           <Route path="/" element={<Dashboard />} /> {/* 🏠 Redirection racine vers Dashboard */}
           <Route path="/dashboard" element={<Dashboard />} /> {/* 📊 Page Dashboard */}
-          <Route path="/Produits" element={<Produits />} /> {/* 🛒 Produits */}
-          <Route path="/Stocks" element={<Stocks />} /> {/* 📦 Stocks */}
-          <Route path="/Ventes" element={<Ventes />} /> {/* 💸 Ventes */}
-          <Route path="/Achats" element={<Achats />} /> {/* 🛍️ Achats */}
-          <Route path="/Statistiques" element={<Statistiques />} /> {/* 📈 Statistiques */}
-          <Route path="/Utilisateurs" element={<Utilisateurs />} /> {/* 👥 Utilisateurs */}
-          <Route path="/Parametres" element={<Parametres />} /> {/* ⚙️ Paramètres */}
-          <Route path="/Deconnection" element={<Deconnection />} /> {/* 🚪 Déconnexion */}
+          <Route path="/produits" element={<Produits />} /> {/* 🛒 Produits */}
+          <Route path="/stocks" element={<Stocks />} /> {/* 📦 Stocks */}
+          <Route path="/ventes" element={<Ventes />} /> {/* 💸 Ventes */}
+          <Route path="/achats" element={<Achats />} /> {/* 🛍️ Achats */}
+          <Route path="/statistiques" element={<Statistiques />} /> {/* 📈 Statistiques */}
+          <Route path="/utilisateurs" element={<Utilisateurs />} /> {/* 👥 Utilisateurs */}
+          <Route path="/parametres" element={<Parametres />} /> {/* ⚙️ Paramètres */}
+          <Route path="/deconnection" element={<Deconnection />} /> {/* 🚪 Déconnexion */}
         </Routes>
       </div>
     </div>

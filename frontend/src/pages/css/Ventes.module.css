@@ -1,3 +1,48 @@
+/* Variables pour le thème clair */
+:root {
+  --ventes-background-primary: rgba(247, 247, 247, 0.5); /* Fond principal clair */
+  --ventes-background-secondary: #f2f2f2; /* Fond secondaire clair */
+  --ventes-background-hover: #f9f9f9; /* Fond au survol clair */
+  --ventes-text-primary: #333; /* Texte principal clair */
+  --ventes-text-secondary: #6c757d; /* Texte secondaire clair */
+  --ventes-border-primary: #ccc; /* Bordure principale clair */
+  --ventes-border-secondary: #ddd; /* Bordure secondaire clair */
+  --ventes-button-primary: #2563eb; /* Bouton principal clair */
+  --ventes-button-hover: #1d4ed8; /* Bouton au survol clair */
+  --ventes-button-secondary: #506079; /* Bouton secondaire clair (print-btn) */
+  --ventes-button-secondary-hover: #354965; /* Bouton secondaire au survol clair */
+  --ventes-modal-background: #fff; /* Fond modale clair */
+  --ventes-modal-overlay: rgba(0, 0, 0, 0.5); /* Fond overlay modale clair */
+  --ventes-modal-shadow: rgba(0, 0, 0, 0.3); /* Ombre modale clair */
+  --ventes-loader-border: #f3f3f3; /* Bordure loader clair */
+  --ventes-loader-accent: #2563eb; /* Accent loader clair */
+  --ventes-print-background: #fff; /* Fond impression clair */
+  --ventes-print-text: #000; /* Texte impression clair */
+}
+
+/* Variables pour le thème sombre */
+[data-theme="dark"] {
+  --ventes-background-primary: #1e1e1e; /* Fond principal sombre */
+  --ventes-background-secondary: #2a2a2a; /* Fond secondaire sombre */
+  --ventes-background-hover: #333; /* Fond au survol sombre */
+  --ventes-text-primary: #e0e0e0; /* Texte principal sombre */
+  --ventes-text-secondary: #a0a0a0; /* Texte secondaire sombre */
+  --ventes-border-primary: #444; /* Bordure principale sombre */
+  --ventes-border-secondary: #444; /* Bordure secondaire sombre */
+  --ventes-button-primary: #1e40af; /* Bouton principal sombre */
+  --ventes-button-hover: #1e3a8a; /* Bouton au survol sombre */
+  --ventes-button-secondary: #4b5563; /* Bouton secondaire sombre (print-btn) */
+  --ventes-button-secondary-hover: #374151; /* Bouton secondaire au survol sombre */
+  --ventes-modal-background: #2a2a2a; /* Fond modale sombre */
+  --ventes-modal-overlay: rgba(0, 0, 0, 0.7); /* Fond overlay modale sombre */
+  --ventes-modal-shadow: rgba(0, 0, 0, 0.5); /* Ombre modale sombre */
+  --ventes-loader-border: #444; /* Bordure loader sombre */
+  --ventes-loader-accent: #1e40af; /* Accent loader sombre */
+  --ventes-print-background: #fff; /* Fond impression sombre (inchangé) */
+  --ventes-print-text: #000; /* Texte impression sombre (inchangé) */
+}
+
+/* Styles de base */
 .ventes-container {
   display: flex;
   flex-direction: column;
@@ -6,56 +51,64 @@
   font-family: 'Segoe UI', sans-serif;
   margin-top: 50px;
   border-radius: 20px;
-  background-color: rgba(247, 247, 247, 0.5);
-  overflow: hidden; 
+  background-color: var(--ventes-background-primary);
+  color: var(--ventes-text-primary);
+  overflow: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .ventes-header {
-  flex: 0 0 80px; /* hauteur fixe de 80px */
+  flex: 0 0 80px;
   display: flex;
   border-radius: 20px 20px 0px 0px;
   justify-content: space-between;
   align-items: center;
   padding: 8px 16px;
-  background-color: #f2f2f2;
-  border-bottom: 2px #ccc;
+  background-color: var(--ventes-background-secondary);
+  border-bottom: 2px solid var(--ventes-border-primary);
   margin-bottom: 0px;
-  overflow: hidden; /* empêche le contenu de faire grandir */
+  overflow: hidden;
+  color: var(--ventes-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .table-wrapper {
-  flex: 1 1 auto; /* prend tout le reste */
+  flex: 1 1 auto;
   overflow-y: auto;
-  border: 1px solid #ccc;
+  border: 1px solid var(--ventes-border-primary);
   border-radius: 6px;
+  transition: border-color 0.3s ease;
 }
 
 .styled-table {
   width: 100%;
   border-collapse: collapse;
+  color: var(--ventes-text-primary);
+  transition: color 0.3s ease;
 }
 
 .styled-table thead {
-  background-color: #f0f0f0;
+  background-color: var(--ventes-background-secondary);
   position: sticky;
   top: 0;
+  color: var(--ventes-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .styled-table th,
 .styled-table td {
   padding: 12px 8px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--ventes-border-secondary);
   text-align: left;
   font-size: 14px;
+  color: var(--ventes-text-primary);
+  transition: border-color 0.3s ease, color 0.3s ease;
 }
 
 .styled-table tr:hover {
-  background-color: #f9f9f9;
+  background-color: var(--ventes-background-hover);
+  transition: background-color 0.3s ease;
 }
-  
-/*
-Les styles des boutons actions 
-*/
 
 .table-actions {
   display: flex;
@@ -74,97 +127,25 @@ Les styles des boutons actions
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  transition: background-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
   color: white;
 }
 
-/* Vue (Eye) : bleu moderne */
 .view-btn {
-  background-color: #2563eb; /* Blue-600 */
+  background-color: var(--ventes-button-primary);
 }
 
 .view-btn:hover {
-  background-color: #1d4ed8; /* Blue-700 */
-  transform: translateY(-1px);
-}
-
-/* Impression (Printer) : gris foncé neutre */
-.print-btn {
-  background-color: #506079; /* Gray-700 */
-}
-
-.print-btn:hover {
-  background-color: #354965; /* Gray-800 */
-  transform: translateY(-1px);
-}
-
-/*
-  Style Pour les boutons Crud
-*/
-.button-group {
-  display: flex;
-  gap: 10px;
-}
-
-/*
-  Code pour la fenêtre flottante 
-*/
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* fond assombri */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  max-width: 600px;
-  width: 90%;
-  position: relative;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
-
-/*
- Bouton Pour fermer une fenêtre flottante 
-*/
-.close-btn {
-  height: 50px;
-  position: absolute;
-  border-radius: 50%;
-  top: 10px;
-  right: 15px;
-  background:white;
-  color: black; /* Corrigé "balck" en "black" */
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-
-.view-btn {
-  background-color: #2563eb;
-}
-
-.view-btn:hover {
-  background-color: #1d4ed8;
+  background-color: var(--ventes-button-hover);
   transform: translateY(-1px);
 }
 
 .print-btn {
-  background-color: #506079;
+  background-color: var(--ventes-button-secondary);
 }
 
 .print-btn:hover {
-  background-color: #354965;
+  background-color: var(--ventes-button-secondary-hover);
   transform: translateY(-1px);
 }
 
@@ -182,17 +163,56 @@ Les styles des boutons actions
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-  color: white;
-  background-color: #2563eb;
+  transition: background-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+  color:white;
+  background-color: var(--ventes-button-primary);
 }
 
 .btn:hover {
-  background-color: #1d4ed8;
+  background-color: var(--ventes-button-hover);
   transform: translateY(-1px);
 }
 
-/* Animation de chargement pour l'impression */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--ventes-modal-overlay);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content {
+  background: var(--ventes-modal-background);
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 0 20px var(--ventes-modal-shadow);
+  color: var(--ventes-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.close-btn {
+  height: 50px;
+  position: absolute;
+  border-radius: 50%;
+  top: 10px;
+  right: 15px;
+  background: var(--ventes-modal-background);
+  color: var(--ventes-text-primary);
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 .print-container.loading {
   position: fixed;
   top: 0;
@@ -202,33 +222,29 @@ Les styles des boutons actions
   display: flex;
   justify-content: center;
   align-items: center;
-  background: transparent; /* Fond invisible */
-  z-index: 9999; /* Au-dessus des autres éléments */
-  pointer-events: none; /* Pas d'interaction */
+  background: transparent;
+  z-index: 9999;
+  pointer-events: none;
 }
 
-/* Masquer le contenu de FacturePrintable */
 .print-container.loading > *:not(.loader) {
-  display: none; /* Cacher tout sauf le loader */
+  display: none;
 }
 
-/* Style de l'animation de chargement */
 .loader {
-  border: 4px solid #f3f3f3; /* Gris clair */
-  border-top: 4px solid #2563eb; /* Bleu assorti au thème */
+  border: 4px solid var(--ventes-loader-border);
+  border-top: 4px solid var(--ventes-loader-accent);
   border-radius: 50%;
   width: 40px;
   height: 40px;
   animation: spin 1s linear infinite;
 }
 
-/* Animation de rotation */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-/* Styles pour l'impression */
 @media print {
   body * {
     visibility: hidden;
@@ -237,6 +253,7 @@ Les styles des boutons actions
   .print-container,
   .print-container * {
     visibility: visible;
+    color: var(--ventes-print-text);
   }
 
   .print-container {
@@ -244,18 +261,19 @@ Les styles des boutons actions
     top: 0;
     left: 0;
     width: 100%;
+    background: var(--ventes-print-background);
   }
 
   .print-container.loading {
     display: block;
-    background: white;
+    background: var(--ventes-print-background);
   }
 
   .print-container.loading > *:not(.loader) {
-    display: block; /* Afficher FacturePrintable lors de l'impression */
+    display: block;
   }
 
   .loader {
-    display: none; /* Cacher le loader lors de l'impression */
+    display: none;
   }
 }

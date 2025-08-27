@@ -3,22 +3,32 @@ import React, { createContext, useState, useEffect } from 'react';
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
   useEffect(() => {
-    // Vérifier le thème sauvegardé ou les préférences système
-    const savedTheme = localStorage.getItem('theme') || 
-                      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    setTheme(savedTheme);
-    
-    // Appliquer le thème au document
-    document.documentElement.setAttribute('data-theme', savedTheme);
-  }, []);
+    const applyTheme = () => {
+      const selectedTheme = theme === 'system'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        : theme;
+      document.documentElement.setAttribute('data-theme', selectedTheme);
+      localStorage.setItem('theme', theme);
+    };
+
+    applyTheme();
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleSystemChange = (e) => {
+      if (theme === 'system') {
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+      }
+    };
+    mediaQuery.addEventListener('change', handleSystemChange);
+
+    return () => mediaQuery.removeEventListener('change', handleSystemChange);
+  }, [theme]);
 
   const updateTheme = (newTheme) => {
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
   };
 
   return (

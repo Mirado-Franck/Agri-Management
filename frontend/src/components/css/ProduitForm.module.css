@@ -1,52 +1,93 @@
+/* Variables pour le thème clair */
+:root {
+  --form-bg: white;
+  --form-text: #333;
+  --form-border: #e5e7eb;
+  --form-border-hover: #d1d5db;
+  --form-border-focus: #3b82f6;
+  --form-placeholder: #6b7280;
+  --form-label: #6b7280;
+  --form-label-focus: #3b82f6;
+  --form-option-hover: #f3f4f6;
+  --form-option-active: #e5e7eb;
+  --form-button-bg: #3b82f6;
+  --form-button-hover: #2563eb;
+  --form-button-text: white;
+}
+
+/* Variables pour le thème sombre */
+[data-theme="dark"] {
+  --form-bg: #2a2a2a;
+  --form-text: #e0e0e0;
+  --form-border: #444;
+  --form-border-hover: #555;
+  --form-border-focus: #60a5fa;
+  --form-placeholder: #a0a0a0;
+  --form-label: #a0a0a0;
+  --form-label-focus: #60a5fa;
+  --form-option-hover: #3a3a3a;
+  --form-option-active: #4a4a4a;
+  --form-button-bg: #1e40af;
+  --form-button-hover: #1e3a8a;
+  --form-button-text: white;
+}
+
 /* Styles de base du conteneur du formulaire */
-.form-container {
+.formContainer {
   padding: 2rem;
-  background: white;
+  background: var(--form-bg);
   border-radius: 12px;
   max-width: 500px;
   margin-left: 2px;
+  transition: background-color 0.3s ease;
 }
 
 /* Titre du formulaire */
-.form-container h2 {
+.formContainer h2 {
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--form-text);
   text-align: center;
+  transition: color 0.3s ease;
 }
 
 /* Groupe de formulaire */
-.form-group {
+.formGroup {
   position: relative;
   margin-bottom: 1.5rem;
 }
 
 /* Styles communs pour tous les champs de saisie */
-.form-input,
-textarea.form-input,
-select.form-input {
+.formInput,
+textarea.formInput,
+select.formInput {
   width: 100%;
   padding: 0.8rem 1rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--form-border);
   border-radius: 6px;
   font-size: 1rem;
   outline: none;
-  transition: border-color 0.3s;
-  box-sizing: border-box; /* Important pour garder les dimensions cohérentes */
-  height: 48px; /* Hauteur fixe pour tous les champs */
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  box-sizing: border-box;
+  height: 48px;
   appearance: none;
-  background-color: white;
+  background-color: var(--form-bg);
+  color: var(--form-text);
 }
 
-/* Champ multiligne (textarea) : override height si nécessaire */
-textarea.form-input {
-  resize: vertical; /* ou none si tu ne veux pas le redimensionnement */
+.formInput::placeholder {
+  color: var(--form-placeholder);
+}
+
+/* Champ multiligne */
+textarea.formInput {
+  resize: vertical;
   min-height: 48px;
 }
 
-/* Champ select : ajouter un espace pour l'icône dropdown */
-select.form-input {
+/* Champ select */
+select.formInput {
   padding-right: 2.5rem;
   background-position: right 1rem center;
   background-repeat: no-repeat;
@@ -54,46 +95,134 @@ select.form-input {
 }
 
 /* Focus + Label flottant */
-.form-input:focus {
-  border-color: #3b82f6;
+.formInput:focus {
+  border-color: var(--form-border-focus);
 }
 
-.form-input:not(:placeholder-shown) + .form-label,
-.form-input:focus + .form-label {
+.formInput:not(:placeholder-shown) + .formLabel,
+.formInput:focus + .formLabel {
   top: -10px;
   left: 10px;
   font-size: 0.75rem;
-  color: #3b82f6;
+  color: var(--form-label-focus);
+  background-color: var(--form-bg);
+  padding: 0 4px;
 }
 
 /* Label flottant */
-.form-label {
+.formLabel {
   position: absolute;
   top: 50%;
   left: 1rem;
   transform: translateY(-50%);
-  color: #6b7280;
+  color: var(--form-label);
   font-size: 1rem;
   pointer-events: none;
   transition: all 0.3s ease;
+  background-color: transparent;
+}
+
+/* Label pour le select */
+.selectLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--form-label);
+  font-size: 0.875rem;
+  transition: color 0.3s ease;
 }
 
 /* Bouton d'envoi */
-.submit-btn {
+.submitBtn {
   width: 100%;
   padding: 0.8rem;
-  background: #3b82f6;
-  color: white;
+  background: var(--form-button-bg);
+  color: var(--form-button-text);
   border: none;
   border-radius: 6px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.3s;
-  height: 48px; /* Même hauteur que les inputs */
+  transition: background 0.3s ease;
+  height: 48px;
 }
 
-.submit-btn:hover {
-  background: #2563eb;
+.submitBtn:hover {
+  background: var(--form-button-hover);
 }
 
+/* Responsive */
+@media (max-width: 768px) {
+  .formContainer {
+    padding: 1.5rem;
+    margin-left: 0;
+  }
+  
+  .formContainer h2 {
+    font-size: 1.25rem;
+  }
+  
+  .formInput,
+  textarea.formInput,
+  select.formInput {
+    font-size: 0.9rem;
+    height: 44px;
+  }
+  
+  .submitBtn {
+    height: 44px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Style des barres de scroll pour les inputs number en mode dark */
+[data-theme="dark"] input[type="number"]::-webkit-outer-spin-button,
+[data-theme="dark"] input[type="number"]::-webkit-inner-spin-button {
+  background-color: var(--form-bg);
+  border: 1px solid var(--form-border);
+  border-radius: 4px;
+  color: var(--form-text);
+}
+
+[data-theme="dark"] input[type="number"]::-webkit-outer-spin-button:hover,
+[data-theme="dark"] input[type="number"]::-webkit-inner-spin-button:hover {
+  background-color: var(--form-option-hover);
+  border-color: var(--form-border-hover);
+}
+
+[data-theme="dark"] input[type="number"]::-webkit-inner-spin-button,
+[data-theme="dark"] input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Style pour les flèches des inputs number */
+[data-theme="dark"] input[type="number"] {
+  background-image: linear-gradient(45deg, transparent 50%, var(--form-text) 50%),
+                    linear-gradient(135deg, var(--form-text) 50%, transparent 50%);
+  background-position: calc(100% - 15px) center, calc(100% - 10px) center;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+[data-theme="dark"] input[type="number"]:hover {
+  background-image: linear-gradient(45deg, transparent 50%, var(--form-border-focus) 50%),
+                    linear-gradient(135deg, var(--form-border-focus) 50%, transparent 50%);
+}
+
+/* Support impression */
+@media print {
+  .formContainer {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .formInput {
+    border-color: #000 !important;
+    background: white !important;
+    color: black !important;
+  }
+  
+  .formLabel {
+    color: black !important;
+  }
+}

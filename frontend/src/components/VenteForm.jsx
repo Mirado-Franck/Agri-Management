@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaTrash, FaPlus } from 'react-icons/fa';
+import { toast } from 'sonner';
+import toastStyles from '../pages/toast/toast.js'; // 👈 Importation du style des toasts
 import styles from './css/VenteForm.module.css';
 
 export default function VenteForm() {
@@ -20,9 +22,8 @@ export default function VenteForm() {
       const res = await fetch('http://localhost:8000/api/produits/produits/');
       const data = await res.json();
       setProduitsDisponibles(data);
-      // console.log('📦 Produits:', data);
     } catch (err) {
-      console.error('❌ Erreur chargement produits', err);
+      console.error('Erreur chargement produits', err);
     }
   };
 
@@ -31,13 +32,12 @@ export default function VenteForm() {
       const res = await fetch('http://localhost:8000/api/produits/stocks/');
       const data = await res.json();
       setStocks(data);
-      // console.log('📊 Stocks:', data);
     } catch (err) {
-      console.error('❌ Erreur chargement stocks', err);
+      console.error('Erreur chargement stocks', err);
     }
   };
 
-  // Helper : récupère l’objet stock pour un produit (essayes ID puis nom)
+  // Helper : récupère l'objet stock pour un produit (essayes ID puis nom)
   const getStockObjForProduct = (produitId) => {
     const prodId = parseInt(produitId);
     const byId = stocks.find(s => Number(s.produit) === prodId);
@@ -81,14 +81,18 @@ export default function VenteForm() {
       const stockDispo = getQuantiteDispo(produitId);
 
       if (!produitId) {
-        alert('Veuillez choisir un produit avant de saisir une quantité.');
+        toast.error('Veuillez choisir un produit avant de saisir une quantité.', {
+          style: toastStyles.error,
+        });
         return;
       }
 
       if (!Number.isFinite(saisie) || saisie < 1) {
         produits[index].quantite = 1;
       } else if (saisie > stockDispo) {
-        alert(`⚠️ Stock insuffisant pour ${produitSel?.nom_produit}. Dispo : ${stockDispo}`);
+        toast.error(`Stock insuffisant pour ${produitSel?.nom_produit}. Disponible : ${stockDispo}`, {
+          style: toastStyles.error,
+        });
         produits[index].quantite = stockDispo; // blocage au max
       } else {
         produits[index].quantite = saisie;
@@ -117,15 +121,19 @@ export default function VenteForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation “anti-dépassement” juste avant envoi
+    // Validation "anti-dépassement" juste avant envoi
     for (const p of vente.produits) {
       const qMax = getQuantiteDispo(p.produitId);
       if (!p.produitId) {
-        alert('Veuillez choisir un produit dans chaque ligne.');
+        toast.error('Veuillez choisir un produit dans chaque ligne.', {
+          style: toastStyles.error,
+        });
         return;
       }
       if (p.quantite > qMax) {
-        alert('Certaines quantités dépassent le stock disponible. Corrige-les avant d’enregistrer.');
+        toast.error('Certaines quantités dépassent le stock disponible. Corrigez-les avant d\'enregistrer.', {
+          style: toastStyles.error,
+        });
         return;
       }
     }
@@ -145,8 +153,6 @@ export default function VenteForm() {
       })),
     };
 
-    // console.log('🧾 Vente envoyée :', venteData);
-
     try {
       const response = await fetch('http://localhost:8000/api/produits/ventes/create/', {
         method: 'POST',
@@ -160,7 +166,9 @@ export default function VenteForm() {
       const result = await response.json();
 
       if (response.ok) {
-        alert('✅ Vente enregistrée !');
+        toast.success('Vente enregistrée avec succès !', {
+          style: toastStyles.success,
+        });
         setVente({
           client: '',
           produits: [{ categorie: '', produitId: '', quantite: 1, prix: 0 }],
@@ -168,12 +176,16 @@ export default function VenteForm() {
         await fetchStocks();     // pour refléter la baisse de stock
         await fetchProduits();   // si tu affiches quantite_en_stock côté produits
       } else {
-        console.error('🛑 Erreur serveur :', result);
-        alert(`Erreur: ${JSON.stringify(result)}`);
+        console.error('Erreur serveur :', result);
+        toast.error(`Erreur: ${result.detail || JSON.stringify(result)}`, {
+          style: toastStyles.error,
+        });
       }
     } catch (err) {
-      console.error('🛑 Erreur réseau :', err);
-      alert('Erreur réseau lors de l’enregistrement de la vente.');
+      console.error('Erreur réseau :', err);
+      toast.error('Erreur réseau lors de l\'enregistrement de la vente.', {
+        style: toastStyles.error,
+      });
     }
   };
 

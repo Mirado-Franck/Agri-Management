@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../axiosInstance';
-import './css/Utilisateurs.css';
+import styles from './css/Utilisateurs.module.css';
 import { FaPlus } from "react-icons/fa";
 import UserCreateForm from '../components/UserCreateForm';
 
@@ -31,7 +31,7 @@ export default function Utilisateurs() {
         setLoading(false);
       })
       .catch(() => {
-        setErreur("Erreur lors du chargement des utilisateurs");
+        setErreur("Erreur lors du chargement des utilisateurs 🚨");
         setLoading(false);
       });
   }, []);
@@ -51,36 +51,35 @@ export default function Utilisateurs() {
         prev.map(u => (u.id === userId ? { ...u, is_active: res.data.is_active } : u))
       );
     } catch (error) {
-      alert("Erreur lors du changement de statut.");
+      alert("Erreur lors du changement de statut. 😥");
     }
   };
 
   return (
-    <div className="utilisateurs-container">
-      <div className="utilisateurs-header">
+    <div className={styles.utilisateursContainer}>
+      <div className={styles.utilisateursHeader}>
         <div></div>
         <button
-          className="btn"
+          className={styles.btn}
           onClick={() => setShowModal(true)}
           disabled={userRole !== 'admin'}
-          title={userRole !== 'admin' ? "Seul un admin peut créer un utilisateur" : ""}
+          title={userRole !== 'admin' ? "Seul un admin peut créer un utilisateur 🚫" : ""}
         >
           <FaPlus /> Créer un utilisateur
         </button>
       </div>
 
-      {erreur && <div className="alert">{erreur}</div>}
+      {erreur && <div className={styles.alert}>{erreur}</div>}
 
       {loading ? (
-        <div>Chargement...</div>
+        <div>Chargement... ⏳</div>
       ) : (
-        <table className="styled-table">
+        <table className={styles.styledTable}>
           <thead>
             <tr>
               <th>#</th>
               <th>Nom d'utilisateur</th>
               <th>Rôle</th>
-              <th>Statut</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -94,17 +93,16 @@ export default function Utilisateurs() {
                   <td>{index + 1}</td>
                   <td>{user.username}</td>
                   <td>{user.role}</td>
-                  <td>{user.is_active ? "Actif" : "Inactif"}</td>
                   <td>
                     <button
-                      className={`btn ${user.is_active ? 'btn-danger' : 'btn-success'}`}
+                      className={`${styles.btn} ${user.is_active ? styles.btnDanger : styles.btnSuccess}`}
                       onClick={() => toggleStatut(user.id)}
                       disabled={isActionDisabled}
                       title={
                         userRole !== 'admin'
-                          ? "Action réservée à l'admin"
+                          ? "Action réservée à l'admin 🚫"
                           : isCurrentUser
-                          ? "Vous ne pouvez pas désactiver votre propre compte"
+                          ? "Vous ne pouvez pas désactiver votre propre compte 🚫"
                           : ""
                       }
                     >
@@ -119,8 +117,8 @@ export default function Utilisateurs() {
       )}
 
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
             <UserCreateForm
               onCancel={() => setShowModal(false)}
               onSuccess={handleUserCreated}
