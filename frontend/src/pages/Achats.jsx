@@ -19,7 +19,6 @@ export default function Achats() {
   useEffect(() => {
     const fetchAchats = async () => {
       try {
-        const token = localStorage.getItem('access_token');
         const response = await axiosInstance.get('/produits/achats/');
         setAchats(response.data);
       } catch (err) {

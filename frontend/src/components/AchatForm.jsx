@@ -6,7 +6,7 @@ import styles from './css/AchatForm.module.css';
 
 export default function AchatForm() {
   const [produitsDisponibles, setProduitsDisponibles] = useState([]);
-  const [stocks, setStocks] = useState([]);
+  const [, setStocks] = useState([]);
   const [achat, setAchat] = useState({
     fournisseur: '',
     produits: [{ categorie: '', produitId: '', quantite: 1, prix: 0 }],
