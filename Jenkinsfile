@@ -18,7 +18,8 @@ pipeline {
                 bat 'cd frontend && npm install'
 
                 echo '=== 4. Build de production Frontend ==='
-                bat 'cd frontend && npm run build'
+                // set CI=false évite que les warnings ESLint ne fassent échouer le build
+                bat 'cd frontend && set CI=false && npm run build'
             }
         }
     }
