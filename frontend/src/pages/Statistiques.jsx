@@ -12,15 +12,16 @@ import styles from './css/Statistiques.module.css';
 import VenteChart from '../components/VenteChart1';
 import VentePieChart from '../components/VentePieChart';
 
+// Couleurs prédéfinies pour les top produits
+// (définies hors du composant : constante stable, pas une dépendance réactive)
+const couleurs = ['#3b82f6', '#10b981', '#6366f1', '#f59e0b', '#ef4444'];
+
 const Statistiques = () => {
   const location = useLocation();
   const [produitsAlerte, setProduitsAlerte] = useState([]);
   const [topProduits, setTopProduits] = useState([]);
   const [performancesCategories, setPerformancesCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Couleurs prédéfinies pour les top produits
-  const couleurs = ['#3b82f6', '#10b981', '#6366f1', '#f59e0b', '#ef4444'];
 
   // Scroll automatique vers la section Produits en alerte
   useEffect(() => {

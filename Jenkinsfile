@@ -18,8 +18,11 @@ pipeline {
                 bat 'cd frontend && npm install'
 
                 echo '=== 4. Build de production Frontend ==='
-                // set CI=false évite que les warnings ESLint ne fassent échouer le build
-                bat 'cd frontend && set CI=false && npm run build'
+                // set "CI=false" évite que les warnings ESLint ne fassent échouer le build.
+                // NB: la syntaxe entre guillemets est importante sous Windows :
+                // 'set CI=false && ...' inclurait l'espace dans la valeur ("false ")
+                // et react-scripts la considérerait toujours comme active.
+                bat 'cd frontend && set "CI=false" && npm run build'
             }
         }
     }

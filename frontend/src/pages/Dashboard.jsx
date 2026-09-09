@@ -10,7 +10,7 @@ import axiosInstance from '../axiosInstance';
 
 export default function Dashboard() {
   const [ventes, setVentes] = useState([]);
-  const [produits, setProduits] = useState([]);
+  const [, setProduits] = useState([]);
   const [alertCount, setAlertCount] = useState(0);
   const [loading, setLoading] = useState(true);
 

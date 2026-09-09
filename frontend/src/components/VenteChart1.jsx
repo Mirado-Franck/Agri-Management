@@ -4,8 +4,86 @@ import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Lege
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
+// Fonctions utilitaires pures (hors du composant : pas des dépendances réactives)
+const getNumeroSemaine = (date) => {
+  const unJour = 86400000;
+  const premierJanvier = new Date(date.getFullYear(), 0, 1);
+  const joursDepuisDebutAnnee = Math.floor((date - premierJanvier) / unJour);
+  return Math.ceil((joursDepuisDebutAnnee + premierJanvier.getDay() + 1) / 7);
+};
+
+const getNomMois = (date) => {
+  const mois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+               'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+  return mois[date.getMonth()];
+};
+
+const getNumeroMois = (nomMois) => {
+  const mois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+               'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+  return mois.indexOf(nomMois);
+};
+
+const isMemeJour = (date1, date2) => {
+  return date1.getDate() === date2.getDate() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getFullYear() === date2.getFullYear();
+};
+
+const isMemeMois = (date1, date2) => {
+  return date1.getMonth() === date2.getMonth() &&
+         date1.getFullYear() === date2.getFullYear();
+};
+
+const isMemeTrimestre = (date1, date2) => {
+  return Math.floor(date1.getMonth() / 3) === Math.floor(date2.getMonth() / 3) &&
+         date1.getFullYear() === date2.getFullYear();
+};
+
+const regrouperVentes = (ventesData, groupBy, specificDate) => {
+  const ventesRegroupees = {};
+  const dateSpec = new Date(specificDate);
+
+  ventesData.forEach(v => {
+    const dateVente = new Date(v.date);
+
+    if (groupBy === 'jour' && !isMemeJour(dateVente, dateSpec)) return;
+    if (groupBy === 'mois' && !isMemeMois(dateVente, dateSpec)) return;
+    if (groupBy === 'trimestre' && !isMemeTrimestre(dateVente, dateSpec)) return;
+    if (groupBy === 'annee' && dateVente.getFullYear() !== dateSpec.getFullYear()) return;
+
+    let key;
+    switch (groupBy) {
+      case 'jour': key = `${dateVente.getDate()}/${dateVente.getMonth() + 1}`; break;
+      case 'semaine': key = `Semaine ${getNumeroSemaine(dateVente)}`; break;
+      case 'mois': key = `${getNomMois(dateVente)} ${dateVente.getFullYear()}`; break;
+      case 'trimestre': key = `T${Math.floor(dateVente.getMonth() / 3) + 1} ${dateVente.getFullYear()}`; break;
+      case 'annee': key = dateVente.getFullYear().toString(); break;
+      default: key = `Semaine ${getNumeroSemaine(dateVente)}`;
+    }
+
+    ventesRegroupees[key] = (ventesRegroupees[key] || 0) + v.total;
+  });
+
+  const donneesTriees = Object.entries(ventesRegroupees).sort((a, b) => {
+    if (groupBy === 'jour') {
+      return new Date(a[0].split('/').reverse().join('-')) - new Date(b[0].split('/').reverse().join('-'));
+    } else if (groupBy === 'semaine') {
+      return parseInt(a[0].split(' ')[1]) - parseInt(b[0].split(' ')[1]);
+    } else if (groupBy === 'mois') {
+      return getNumeroMois(a[0].split(' ')[0]) - getNumeroMois(b[0].split(' ')[0]);
+    } else if (groupBy === 'trimestre') {
+      return a[0].localeCompare(b[0]);
+    } else {
+      return parseInt(a[0]) - parseInt(b[0]);
+    }
+  });
+
+  return donneesTriees;
+};
+
 export default function VenteChart1() {
-  const [ventes, setVentes] = useState([]);
+  const [, setVentes] = useState([]);
   const [ventesGroupees, setVentesGroupees] = useState([]);
   const [periode, setPeriode] = useState('semaine');
   const [dateSpecifique, setDateSpecifique] = useState(new Date().toISOString().split('T')[0]);
@@ -22,7 +100,7 @@ export default function VenteChart1() {
 
         const ventesData = await response.json();
         setVentes(ventesData);
-        regrouperVentes(ventesData, periode, dateSpecifique);
+        setVentesGroupees(regrouperVentes(ventesData, periode, dateSpecifique));
       } catch (error) {
         console.error("Erreur lors du chargement des ventes :", error);
       }
@@ -30,84 +108,6 @@ export default function VenteChart1() {
 
     fetchVentes();
   }, [periode, dateSpecifique]);
-
-  const regrouperVentes = (ventesData, groupBy, specificDate) => {
-    const ventesRegroupees = {};
-    const dateSpec = new Date(specificDate);
-
-    ventesData.forEach(v => {
-      const dateVente = new Date(v.date);
-      
-      if (groupBy === 'jour' && !isMemeJour(dateVente, dateSpec)) return;
-      if (groupBy === 'mois' && !isMemeMois(dateVente, dateSpec)) return;
-      if (groupBy === 'trimestre' && !isMemeTrimestre(dateVente, dateSpec)) return;
-      if (groupBy === 'annee' && dateVente.getFullYear() !== dateSpec.getFullYear()) return;
-
-      let key;
-      switch (groupBy) {
-        case 'jour': key = `${dateVente.getDate()}/${dateVente.getMonth() + 1}`; break;
-        case 'semaine': key = `Semaine ${getNumeroSemaine(dateVente)}`; break;
-        case 'mois': key = `${getNomMois(dateVente)} ${dateVente.getFullYear()}`; break;
-        case 'trimestre': key = `T${Math.floor(dateVente.getMonth() / 3) + 1} ${dateVente.getFullYear()}`; break;
-        case 'annee': key = dateVente.getFullYear().toString(); break;
-        default: key = `Semaine ${getNumeroSemaine(dateVente)}`;
-      }
-
-      ventesRegroupees[key] = (ventesRegroupees[key] || 0) + v.total;
-    });
-
-    const donneesTriees = Object.entries(ventesRegroupees).sort((a, b) => {
-      if (groupBy === 'jour') {
-        return new Date(a[0].split('/').reverse().join('-')) - new Date(b[0].split('/').reverse().join('-'));
-      } else if (groupBy === 'semaine') {
-        return parseInt(a[0].split(' ')[1]) - parseInt(b[0].split(' ')[1]);
-      } else if (groupBy === 'mois') {
-        return getNumeroMois(a[0].split(' ')[0]) - getNumeroMois(b[0].split(' ')[0]);
-      } else if (groupBy === 'trimestre') {
-        return a[0].localeCompare(b[0]);
-      } else {
-        return parseInt(a[0]) - parseInt(b[0]);
-      }
-    });
-
-    setVentesGroupees(donneesTriees);
-  };
-
-  // Fonctions utilitaires (identiques à ton code original)
-  const getNumeroSemaine = (date) => {
-    const unJour = 86400000;
-    const premierJanvier = new Date(date.getFullYear(), 0, 1);
-    const joursDepuisDebutAnnee = Math.floor((date - premierJanvier) / unJour);
-    return Math.ceil((joursDepuisDebutAnnee + premierJanvier.getDay() + 1) / 7);
-  };
-
-  const getNomMois = (date) => {
-    const mois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
-                 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-    return mois[date.getMonth()];
-  };
-
-  const getNumeroMois = (nomMois) => {
-    const mois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
-                 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-    return mois.indexOf(nomMois);
-  };
-
-  const isMemeJour = (date1, date2) => {
-    return date1.getDate() === date2.getDate() && 
-           date1.getMonth() === date2.getMonth() && 
-           date1.getFullYear() === date2.getFullYear();
-  };
-
-  const isMemeMois = (date1, date2) => {
-    return date1.getMonth() === date2.getMonth() && 
-           date1.getFullYear() === date2.getFullYear();
-  };
-
-  const isMemeTrimestre = (date1, date2) => {
-    return Math.floor(date1.getMonth() / 3) === Math.floor(date2.getMonth() / 3) && 
-           date1.getFullYear() === date2.getFullYear();
-  };
 
   // Configuration du graphique (identique à l'original)
   const data = {
