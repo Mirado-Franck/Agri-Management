@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    triggers {
+        // Jenkins vérifie GitHub chaque minute : si un push est détecté,
+        // un build démarre automatiquement (déclencheur CI)
+        pollSCM('H * * * *')
+    }
+
     stages {
         stage('Backend - Install & Test') {
             steps {
@@ -18,11 +24,16 @@ pipeline {
                 bat 'cd frontend && npm install'
 
                 echo '=== 4. Build de production Frontend ==='
-                // set "CI=false" évite que les warnings ESLint ne fassent échouer le build.
-                // NB: la syntaxe entre guillemets est importante sous Windows :
-                // 'set CI=false && ...' inclurait l'espace dans la valeur ("false ")
-                // et react-scripts la considérerait toujours comme active.
                 bat 'cd frontend && set "CI=false" && npm run build'
+            }
+        }
+
+        stage('Déploiement') {
+            steps {
+                echo '=== 5. Déploiement du build vers le dossier servi ==='
+                // Copie le build React dans le dossier servi par le serveur web.
+                // Les fichiers sont remplacés à chaud : aucun redémarrage nécessaire.
+                bat 'xcopy /E /Y /I frontend\\build C:\\agri-deploy'
             }
         }
     }
@@ -32,8 +43,7 @@ pipeline {
             echo '=== Pipeline terminé ==='
         }
         success {
-            echo '=== Succès : Tous les tests et builds sont validés ! ==='
-            // Sauvegarde du dossier de build comme livrable (artefact)
+            echo '=== Succès : build déployé ! ==='
             archiveArtifacts artifacts: 'frontend/build/**', allowEmptyArchive: true
         }
         failure {
