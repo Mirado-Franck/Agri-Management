@@ -45,7 +45,7 @@ export default function Login({ onLogin }) {
   return (
     <div className="center-wrapper">
       <div className="login-container">
-        <h2>Connexion</h2>
+        <h2>Connexion Test</h2>
 
         <form onSubmit={handleLogin}>
           <div className="input-group">
