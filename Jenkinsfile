@@ -4,7 +4,7 @@ pipeline {
     triggers {
         // Jenkins vérifie GitHub chaque minute : si un push est détecté,
         // un build démarre automatiquement (déclencheur CI)
-        pollSCM('H * * * *')
+        pollSCM('H/1 * * * *')
     }
 
     stages {
